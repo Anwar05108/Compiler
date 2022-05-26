@@ -16,6 +16,7 @@
 #include<sstream>
 #include<iomanip>
 #include<bitset>
+#include <fstream>
 
 
 using namespace std;
@@ -35,5 +36,31 @@ using namespace std;
 
 int main()
 {
+    ifstream fin;
+    fin.open("input.txt");
+    ofstream fout;
+    // fout.open("output.txt");
+
+    if (fin.is_open())
+    {
+        /* code */
+        string line;
+        while (getline(fin, line))
+        {
+            /* code */
+            cout << line << endl;
+            
+            cout << "this is a line"<<endl;
+            // if ()
+            // {
+            //     /* code */
+            // }
+            
+            // fout << line << endl;
+        }
+    }
+    fin.close();
+
+
     
 }
