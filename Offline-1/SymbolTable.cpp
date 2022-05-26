@@ -6,21 +6,58 @@ class SymbolTable
 private:
     ScopeTable *scopeTable;
 public:
-    SymbolTable(/* args */);
+    SymbolTable(int);
     ~SymbolTable();
-    bool insert(SymbolInfo);
-    bool delete(SymbolInfo);
+    bool insert(string, string);
+    // bool delete(SymbolInfo);
+    void enterScope(int, int );
+    void exitScope();
+    SymbolInfo* search(SymbolInfo);
+    void printCurrentScope();
+    void printAllScopes();
 };
 
-SymbolTable::SymbolTable(/* args */)
+SymbolTable::SymbolTable(int n)
 {
+    this->scopeTable = new ScopeTable(0, n, NULL);
 }
+
 
 SymbolTable::~SymbolTable()
 {
 }
 
-bool SymbolTable::insert(SymbolInfo info)
+bool SymbolTable::insert(string name, string type)
 {
-    return scopeTable->insert(info);
+    return scopeTable->insert(name, type);
 }
+
+// bool SymbolTable::delete(SymbolInfo info)
+// {
+//     return scopeTable->deleteSymbol(info.getName());
+// }
+
+void SymbolTable::enterScope(int id, int size)
+{
+    scopeTable = new ScopeTable(id, size, scopeTable);
+}
+
+void SymbolTable:: exitScope()
+{
+    delete scopeTable;
+}
+
+// SymbolInfo* SymbolTable::search(SymbolInfo info)
+// {
+//     return scopeTable->search(info);
+// }
+
+void SymbolTable::printCurrentScope()
+{
+    scopeTable->print();
+}
+
+// void SymbolTable::printAllScopes()
+// {
+//     scopeTable->printAllScopes();
+// }

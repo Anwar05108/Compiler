@@ -1,4 +1,7 @@
+// #include "SymbolTable.cpp"
 #include "SymbolInfo.cpp"
+
+using namespace std;
 
 class ScopeTable
 {
@@ -7,36 +10,34 @@ private:
     SymbolInfo** bucket;
     int id;
     int size;
-    int level;
-    int maxLevel;
+    
     ScopeTable *parentScope;
 public:
     int smdbHash(string);
-    ScopeTable(int);
+    ScopeTable(int,int , ScopeTable*);
     ~ScopeTable();
-    bool insert(SymbolInfo*);
+    bool insert(string, string);
     SymbolInfo* search(SymbolInfo);
     void print();
-    void print(int);
-    void print(int,int);
+    // void print(int);
+    // void print(int,int);
     bool deleteSymbol(string);
 };
 
-ScopeTable::ScopeTable(int n)
+ScopeTable::ScopeTable(int id, int n, ScopeTable *parentScope)
 {
     /* code */
-    this->bucket = new SymbolInfo*[n];
-    this->id = 0;
+    this->id = id;
     this->size = n;
-    this->level = 0;
-    this->maxLevel = 0;
-    this->parentScope = NULL;
-    for (int i = 0; i < n; ++i)
+    this->parentScope = parentScope;
+    this->bucket = new SymbolInfo*[n];
+    for (int i = 0; i < n; i++)
     {
         /* code */
         this->bucket[i] = NULL;
     }
 }
+
 
 ScopeTable::~ScopeTable()
 {
@@ -73,11 +74,11 @@ int ScopeTable::smdbHash(string str)
     return hash;
 }
 
-bool ScopeTable::insert(SymbolInfo& symbol )
+bool ScopeTable::insert(string name, string type )
 {
     /* code */
-    string name = symbol.getName();
-    string type = symbol.getType();
+    // string name = symbol.getName();
+    // string type = symbol.getType();
 
     int index = smdbHash(name) % this->size;
     SymbolInfo *temp = this->bucket[index];
@@ -145,4 +146,22 @@ SymbolInfo* ScopeTable::search(SymbolInfo symbol)
         temp = temp->getNext();
     }
     return NULL;
+}
+
+
+
+void ScopeTable::print()
+{
+    /* code */
+    for (int i = 0; i < this->size; i++)
+    {
+        /* code */
+        SymbolInfo *temp = this->bucket[i];
+        while (temp != NULL)
+        {
+            /* code */
+            cout << temp->getName() << " " << temp->getType() << endl;
+            temp = temp->getNext();
+        }
+    }
 }

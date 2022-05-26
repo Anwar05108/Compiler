@@ -18,6 +18,10 @@
 #include<bitset>
 #include <fstream>
 
+#include "SymbolInfo.cpp"
+#include "ScopeTable.cpp"
+#include "SymbolTable.cpp"
+
 
 using namespace std;
 
@@ -44,20 +48,64 @@ int main()
     if (fin.is_open())
     {
         /* code */
-        string line;
-        while (getline(fin, line))
+        // string line;
+        int n;
+        while (!fin.eof())
         {
             /* code */
-            cout << line << endl;
+            fin >> n;
+            SymbolTable symbolTable = SymbolTable(n);
+            string choice, name, type;
+            fin >> choice;
+            while (choice != "end")
+            {
+                /* code */
+                if (choice == "insert")
+                {
+                    /* code */
+                    fin >> name >> type;
+                    // SymbolInfo *symbolInfo = new SymbolInfo(symbol, type);
+                    symbolTable.insert(name, type);
+                }
+                // else if (choice == "search")
+                // {
+                //     /* code */
+                //     fin >> symbol;
+                //     SymbolInfo *symbolInfo = symbolTable.search(symbol);
+                //     if (symbolInfo == NULL)
+                //     {
+                //         /* code */
+                //         fout << "not found" << endl;
+                //     }
+                //     else
+                //     {
+                //         /* code */
+                //         fout << symbolInfo->getType() << endl;
+                //     }
+                // }
+                // else if (choice == "delete")
+                // {
+                //     /* code */
+                //     fin >> symbol;
+                //     symbolTable.deleteSymbol(symbol);
+                // }
+                // else if (choice == "print")
+                // {
+                //     /* code */
+                //     symbolTable.print();
+                // }
+                fin >> choice;
+            }
             
-            cout << "this is a line"<<endl;
-            // if ()
-            // {
-            //     /* code */
-            // }
             
-            // fout << line << endl;
+            
+
+
+
+
         }
+        
+        
     }
     fin.close();
 
