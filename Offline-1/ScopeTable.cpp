@@ -10,18 +10,22 @@ private:
     SymbolInfo** bucket;
     int id;
     int size;
+    int level;
+    // int 
     
     ScopeTable *parentScope;
-public:
     int smdbHash(string);
+public:
     ScopeTable(int,int , ScopeTable*);
     ~ScopeTable();
     bool insert(string, string);
-    SymbolInfo* search(SymbolInfo);
+    SymbolInfo* search(string);
     void print();
     // void print(int);
     // void print(int,int);
+    void printAllScopes();
     bool deleteSymbol(string);
+    ScopeTable* getParentScope();
 };
 
 ScopeTable::ScopeTable(int id, int n, ScopeTable *parentScope)
@@ -36,6 +40,7 @@ ScopeTable::ScopeTable(int id, int n, ScopeTable *parentScope)
         /* code */
         this->bucket[i] = NULL;
     }
+    cout << "scope with id " << id <<" created" << endl;
 }
 
 
@@ -81,7 +86,7 @@ bool ScopeTable::insert(string name, string type )
     // string type = symbol.getType();
 
     int index = smdbHash(name) % this->size;
-    SymbolInfo *temp = this->bucket[index];
+    SymbolInfo* temp = bucket[index];
     while (temp != NULL)
     {
         /* code */
@@ -95,6 +100,8 @@ bool ScopeTable::insert(string name, string type )
     SymbolInfo *newSymbol = new SymbolInfo(name,type);
     newSymbol->setNext(this->bucket[index]);
     this->bucket[index] = newSymbol;
+    cout << "Inserted " << name << " " << type << " in scope " << this->id <<" in index "<<  index << endl;
+    // cout << "in bucket " << index << endl;
     return true;
 }
 
@@ -130,23 +137,49 @@ bool ScopeTable::deleteSymbol(string name)
 }
 
 
-SymbolInfo* ScopeTable::search(SymbolInfo symbol)
+SymbolInfo* ScopeTable::search(string name)
 {
     /* code */
-    int index = smdbHash(symbol.getName()) % this->size;
+    int index = smdbHash(name) % this->size;
     SymbolInfo *temp = this->bucket[index];
     while (temp != NULL)
     {
         /* code */
-        if (temp->getName() == symbol.getName())
+        if (temp->getName() == name)
         {
             /* code */
+             cout << "in bucket " << index ;
+        cout << "in scope " << this->id ;
             return temp;
         }
         temp = temp->getNext();
     }
+    if (this->parentScope != NULL)
+    {
+        /* code */
+        cout << "Searching in parent scope" << endl;
+        cout << "in bucket " << index ;
+        cout << "in scope " << this->id ;
+        return this->parentScope->search(name);
+    }
     return NULL;
 }
+// {
+//     /* code */
+//     int index = smdbHash(symbol.getName()) % this->size;
+//     SymbolInfo *temp = this->bucket[index];
+//     while (temp != NULL)
+//     {
+//         /* code */
+//         if (temp->getName() == symbol.getName())
+//         {
+//             /* code */
+//             return temp;
+//         }
+//         temp = temp->getNext();
+//     }
+//     return NULL;
+// }
 
 
 
@@ -160,8 +193,30 @@ void ScopeTable::print()
         while (temp != NULL)
         {
             /* code */
-            cout << temp->getName() << " " << temp->getType() << endl;
+            cout << "Scope Table" << this->id << " " << temp->getName() << " " << temp->getType() << endl; 
+            // cout << temp->getName() << " " << temp->getType() << endl;
             temp = temp->getNext();
         }
     }
+}
+
+
+void ScopeTable::printAllScopes()
+{
+    /* code */
+    cout << "Scope " << this->id << endl;
+    this->print();
+    if (this->parentScope != NULL)
+    {
+        /* code */
+        this->parentScope->printAllScopes();
+    }
+}
+
+
+ScopeTable* ScopeTable::getParentScope()
+{
+    /* code */
+    cout << "exit from scope " << this->id << endl;
+    return this->parentScope;
 }

@@ -18,8 +18,8 @@
 #include<bitset>
 #include <fstream>
 
-#include "SymbolInfo.cpp"
-#include "ScopeTable.cpp"
+// #include "SymbolInfo.cpp"
+// #include "ScopeTable.cpp"
 #include "SymbolTable.cpp"
 
 
@@ -57,32 +57,67 @@ int main()
             SymbolTable symbolTable = SymbolTable(n);
             string choice, name, type;
             fin >> choice;
-            while (choice != "end")
+            int serial = 0;
+            while (choice != "exit")
             {
                 /* code */
-                if (choice == "insert")
+                if (choice == "I")
                 {
                     /* code */
                     fin >> name >> type;
                     // SymbolInfo *symbolInfo = new SymbolInfo(symbol, type);
                     symbolTable.insert(name, type);
                 }
-                // else if (choice == "search")
-                // {
-                //     /* code */
-                //     fin >> symbol;
-                //     SymbolInfo *symbolInfo = symbolTable.search(symbol);
-                //     if (symbolInfo == NULL)
-                //     {
-                //         /* code */
-                //         fout << "not found" << endl;
-                //     }
-                //     else
-                //     {
-                //         /* code */
-                //         fout << symbolInfo->getType() << endl;
-                //     }
-                // }
+                else if (choice == "L")
+                {
+                    /* code */
+                    fin >> name;
+                    SymbolInfo *symbolInfo = symbolTable.search(name);
+                    if (symbolInfo == NULL)
+                    {
+                        /* code */
+                        // fout << "not found" << endl;
+                        cout << "not found" << endl;
+                    }
+                    else
+                    {
+                        /* code */
+                        // fout << symbolInfo->getType() << endl;
+                        cout << "found";
+                        cout << symbolInfo->getType() << endl;
+                    }
+                }
+                else if (choice == "S")
+                {
+                    /* code */
+                    symbolTable.enterScope(++serial, n);
+
+
+                }
+                else if (choice == "E")
+                {
+                    /* code */
+                    symbolTable.exitScope();
+                }
+                else if (choice == "P")
+                {
+                    /* code */
+                    symbolTable.printCurrentScope();
+                }
+                else if (choice == "A")
+                {
+                    /* code */
+                    symbolTable.printAllScopes();
+                }
+                else if (choice == "D")
+                {
+                    /* code */
+                    fin >> name;
+                    symbolTable.deletef(name);
+                }
+                
+                
+                
                 // else if (choice == "delete")
                 // {
                 //     /* code */
@@ -95,6 +130,8 @@ int main()
                 //     symbolTable.print();
                 // }
                 fin >> choice;
+                // cout << choice << endl;
+                // cout << endl;
             }
             
             

@@ -1,5 +1,5 @@
 #include "ScopeTable.cpp"
-#include "SymbolInfo.cpp"
+// #include "SymbolInfo.cpp"
 
 class SymbolTable
 {
@@ -9,10 +9,10 @@ public:
     SymbolTable(int);
     ~SymbolTable();
     bool insert(string, string);
-    // bool delete(SymbolInfo);
+    bool deletef(string);
     void enterScope(int, int );
     void exitScope();
-    SymbolInfo* search(SymbolInfo);
+    SymbolInfo* search(string);
     void printCurrentScope();
     void printAllScopes();
 };
@@ -40,24 +40,30 @@ bool SymbolTable::insert(string name, string type)
 void SymbolTable::enterScope(int id, int size)
 {
     scopeTable = new ScopeTable(id, size, scopeTable);
+    // cout << "scope with " << id <<" created" << endl;
 }
 
 void SymbolTable:: exitScope()
 {
-    delete scopeTable;
+     scopeTable = scopeTable->getParentScope();
 }
 
-// SymbolInfo* SymbolTable::search(SymbolInfo info)
-// {
-//     return scopeTable->search(info);
-// }
+SymbolInfo* SymbolTable::search(string name)
+{
+    return scopeTable->search(name);
+}
 
 void SymbolTable::printCurrentScope()
 {
     scopeTable->print();
 }
 
-// void SymbolTable::printAllScopes()
-// {
-//     scopeTable->printAllScopes();
-// }
+void SymbolTable::printAllScopes()
+{
+    scopeTable->printAllScopes();
+}
+
+bool SymbolTable::deletef(string name)
+{
+    return scopeTable->deleteSymbol(name);
+}
