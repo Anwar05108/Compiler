@@ -50,6 +50,7 @@ int main()
         /* code */
         // string line;
         int n;
+        int serial = 1;
         while (!fin.eof())
         {
             /* code */
@@ -57,7 +58,7 @@ int main()
             SymbolTable symbolTable = SymbolTable(n);
             string choice, name, type;
             fin >> choice;
-            int serial = 0;
+            // serial = 1;
             while (choice != "exit")
             {
                 /* code */
@@ -90,7 +91,17 @@ int main()
                 else if (choice == "S")
                 {
                     /* code */
-                    symbolTable.enterScope(++serial, n);
+                    // if(symbolTable.getParentScope() == NULL){
+                    //     serial++;
+                    //     cout << "no parentScope" << endl;
+                    //     cout << "serial " << serial << endl;
+                        symbolTable.enterScope(n);
+                    // }
+                    // else{
+                    //     // symbolTable.enterScope(serial, symbolTable.getParentScope()->getSize());
+                    //     cout << "serial " << serial << endl;
+                    // symbolTable.enterScope(serial, n);
+                    // }
 
 
                 }
@@ -101,14 +112,26 @@ int main()
                 }
                 else if (choice == "P")
                 {
+                    string printChoice;
                     /* code */
-                    symbolTable.printCurrentScope();
+                    fin >> printChoice;
+                    if (printChoice == "C")
+                    {
+                        /* code */
+                        symbolTable.printCurrentScope();
+                    }
+                    else if (printChoice == "A")
+                    {
+                        /* code */
+                        symbolTable.printAllScopes();
+                    }
+                    
                 }
-                else if (choice == "A")
-                {
-                    /* code */
-                    symbolTable.printAllScopes();
-                }
+                // else if (choice == "A")
+                // {
+                //     /* code */
+                //     symbolTable.printAllScopes();
+                // }
                 else if (choice == "D")
                 {
                     /* code */

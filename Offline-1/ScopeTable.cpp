@@ -10,11 +10,17 @@ private:
     SymbolInfo** bucket;
     int id;
     int size;
-    int level;
+    int level = 0;
+    int maxLevel;
+    int child, sibling;
+
+
     // int 
     
     ScopeTable *parentScope;
     int smdbHash(string);
+
+
 public:
     ScopeTable(int,int , ScopeTable*);
     ~ScopeTable();
@@ -26,12 +32,25 @@ public:
     void printAllScopes();
     bool deleteSymbol(string);
     ScopeTable* getParentScope();
+    void setParentScope(ScopeTable*);
+    int getId();
+    int getLevel();
+    int getMaxLevel();
+    void setMaxLevel(int);
+    void setLevel(int);
+    int getChild();
+    int getSibling();
+    void setChild(int);
+    void setSibling(int);
 };
 
-ScopeTable::ScopeTable(int id, int n, ScopeTable *parentScope)
+ScopeTable::ScopeTable(int sibling, int n, ScopeTable *parentScope)
 {
     /* code */
-    this->id = id;
+    // this-> level = ;
+    this->id = sibling + 1;
+    this -> child = 0;
+    
     this->size = n;
     this->parentScope = parentScope;
     this->bucket = new SymbolInfo*[n];
@@ -40,14 +59,14 @@ ScopeTable::ScopeTable(int id, int n, ScopeTable *parentScope)
         /* code */
         this->bucket[i] = NULL;
     }
-    cout << "scope with id " << id <<" created" << endl;
+    cout << "scope with id " << id <<" created and parentScope is"<< parentScope << endl;
 }
 
 
 ScopeTable::~ScopeTable()
 {
     /* code */
-    for (int i = 0; i < this->size; ++i)
+    for (int i = 0; i < this->size; i++)
     {
         /* code */
         SymbolInfo *temp = this->bucket[i];
@@ -186,6 +205,9 @@ SymbolInfo* ScopeTable::search(string name)
 void ScopeTable::print()
 {
     /* code */
+    
+        // cout << "bucket " <<  << ": ";
+        cout << "Scope Table " << this->id << " ";
     for (int i = 0; i < this->size; i++)
     {
         /* code */
@@ -193,7 +215,7 @@ void ScopeTable::print()
         while (temp != NULL)
         {
             /* code */
-            cout << "Scope Table" << this->id << " " << temp->getName() << " " << temp->getType() << endl; 
+            cout  << temp->getName() << " " << temp->getType() << endl; 
             // cout << temp->getName() << " " << temp->getType() << endl;
             temp = temp->getNext();
         }
@@ -201,22 +223,85 @@ void ScopeTable::print()
 }
 
 
-void ScopeTable::printAllScopes()
-{
-    /* code */
-    cout << "Scope " << this->id << endl;
-    this->print();
-    if (this->parentScope != NULL)
-    {
-        /* code */
-        this->parentScope->printAllScopes();
-    }
-}
+
+// void ScopeTable::printAllScopes()
+// {
+//     /* code */
+//     cout << "Scope " << this->id << endl;
+//     this->print();
+//     if (this->parentScope != NULL)
+//     {
+//         /* code */
+//         this->parentScope->printAllScopes();
+//     }
+// }
+
+
 
 
 ScopeTable* ScopeTable::getParentScope()
 {
     /* code */
-    cout << "exit from scope " << this->id << endl;
+    // cout << "exit from scope " << this->id << endl;
     return this->parentScope;
+}
+
+int ScopeTable::getId()
+{
+    /* code */
+    return this->id;
+}
+
+int ScopeTable::getLevel()
+{
+    /* code */
+    return this->level;
+}
+
+int ScopeTable::getMaxLevel()
+{
+    /* code */
+    return this->maxLevel;
+}
+
+void ScopeTable::setMaxLevel(int maxLevel)
+{
+    /* code */
+    this->maxLevel = maxLevel;
+}
+
+void ScopeTable::setLevel(int level)
+{
+    /* code */
+    this->level = level;
+}
+
+void ScopeTable::setParentScope(ScopeTable *parentScope)
+{
+    /* code */
+    this->parentScope = parentScope;
+}
+
+int ScopeTable::getChild()
+{
+    /* code */
+    return this->child;
+}
+
+void ScopeTable:: setChild(int child)
+{
+    /* code */
+    this->child = child;
+}
+
+int ScopeTable::getSibling()
+{
+    /* code */
+    return this->sibling;
+}
+
+void ScopeTable:: setSibling(int sibling)
+{
+    /* code */
+    this->sibling = sibling;
 }
