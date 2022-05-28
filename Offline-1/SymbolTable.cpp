@@ -47,8 +47,8 @@ void SymbolTable::enterScope(int size)
 
 
     // newScopeTable-> setParentScope(scopeTable);
-    newScopeTable -> setLevel(scopeTable->getLevel() + 1);
-    newScopeTable -> setMaxLevel(scopeTable->getMaxLevel());
+    // newScopeTable -> setLevel(scopeTable->getLevel() + 1);
+    // newScopeTable -> setMaxLevel(scopeTable->getMaxLevel());
     this->scopeTable = newScopeTable;
 
     // cout << "scope with " << id <<" created" << endl;
@@ -79,6 +79,7 @@ void SymbolTable::printAllScopes()
     ScopeTable *temp = scopeTable;
 
     temp = scopeTable;
+    cout <<" ScopeTable: " << temp->getShowId() << endl;
     while (temp != NULL)
     {
         temp->print();

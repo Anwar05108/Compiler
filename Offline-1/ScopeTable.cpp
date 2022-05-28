@@ -68,19 +68,19 @@ ScopeTable::ScopeTable(int sibling, int n, ScopeTable *parentScope)
 ScopeTable::~ScopeTable()
 {
     /* code */
-    for (int i = 0; i < this->size; i++)
-    {
-        /* code */
-        SymbolInfo *temp = this->bucket[i];
-        while (temp != NULL)
-        {
-            /* code */
-            SymbolInfo *temp2 = temp;
-            temp = temp->getNext();
-            delete temp2;
-        }
-    }
-    delete[] this->bucket;
+    // for (int i = 0; i < this->size; i++)
+    // {
+    //     /* code */
+    //     SymbolInfo *temp = this->bucket[i];
+    //     while (temp != NULL)
+    //     {
+    //         /* code */
+    //         SymbolInfo *temp2 = temp;
+    //         temp = temp->getNext();
+    //         delete temp2;
+    //     }
+    // }
+    // delete[] this->bucket;
 }
 
 int ScopeTable::smdbHash(string str)
@@ -209,21 +209,28 @@ void ScopeTable::print()
     /* code */
     
         // cout << "bucket " <<  << ": ";
-        cout << "Scope Table " << this->id << " show id "<< this->getShowId() << endl;
+        // cout << "Scope Table " << this->id << " show id "<< this->getShowId() << endl;
     for (int i = 0; i < this->size; i++)
     {
         /* code */
         SymbolInfo *temp = this->bucket[i];
+         cout << "bucket " << i << ": ";
+        if (temp == NULL)
+        {
+            /* code */
+            cout << "empty";
+        }
+        
         while (temp != NULL)
         {
             /* code */
-            cout <<"index "<< i << " "<< temp->getName() << " " << temp->getType() << " "; ; 
+            cout<<"name :"<< temp->getName() << " type :" << temp->getType() << " "; 
             // cout << temp->getName() << " " << temp->getType() << endl;
             temp = temp->getNext();
             // cout << temp;
         }
-    }
         cout << endl;
+    }
 }
 
 
@@ -313,11 +320,12 @@ void ScopeTable:: setSibling(int sibling)
 
 string ScopeTable::getShowId(){
 
-    string str = "";
+    string str = to_string(this->id);
+
     while (this->parentScope != NULL)
     {
         /* code */
-    str = to_string(this->parentScope->getId()) + "." + to_string(this->id);
+    str = to_string(this->parentScope->getId()) + "." + str;
         this->parentScope = this->parentScope->getParentScope();
     }
     // cout << "show id " << str << endl;
