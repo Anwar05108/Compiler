@@ -13,6 +13,7 @@ private:
     int level = 0;
     int maxLevel;
     int child, sibling;
+    string showId;
 
 
     // int 
@@ -42,6 +43,7 @@ public:
     int getSibling();
     void setChild(int);
     void setSibling(int);
+    string getShowId();
 };
 
 ScopeTable::ScopeTable(int sibling, int n, ScopeTable *parentScope)
@@ -207,7 +209,7 @@ void ScopeTable::print()
     /* code */
     
         // cout << "bucket " <<  << ": ";
-        cout << "Scope Table " << this->id << " ";
+        cout << "Scope Table " << this->id << " show id "<< this->getShowId() << endl;
     for (int i = 0; i < this->size; i++)
     {
         /* code */
@@ -215,11 +217,13 @@ void ScopeTable::print()
         while (temp != NULL)
         {
             /* code */
-            cout  << temp->getName() << " " << temp->getType() << endl; 
+            cout <<"index "<< i << " "<< temp->getName() << " " << temp->getType() << " "; ; 
             // cout << temp->getName() << " " << temp->getType() << endl;
             temp = temp->getNext();
+            // cout << temp;
         }
     }
+        cout << endl;
 }
 
 
@@ -304,4 +308,23 @@ void ScopeTable:: setSibling(int sibling)
 {
     /* code */
     this->sibling = sibling;
+}
+
+
+string ScopeTable::getShowId(){
+
+    string str = "";
+    while (this->parentScope != NULL)
+    {
+        /* code */
+    str = to_string(this->parentScope->getId()) + "." + to_string(this->id);
+        this->parentScope = this->parentScope->getParentScope();
+    }
+    // cout << "show id " << str << endl;
+    // {
+    //     /* code */
+    // }
+    
+    // return "Scope " + to_string(this->id);
+    return str;
 }

@@ -41,6 +41,7 @@ bool SymbolTable::insert(string name, string type)
 void SymbolTable::enterScope(int size)
 {
     int noChild = scopeTable -> getChild();
+    scopeTable -> setChild(noChild + 1);
     ScopeTable *newScopeTable = new ScopeTable(noChild, size, this->scopeTable);
     // scopeTable = new ScopeTable(id, size, scopeTable);
 
@@ -57,7 +58,8 @@ void SymbolTable:: exitScope()
 {       
     cout << "scope with id " << scopeTable->getId() <<" exited" << endl;
     // ScopeTable *nextScope = 
-     scopeTable = scopeTable->getParentScope();
+    ScopeTable *temp = scopeTable;
+     scopeTable = temp->getParentScope();
 }
 
 SymbolInfo* SymbolTable::search(string name)

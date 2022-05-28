@@ -7,10 +7,8 @@ I o o
 P A
 L o
 L a
-E
 S
 I foo FUNCTION
-E
 S
 I i VAR
 P A
