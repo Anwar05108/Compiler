@@ -1,13 +1,41 @@
 7
-S
 I a a
-S
 S
 I h h
+S
 I o o
-I foo FUNCTION
-I a a
-I abc a
-I abcddd a
 P A
-exit
+L o
+L a
+E
+S
+I foo FUNCTION
+E
+S
+I i VAR
+P A
+L foo
+L j
+E
+E
+S
+I 5 NUMBER
+P A
+D j
+D i
+P A
+S
+E
+S
+I <= RELOP
+I == RELOP
+P A
+I <= RELOP
+I foo FUNCTION
+D ==
+P A
+E
+I t t
+I k k
+P C
+P A
