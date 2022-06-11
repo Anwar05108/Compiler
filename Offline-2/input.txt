@@ -1,12 +1,13 @@
-+-/=1  (34)}][],;&&
-;
-if; else;
-[==[-1]][];
-then;
-[==[-1]][];
-else;
-"hello";
-fi;
-[==[-1]][];
-fi;
-int
+int main(){
+	int a,b;
+	a=a+1;
+	char ch='a';
+	ch='\t';
+	char c[]="ab\td";
+	printf("abc\
+def\
+ghi");
+// a comment
+
+	return 0;
+}	

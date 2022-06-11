@@ -20,6 +20,7 @@ private:
     
     ScopeTable *parentScope;
     int smdbHash(string);
+    
 
 
 public:
@@ -44,6 +45,7 @@ public:
     void setChild(int);
     void setSibling(int);
     string getShowId();
+    void printInFile(FILE *);
 };
 
 ScopeTable::ScopeTable(int sibling, int n, ScopeTable *parentScope)
@@ -338,4 +340,23 @@ string ScopeTable::getShowId(){
     
     // return "Scope " + to_string(this->id);
     return str;
+}
+
+void ScopeTable::printInFile(FILE *fp)
+{
+    
+   
+    for (int i = 0; i < this->size; i++)
+    {
+        
+        SymbolInfo *temp = this->bucket[i];
+        while (temp != NULL)
+        {
+            
+            fprintf(fp, "%d --> < %s : %s >\n",i, temp->getName().c_str(), temp->getType().c_str());
+            temp = temp->getNext();
+        }
+    }
+
+
 }

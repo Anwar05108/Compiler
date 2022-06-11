@@ -1,5 +1,45 @@
-<+ ADDOP>
-<- ADDOP>
-<- ADDOP>
-<- ADDOP>
-<- ADDOP>
+<INT>
+<ID main>
+<LPAREN (>
+<RPAREN )>
+<LCURL {>
+<INT>
+<ID a>
+<COMMA ,>
+<ID b>
+<SEMICOLON ;>
+<ID a>
+<ASSIGNOP =>
+<ID a>
+<ADDOP +>
+<DIGIT 1>
+<SEMICOLON ;>
+<CHAR>
+<ID ch>
+<ASSIGNOP =>
+<NORMAL_CHAR 'a'>
+<SEMICOLON ;>
+<ID ch>
+<ASSIGNOP =>
+<ID t>
+<SEMICOLON ;>
+<CHAR>
+<ID c>
+<LTHIRD [>
+<RTHIRD ]>
+<ASSIGNOP =>
+<STRING "ab\td">
+<SEMICOLON ;>
+<ID printf>
+<LPAREN (>
+<STRING "abc\
+def\
+ghi">
+<RPAREN )>
+<SEMICOLON ;>
+<ID a>
+<ID comment>
+<RETURN>
+<DIGIT 0>
+<SEMICOLON ;>
+<RCURL }>

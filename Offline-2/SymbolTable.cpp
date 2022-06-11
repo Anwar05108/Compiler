@@ -17,6 +17,7 @@ public:
     void printAllScopes();
     ScopeTable* getParentScope();
     ScopeTable* getScopeTable();
+    void printAllScopesInFile(FILE *);
 };
 
 SymbolTable::SymbolTable(int n)
@@ -101,6 +102,18 @@ void SymbolTable::printAllScopes()
     // }
     
     // scopeTable->printAllScopes();
+}
+
+
+void SymbolTable::printAllScopesInFile(FILE *fp)
+{
+    ScopeTable *temp = scopeTable;
+    while (temp != NULL)
+    {
+        fprintf(fp, "ScopeTable: %s\n", temp->getShowId().c_str());
+        temp->printInFile(fp);
+        temp = temp->getParentScope();
+    }
 }
 
 bool SymbolTable::deletef(string name)
