@@ -1,78 +1,112 @@
-
-//designing a lexer using flex and bison
 %option noyywrap
 
 %{
-
-#include <iostream>
-#include <string>
-
-
-#include <fstream>
-
-
-#include <sstream>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
-#include <cctype>
-#include <cassert>
-#include <cstdarg>
-#include <cstddef>
-
-
-
+#include<stdio.h>
+#include<stdlib.h>
 %}
 
 
-// %token <yylex> INTEGER
+/*operators*/
+ADDOP [+-]
+MULOP [*/]
+ASSIGNOP [=]
+RELOP [<>=!]
+LOGICOP [&&||]
+LOGICNOT [!]
 
-//operators
+/*PARENTHESIS*/
+LPAREN [\(]
+RPAREN [\)]
+LCURL [\{]
+RCURL [\}]
+LTHIRD [\[]
+RTHIRD [\]]
 
-
-%token <yylex> PLUS
-%token <yylex> MINUS
-%token <yylex> MULTIPLY
-%token <yylex> DIVIDE
-%token <yylex> MODULO
-%token <yylex> POWER
-%token <yylex> EQUAL
-%token <yylex> NOT_EQUAL
-%token <yylex> LESS_THAN
-%token <yylex> LESS_THAN_EQUAL
-%token <yylex> GREATER_THAN
-%token <yylex> GREATER_THAN_EQUAL
-%token <yylex> AND
-%token <yylex> OR
-%token <yylex> NOT
-%token <yylex> XOR
-%token <yylex> AND_NOT
-%token <yylex> OR_NOT
-%token <yylex> AND_AND
-%token <yylex> OR_OR
-%token <yylex> LEFT_SHIFT
-%token <yylex> RIGHT_SHIFT
-%token <yylex> LEFT_SHIFT_EQUAL
-%token <yylex> RIGHT_SHIFT_EQUAL
-%token <yylex> BITWISE_AND
-%token <yylex> BITWISE_OR
-%token <yylex> BITWISE_XOR
-%token <yylex> BITWISE_NOT
-%token <yylex> BITWISE_AND_NOT
-%token <yylex> BITWISE_OR_NOT
-%token <yylex> BITWISE_XOR_NOT
-%token <yylex> BITWISE_AND_AND
-%token <yylex> BITWISE_OR_OR
-%token <yylex> BITWISE_XOR_XOR
-%token <yylex> BITWISE_AND_EQUAL
-%token <yylex> BITWISE_OR_EQUAL
+/*COMMA*/
+COMMA [,]
+SEMICOLON [;]
+NEWLINE [\n]
 
 
-//keywords
+/*CHARS*/
 
 
-%token <yylex> IF
+
+
+
+/*keywords*/
+
+KEYWORD "if" | "then" | "else" | "while" | "do" | "for" | "todo" | "end"
+
+WHITESPACE [ \t\n\r]+
+
+
+/*identifiers*/
+ID [a-zA-Z_] [a-zA-Z0-9_]*
+
+
+/*constants*/
+
+DIGIT [0-9]+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%
+
+{WHITESPACE}  {  }
+
+{DIGIT} {printf("%s\n", yytext);}
+
+[A-Z]{3}			{printf("%s matched in [A-Z]{3} rule\n",yytext);}
+a* 					{printf("%s matched in a* rule\n",yytext);}
+A* 					{printf("%s matched in A* rule\n",yytext);}
+{ADDOP} 			{printf("%s matched in ADDOP rule\n",yytext);}
+{MULOP} 			{printf("%s matched in MULOP rule\n",yytext);}
+{ASSIGNOP} 			{printf("%s matched in ASSIGNOP rule\n",yytext);}
+{RELOP} 			{printf("%s matched in RELOP rule\n",yytext);}
+{LOGICOP} 			{printf("%s matched in LOGICOP rule\n",yytext);}
+{LOGICNOT} 			{printf("%s matched in LOGICNOT rule\n",yytext);}
+{LPAREN} 			{printf("%s matched in LPAREN rule\n",yytext);}
+{RPAREN} 			{printf("%s matched in RPAREN rule\n",yytext);}
+{LCURL} 			{printf("%s matched in LCURL rule\n",yytext);}
+{RCURL} 			{printf("%s matched in RCURL rule\n",yytext);}
+{LTHIRD} 			{printf("%s matched in LTHIRD rule\n",yytext);}
+{RTHIRD} 			{printf("%s matched in RTHIRD rule\n",yytext);}
+{COMMA} 			{printf("%s matched in COMMA rule\n",yytext);}
+{SEMICOLON} 		{printf("%s matched in SEMICOLON rule\n",yytext);}
+{NEWLINE} 			{printf("%s matched in NEWLINE rule\n",yytext);}
+
+
+
+. 					{printf("Mysterious character %s found\n",yytext);}
+%%
+int main(int argc,char *argv[]){
+	
+	if(argc!=2){
+		printf("Please provide input file name and try again\n");
+		return 0;
+	}
+	
+	FILE *fin=fopen(argv[1],"r");
+	if(fin==NULL){
+		printf("Cannot open specified file\n");
+		return 0;
+	}
+	
+
+	yyin= fin;
+	yylex();
+	fclose(yyin);
+	return 0;
+}
