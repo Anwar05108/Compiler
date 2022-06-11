@@ -30,6 +30,19 @@ NEWLINE [\n]
 
 /*CHARS*/
 
+SPECIAL_CHAR [\t\n\r\f\v]
+NORMAL_CHAR [a-zA-Z0-9_]
+
+
+/*comments*/
+COMMENT (//)
+MULTI_COMMENT (/*)
+MULTI_COMMENT_END (*/)
+
+
+
+
+
 
 
 
@@ -42,7 +55,18 @@ WHITESPACE [ \t\n\r]+
 
 
 /*identifiers*/
-ID [a-zA-Z_] [a-zA-Z0-9_]*
+ID [a-zA-Z_][a-zA-Z0-9_]*
+
+
+/*numbers*/
+
+
+
+/*strings*/
+STRING ["] [^"]* ["]
+
+
+
 
 
 /*constants*/
@@ -67,6 +91,9 @@ DIGIT [0-9]+
 {WHITESPACE}  {  }
 
 {DIGIT} {printf("%s\n", yytext);}
+{MULTI_COMMENT}     {printf("%s matched in MULTI_COMMENT rule\n",yytext);}
+{MULTI_COMMENT_END} {printf("%s matched in MULTI_COMMENT_END rule\n",yytext);}
+{COMMENT}           {printf("%s matched in COMMENT rule\n",yytext);}
 
 [A-Z]{3}			{printf("%s matched in [A-Z]{3} rule\n",yytext);}
 a* 					{printf("%s matched in a* rule\n",yytext);}
@@ -86,6 +113,12 @@ A* 					{printf("%s matched in A* rule\n",yytext);}
 {COMMA} 			{printf("%s matched in COMMA rule\n",yytext);}
 {SEMICOLON} 		{printf("%s matched in SEMICOLON rule\n",yytext);}
 {NEWLINE} 			{printf("%s matched in NEWLINE rule\n",yytext);}
+{SPECIAL_CHAR} 		{printf("%s matched in SPECIAL_CHAR rule\n",yytext);}
+{NORMAL_CHAR} 		{printf("%s matched in NORMAL_CHAR rule\n",yytext);}
+{ID} 				{printf("%s matched in ID rule\n",yytext);}
+{STRING} 			{printf("%s matched in STRING rule\n",yytext);}
+
+
 
 
 
