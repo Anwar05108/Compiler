@@ -155,12 +155,19 @@ STRING ["][^"]*["]
 
 DIGIT [0-9]
 NUMBER [0-9]+
+EXP [eE][ +-]?[0-9]+
 
 FLOAT_NUM [0-9]+.[0-9]+
+FLOAT_NUM_1 ({FLOAT_NUM})({EXP})
+FLOAT_NUM_2 ({NUMBER})({EXP})
+FLOAT_NUM_3 .({NUMBER})({FLOAT_NUM_1})
+CONST_FLOAT ({FLOAT_NUM}|{FLOAT_NUM_2}|{FLOAT_NUM_3}|{FLOAT_NUM})
 FLOAT_NUM_ERR1 [0-9]+.[.]+[0-9]+
 FLOAT_NUM_ERR2 .[.]+[0-9]+
-
-EXP [0-9]+[eE][ +-]?[0-9]+
+FLOAT_NUM_ERR3 [.]({CONST_FLOAT})
+FLOAT_NUM_ERR4 [eE]({CONST_FLOAT})
+FLOAT_NUM_ERR5 ([.]|({CONST_FLOAT}))*
+FLOAT_ERR ({FLOAT_NUM_ERR1}|{FLOAT_NUM_ERR2}|{FLOAT_NUM_ERR3}|{FLOAT_NUM_ERR4}|{FLOAT_NUM_ERR5})
 /*FLOATING POINTS
 FRAC [0-9]+
 
@@ -216,18 +223,16 @@ FRAC [0-9]+
 {NUMBER} {printf("%s\n", yytext);
         fprintf(tokenFile, "<NUMBER %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <NUMBER %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
-{FLOAT_NUM} {
-        fprintf(tokenFile, "<FLOAT_NUM %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <FLOAT_NUM %s> Lexeme %s found\n",lineNumber, yytext, yytext);}         
-{FLOAT_NUM_ERR1} {
-        fprintf(tokenFile, "<FLOAT_NUM_ERR1 %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <FLOAT_NUM_ERR1 %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+
+{CONST_FLOAT} {
+        fprintf(tokenFile, "<CONST_FLOAT %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <CONST_FLOAT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+{FLOAT_ERR} {
+        fprintf(tokenFile, "<FLOAT_ERR %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <FLOAT_ERR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
         errorCount++;}
 
-{FLOAT_NUM_ERR2} {  
-        fprintf(tokenFile, "<FLOAT_NUM_ERR2 %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <FLOAT_NUM_ERR2 %s> Lexeme %s found\n",lineNumber, yytext, yytext);
-        errorCount++;}
+
 
 
 {MULTI_COMMENT}     {printf("%s matched in MULTI_COMMENT rule\n",yytext);

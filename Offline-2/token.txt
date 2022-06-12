@@ -1,7 +1,22 @@
-<FLOAT_NUM 1E10>
-<DIGIT 7>
-<FLOAT_NUM_ERR2 ..7>
+<FLOAT_ERR 1.2.345>
+<FLOAT_ERR 1E10.7>
 <FLOAT>
 <ID a>
 <ASSIGNOP =>
-<FLOAT_NUM_ERR1 12..7>
+<CONST_FLOAT 12.7>
+<NUMBER 12>
+<ID abcd>
+<ID ab>
+<ID a>
+<ID ab>
+<ID cd>
+<STRING "abcd
+">
+<ID abcd>
+<ID efgh>
+<ID ijk>
+<MULOP />
+<MULOP *>
+<MULOP *>
+<ID abc>
+<ID def>
