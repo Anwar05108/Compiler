@@ -99,15 +99,14 @@ NEWLINE [\n]
 
 
 /*CHARS*/
-
-SPECIAL_CHAR ([\t\r\b\f])
+SPECIAL_CHAR (\\['nt\\afrbv0\"])
 NORMAL_CHAR [a-zA-Z0-9_]
 CONST_CHAR  [']({NORMAL_CHAR}|{SPECIAL_CHAR})[']
 CHAR_ERROR [']({NORMAL_CHAR}{NORMAL_CHAR}+)[']
 /*comments*/
 COMMENT ("//"(([\\]+([\n]))|[\n]*)*)
 MULTI_COMMENT ([^*]|("*"[^\n]))*"*/"
-
+UNFINISHED_CHAR_ERROR [']({NORMAL_CHAR}|{SPECIAL_CHAR})*
 
 
 
@@ -136,12 +135,12 @@ SWITCH "switch"
 DO "do"
 DOUBLE "double"
 
-WHITESPACE [ \t\n\r]+
+WHITESPACE [ \t\r]+
 
 
 /*identifiers*/
 ID [a-zA-Z_][a-zA-Z0-9_]*
-
+INVALID_ID [0-9]*[a-zA-Z0-9]*
 
 /*numbers*/
 
@@ -149,7 +148,7 @@ ID [a-zA-Z_][a-zA-Z0-9_]*
 
 /*strings*/
 STRING ["][^"]*["]
-
+UNFINISHED_STRING_ERROR ["][^"]*
 
 
 
@@ -239,9 +238,7 @@ FRAC [0-9]+
         fprintf(tokenFile, "<DOUBLE>\n");
         fprintf(logFile, "Line no %d: Token <DOUBLE> Lexeme double found\n",lineNumber);}
 
-{DIGIT} {printf("%s\n", yytext);
-        fprintf(tokenFile, "<DIGIT %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <DIGIT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+
 {NUMBER} {printf("%s\n", yytext);
         fprintf(tokenFile, "<NUMBER %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <NUMBER %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
@@ -261,7 +258,10 @@ FRAC [0-9]+
         fprintf(tokenFile, "<CHAR_ERROR %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
         errorCount++;}
-
+{UNFINISHED_CHAR_ERROR} {
+        fprintf(tokenFile, "<UNFINISHED_CHAR_ERROR %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <UNFINISHED_CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        errorCount++;}
 {MULTI_COMMENT}     {printf("%s matched in MULTI_COMMENT rule\n",yytext);
                         
                         fprintf(logFile, "Line no %d: Token <MULTI_COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
@@ -344,14 +344,20 @@ FRAC [0-9]+
                         }
                         }
 
-
+{INVALID_ID}    {printf("%s matched in INVALID_ID rule\n",yytext);
+                    fprintf(tokenFile, "<%s %s>\n", "INVALID_ID",yytext);   
+                    fprintf(logFile, "Line no %d: Error: %s is not a valid identifier\n",lineNumber, yytext);
+                    errorCount++;}
                         
 
 {STRING} 			{printf("%s matched in STRING rule\n",yytext);
                         fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
                     fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext); 
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext);}
+                        }
+{UNFINISHED_STRING_ERROR} {
+                        fprintf(tokenFile, "<%s %s>\n", "UNFINISHED_STRING_ERROR",yytext);
+                    fprintf(logFile, "Line no %d: Error: Unfinished string\n",lineNumber);
+                        errorCount++;}
 . {printf("Mysterious character %s found\n",yytext);}
 %%
 int main(int argc,char *argv[]){
