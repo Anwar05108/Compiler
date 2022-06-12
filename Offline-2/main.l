@@ -54,7 +54,7 @@ string processToken(char *token) {
 }
 
 char processChar(char c) {
-    if (c == '\n') {
+    if (c== '\n') {
         c = '\n';
     }
     else if(c == '\t') {
@@ -97,7 +97,7 @@ COMMA [,]
 SEMICOLON [;]
 NEWLINE [\n]
 
-
+EMPTY_CHARACTER_ERROR ('')
 /*CHARS*/
 SPECIAL_CHAR (\\['nt\\afrbv0\"])
 NORMAL_CHAR [a-zA-Z0-9_]
@@ -189,6 +189,7 @@ FRAC [0-9]+
 %%
 
 {WHITESPACE}  {  }
+{EMPTY_CHARACTER_ERROR}  {  fprintf(logFile, "Error: EMPTY character constant\n"); errorCount++; }
 {IF} { printf("if keyword\n"); 
         fprintf(tokenFile, "<IF>\n");
         fprintf(logFile, "Line no %d: Token <IF> Lexeme if found\n",lineNumber);}
@@ -252,8 +253,10 @@ FRAC [0-9]+
         errorCount++;}
 
 {CONST_CHAR} {
-        fprintf(tokenFile, "<CONST_CHAR %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <CONST_CHAR %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+  
+        fprintf(tokenFile, "<CONST_CHAR %c>\n", yytext[1]);
+        fprintf(logFile, "Line no %d: Token <CONST_CHAR %c> Lexeme %c found\n",lineNumber, yytext[1], yytext[1]);
+        }
 {CHAR_ERROR} {
         fprintf(tokenFile, "<CHAR_ERROR %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
@@ -348,16 +351,17 @@ FRAC [0-9]+
                     fprintf(tokenFile, "<%s %s>\n", "INVALID_ID",yytext);   
                     fprintf(logFile, "Line no %d: Error: %s is not a valid identifier\n",lineNumber, yytext);
                     errorCount++;}
-                        
 
-{STRING} 			{printf("%s matched in STRING rule\n",yytext);
-                        fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
+
+{STRING} 			{ yytext[0] = ' ';yytext[strlen(yytext)-1] = '\0';
+                            fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
                     fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext); 
                         }
 {UNFINISHED_STRING_ERROR} {
                         fprintf(tokenFile, "<%s %s>\n", "UNFINISHED_STRING_ERROR",yytext);
                     fprintf(logFile, "Line no %d: Error: Unfinished string\n",lineNumber);
                         errorCount++;}
+
 . {printf("Mysterious character %s found\n",yytext);}
 %%
 int main(int argc,char *argv[]){

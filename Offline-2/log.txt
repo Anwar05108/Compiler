@@ -1,5 +1,2 @@
-Line no 1: Token <MULTI_COMMENT /*HELLO
-ALSKDFJ
-AKSDFLAKS *****/> Lexeme /*HELLO
-ALSKDFJ
-AKSDFLAKS *****/ found
+Line no 1: Token <STRING  hello> Lexeme  hello found
+Error: EMPTY character constant
