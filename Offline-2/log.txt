@@ -1,76 +1,45 @@
-Line no 1: Token <FLOAT_ERR 1.2.345> Lexeme 1.2.345 found
-Line no 1: Token <FLOAT_ERR 1E10.7> Lexeme 1E10.7 found
-Line no 1: Token <FLOAT> Lexeme float found
+Line no 1: Token <INCOP ++> Lexeme ++ found
+Line no 1: Token <ID A> Lexeme A found
+ScopeTable: 1
+2 --> < A : ID >
+Line no 1: Token <LOGICOP &&> Lexeme && found
+Line no 1: Token <ID b> Lexeme b found
+ScopeTable: 1
+0 --> < b : ID >
+2 --> < A : ID >
+Line no 1: Token <ID A> Lexeme A found
+Line no 1: Error: A already declared
+Line no 1: Token <RELOP <=> Lexeme <= found
+Line no 1: Token <ID b> Lexeme b found
+Line no 1: Error: b already declared
+Line no 1: Token <ID A> Lexeme A found
+Line no 1: Error: A already declared
+Line no 1: Token <RELOP >=> Lexeme >= found
+Line no 1: Token <ID b> Lexeme b found
+Line no 1: Error: b already declared
+Line no 1: Token <ID A> Lexeme A found
+Line no 1: Error: A already declared
+Line no 1: Token <RELOP ==> Lexeme == found
+Line no 1: Token <ID b> Lexeme b found
+Line no 1: Error: b already declared
+Line no 1: Token <ID A> Lexeme A found
+Line no 1: Error: A already declared
+Line no 1: Token <RELOP !=> Lexeme != found
+Line no 1: Token <ID b> Lexeme b found
+Line no 1: Error: b already declared
+Line no 1: Token <ID A> Lexeme A found
+Line no 1: Error: A already declared
+Line no 1: Token <RELOP <> Lexeme < found
+Line no 1: Token <ID b> Lexeme b found
+Line no 1: Error: b already declared
+Line no 1: Token <ID A> Lexeme A found
+Line no 1: Error: A already declared
+Line no 1: Token <RELOP >> Lexeme > found
+Line no 1: Token <ID b> Lexeme b found
+Line no 1: Error: b already declared
+Line no 1: Token <LOGICNOT !> Lexeme ! found
 Line no 1: Token <ID a> Lexeme a found
 ScopeTable: 1
-6 --> < a : ID >
-Line no 1: Token <ASSIGNOP => Lexeme = found
-Line no 1: Token <CONST_FLOAT 12.7> Lexeme 12.7 found
-Line no 1: Token <NUMBER 12> Lexeme 12 found
-Line no 1: Token <ID abcd> Lexeme abcd found
-ScopeTable: 1
-3 --> < abcd : ID >
-6 --> < a : ID >
-Line no 1: Token <ID ab> Lexeme ab found
-ScopeTable: 1
-3 --> < abcd : ID >
-5 --> < ab : ID >
-6 --> < a : ID >
-Line no 1: Token <ID a> Lexeme a found
-Line no 1: Error: a already declared
-Line no 1: Token <ID ab> Lexeme ab found
-Line no 1: Error: ab already declared
-Line no 1: Token <ID cd> Lexeme cd found
-ScopeTable: 1
-3 --> < abcd : ID >
-4 --> < cd : ID >
-5 --> < ab : ID >
-6 --> < a : ID >
-Line no 1: Token <STRING "abcd
-"> Lexeme "abcd
-" found
-Line no 1: Token <STRING "abcd
-"> Lexeme "abcd
-" found
-Line no 1: Token <STRING "abcd
-"> Lexeme "abcd
-" found
-Line no 1: Token <ID abcd> Lexeme abcd found
-Line no 1: Error: abcd already declared
-Line no 1: Token <ID efgh> Lexeme efgh found
-ScopeTable: 1
-0 --> < efgh : ID >
-3 --> < abcd : ID >
-4 --> < cd : ID >
-5 --> < ab : ID >
-6 --> < a : ID >
-Line no 1: Token <ID ijk> Lexeme ijk found
-ScopeTable: 1
-0 --> < efgh : ID >
-3 --> < abcd : ID >
-4 --> < ijk : ID >
-4 --> < cd : ID >
-5 --> < ab : ID >
-6 --> < a : ID >
-Line no 1: Token <MULOP /> Lexeme / found
-Line no 1: Token <MULOP *> Lexeme * found
-Line no 1: Token <MULOP *> Lexeme * found
-Line no 1: Token <ID abc> Lexeme abc found
-ScopeTable: 1
-0 --> < efgh : ID >
-3 --> < abcd : ID >
-4 --> < abc : ID >
-4 --> < ijk : ID >
-4 --> < cd : ID >
-5 --> < ab : ID >
-6 --> < a : ID >
-Line no 1: Token <ID def> Lexeme def found
-ScopeTable: 1
-0 --> < efgh : ID >
-3 --> < abcd : ID >
-4 --> < def : ID >
-4 --> < abc : ID >
-4 --> < ijk : ID >
-4 --> < cd : ID >
-5 --> < ab : ID >
+0 --> < b : ID >
+2 --> < A : ID >
 6 --> < a : ID >

@@ -77,13 +77,13 @@ char processChar(char c) {
 
 /*operators*/
 ADDOP [+-]
-MULOP [*/]
+MULOP [*/%]
 ASSIGNOP [=]
-RELOP [<>=!]
+RELOP ("<="|">="|"<"|">"|"!="|"==")
 LOGICOP ("&&"|"||")
 BITOP [&|^~]
 LOGICNOT [!]
-
+INCOP ("++"|"--")
 /*PARENTHESIS*/
 LPAREN [\(]
 RPAREN [\)]
@@ -100,10 +100,10 @@ NEWLINE [\n]
 
 /*CHARS*/
 
-SPECIAL_CHAR '([\t\r\b\f])'
-NORMAL_CHAR ['][a-zA-Z0-9_][']
-
-
+SPECIAL_CHAR ([\t\r\b\f])
+NORMAL_CHAR [a-zA-Z0-9_]
+CONST_CHAR  [']({NORMAL_CHAR}|{SPECIAL_CHAR})[']
+CHAR_ERROR [']({NORMAL_CHAR}{NORMAL_CHAR}+)[']
 /*comments*/
 COMMENT ("//"(([\\]+([\n]))|[\n]*)*)
 MULTI_COMMENT ([^*]|("*"[^\n]))*"*/"
@@ -127,14 +127,14 @@ INT "int"
 VOID "void"
 FLOAT "float"
 CHAR "char"
-BOOL "bool"
+FOR "for"
 BREAK "break"
 CONTINUE "continue"
 CASE "case"
 DEFAULT "default"
-
-
-
+SWITCH "switch"
+DO "do"
+DOUBLE "double"
 
 WHITESPACE [ \t\n\r]+
 
@@ -214,9 +214,31 @@ FRAC [0-9]+
 {CHAR} { printf("char keyword\n"); 
         fprintf(tokenFile, "<CHAR>\n");
         fprintf(logFile, "Line no %d: Token <CHAR> Lexeme char found\n",lineNumber);}
-{BOOL} { printf("bool keyword\n"); 
-        fprintf(tokenFile, "<BOOL>\n");
-        fprintf(logFile, "Line no %d: Token <BOOL> Lexeme bool found\n",lineNumber);}
+{FOR} { printf("for keyword\n");
+        fprintf(tokenFile, "<FOR>\n");
+        fprintf(logFile, "Line no %d: Token <FOR> Lexeme for found\n",lineNumber);}
+{BREAK} { printf("break keyword\n");
+        fprintf(tokenFile, "<BREAK>\n");
+        fprintf(logFile, "Line no %d: Token <BREAK> Lexeme break found\n",lineNumber);}
+{CONTINUE} { printf("continue keyword\n");
+        fprintf(tokenFile, "<CONTINUE>\n");
+        fprintf(logFile, "Line no %d: Token <CONTINUE> Lexeme continue found\n",lineNumber);}
+{CASE} { printf("case keyword\n");
+        fprintf(tokenFile, "<CASE>\n");
+        fprintf(logFile, "Line no %d: Token <CASE> Lexeme case found\n",lineNumber);}
+{DEFAULT} { printf("default keyword\n");
+        fprintf(tokenFile, "<DEFAULT>\n");
+        fprintf(logFile, "Line no %d: Token <DEFAULT> Lexeme default found\n",lineNumber);}
+{SWITCH} { printf("switch keyword\n");
+        fprintf(tokenFile, "<SWITCH>\n");
+        fprintf(logFile, "Line no %d: Token <SWITCH> Lexeme switch found\n",lineNumber);}
+{DO} { printf("do keyword\n");
+        fprintf(tokenFile, "<DO>\n");
+        fprintf(logFile, "Line no %d: Token <DO> Lexeme do found\n",lineNumber);}
+{DOUBLE} { printf("double keyword\n");
+        fprintf(tokenFile, "<DOUBLE>\n");
+        fprintf(logFile, "Line no %d: Token <DOUBLE> Lexeme double found\n",lineNumber);}
+
 {DIGIT} {printf("%s\n", yytext);
         fprintf(tokenFile, "<DIGIT %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <DIGIT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
@@ -232,8 +254,13 @@ FRAC [0-9]+
         fprintf(logFile, "Line no %d: Token <FLOAT_ERR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
         errorCount++;}
 
-
-
+{CONST_CHAR} {
+        fprintf(tokenFile, "<CONST_CHAR %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <CONST_CHAR %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+{CHAR_ERROR} {
+        fprintf(tokenFile, "<CHAR_ERROR %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        errorCount++;}
 
 {MULTI_COMMENT}     {printf("%s matched in MULTI_COMMENT rule\n",yytext);
                         
@@ -265,6 +292,9 @@ FRAC [0-9]+
 {LOGICNOT} 			{printf("%s matched in LOGICNOT rule\n",yytext);
                     fprintf(tokenFile, "<%s %s>\n", "LOGICNOT",yytext);
                     fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LOGICNOT", yytext, yytext);}
+{INCOP}         {printf("%s matched in INCOP rule\n",yytext);
+                    fprintf(tokenFile, "<%s %s>\n", "INCOP",yytext);
+                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "INCOP", yytext, yytext);}
 {LPAREN} 			{printf("%s matched in LPAREN rule\n",yytext);
                     fprintf(tokenFile, "<%s %s>\n", "LPAREN",yytext);
                     fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LPAREN", yytext, yytext);}
@@ -298,11 +328,7 @@ FRAC [0-9]+
                         fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "SEMICOLON", yytext, yytext);}
 {NEWLINE} 			{lineNumber++;}
 
-{SPECIAL_CHAR} 		{printf("%s matched in SPECIAL_CHAR rule\n",yytext);
-                        fprintf(tokenFile, "<%s %s>\n", "SPECIAL_CHAR",yytext);
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "SPECIAL_CHAR", yytext, yytext);}
-{NORMAL_CHAR} 		{printf("%s matched in NORMAL_CHAR rule\n",yytext);
-                        fprintf(tokenFile, "<%s %s>\n", "NORMAL_CHAR",yytext);}
+
 {ID} 				{printf("%s matched in ID rule\n",yytext);
                         fprintf(tokenFile, "<%s %s>\n", "ID",yytext);
 

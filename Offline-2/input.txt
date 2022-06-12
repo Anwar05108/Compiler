@@ -1,16 +1,9 @@
-1.2.345
-1E10.7
-float a = 12.7
-12abcd
-'ab'
-'a
-'
-'ab cd'
-'\'
-''
-"abcd
-"abcd\
-efgh
-ijk"
-/**abc
-def
+++
+A && b
+A <= b
+A >= b
+A == b
+A != b
+A < b
+A > b
+!a
