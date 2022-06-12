@@ -1,1 +1,5 @@
-Line no 1: Error: Unfinished string
+Line no 1: Token <MULTI_COMMENT /*HELLO
+ALSKDFJ
+AKSDFLAKS *****/> Lexeme /*HELLO
+ALSKDFJ
+AKSDFLAKS *****/ found

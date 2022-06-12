@@ -104,8 +104,8 @@ NORMAL_CHAR [a-zA-Z0-9_]
 CONST_CHAR  [']({NORMAL_CHAR}|{SPECIAL_CHAR})[']
 CHAR_ERROR [']({NORMAL_CHAR}{NORMAL_CHAR}+)[']
 /*comments*/
-COMMENT ("//"(([\\]+([\n]))|[\n]*)*)
-MULTI_COMMENT ([^*]|("*"[^\n]))*"*/"
+COMMENT "//".*
+MULTI_COMMENT "/*"([^*]|\*+[^*/])*\*+"/"
 UNFINISHED_CHAR_ERROR [']({NORMAL_CHAR}|{SPECIAL_CHAR})*
 
 
@@ -262,7 +262,7 @@ FRAC [0-9]+
         fprintf(tokenFile, "<UNFINISHED_CHAR_ERROR %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <UNFINISHED_CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
         errorCount++;}
-{MULTI_COMMENT}     {printf("%s matched in MULTI_COMMENT rule\n",yytext);
+{MULTI_COMMENT}     {
                         
                         fprintf(logFile, "Line no %d: Token <MULTI_COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
 {COMMENT}           {
