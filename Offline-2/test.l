@@ -87,3 +87,16 @@ void main(int argc, char *argv[]){
 	fclose(yyin);
 
 }
+
+
+
+
+   if(!symbolTable.search(yytext))
+                        {
+                            symbolTable.insert(yytext, "ID");
+                            symbolTable.printAllScopesInFile(logFile);
+                        }
+                        else
+                        {
+                            fprintf(logFile, "Line no %d: Error: %s already declared\n",lineNumber, yytext);
+                        }

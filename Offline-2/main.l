@@ -190,49 +190,49 @@ FRAC [0-9]+
 
 {WHITESPACE}  {  }
 {EMPTY_CHARACTER_ERROR}  {  fprintf(logFile, "Error: EMPTY character constant\n"); errorCount++; }
-{IF} { printf("if keyword\n"); 
+{IF} { 
         fprintf(tokenFile, "<IF>\n");
         fprintf(logFile, "Line no %d: Token <IF> Lexeme if found\n",lineNumber);}
-{ELSE} { printf("else keyword\n");
+{ELSE} { 
         fprintf(tokenFile, "<ELSE>\n");
         fprintf(logFile, "Line no %d: Token <ELSE> Lexeme else found\n",lineNumber);}
-{WHILE} { printf("while keyword\n"); 
+{WHILE} {  
         fprintf(tokenFile, "<WHILE>\n");
         fprintf(logFile, "Line no %d: Token <WHILE> Lexeme while found\n",lineNumber);}
-{RETURN} { printf("return keyword\n"); 
+{RETURN} {  
         fprintf(tokenFile, "<RETURN>\n");
         fprintf(logFile, "Line no %d: Token <RETURN> Lexeme return found\n",lineNumber);}
-{INT} { printf("int keyword\n"); 
+{INT} {  
         fprintf(tokenFile, "<INT>\n");
         fprintf(logFile, "Line no %d: Token <INT> Lexeme int found\n",lineNumber);}
-{VOID} { printf("void keyword\n"); 
+{VOID} {  
         fprintf(tokenFile, "<VOID>\n");
         fprintf(logFile, "Line no %d: Token <VOID> Lexeme void found\n",lineNumber);}
-{FLOAT} { printf("float keyword\n"); 
+{FLOAT} {  
         fprintf(tokenFile, "<FLOAT>\n");
         fprintf(logFile, "Line no %d: Token <FLOAT> Lexeme float found\n",lineNumber);}
-{CHAR} { printf("char keyword\n"); 
+{CHAR} {  
         fprintf(tokenFile, "<CHAR>\n");
         fprintf(logFile, "Line no %d: Token <CHAR> Lexeme char found\n",lineNumber);}
-{FOR} { printf("for keyword\n");
+{FOR} { 
         fprintf(tokenFile, "<FOR>\n");
         fprintf(logFile, "Line no %d: Token <FOR> Lexeme for found\n",lineNumber);}
-{BREAK} { printf("break keyword\n");
+{BREAK} { 
         fprintf(tokenFile, "<BREAK>\n");
         fprintf(logFile, "Line no %d: Token <BREAK> Lexeme break found\n",lineNumber);}
-{CONTINUE} { printf("continue keyword\n");
+{CONTINUE} { 
         fprintf(tokenFile, "<CONTINUE>\n");
         fprintf(logFile, "Line no %d: Token <CONTINUE> Lexeme continue found\n",lineNumber);}
-{CASE} { printf("case keyword\n");
+{CASE} { 
         fprintf(tokenFile, "<CASE>\n");
         fprintf(logFile, "Line no %d: Token <CASE> Lexeme case found\n",lineNumber);}
-{DEFAULT} { printf("default keyword\n");
+{DEFAULT} { 
         fprintf(tokenFile, "<DEFAULT>\n");
         fprintf(logFile, "Line no %d: Token <DEFAULT> Lexeme default found\n",lineNumber);}
-{SWITCH} { printf("switch keyword\n");
+{SWITCH} { 
         fprintf(tokenFile, "<SWITCH>\n");
         fprintf(logFile, "Line no %d: Token <SWITCH> Lexeme switch found\n",lineNumber);}
-{DO} { printf("do keyword\n");
+{DO} { 
         fprintf(tokenFile, "<DO>\n");
         fprintf(logFile, "Line no %d: Token <DO> Lexeme do found\n",lineNumber);}
 {DOUBLE} { printf("double keyword\n");
@@ -240,22 +240,22 @@ FRAC [0-9]+
         fprintf(logFile, "Line no %d: Token <DOUBLE> Lexeme double found\n",lineNumber);}
 
 
-{NUMBER} {printf("%s\n", yytext);
-        fprintf(tokenFile, "<NUMBER %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <NUMBER %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+{NUMBER} {symbolTable.insert(yytext,"CONST_INT");
+        fprintf(tokenFile, "<CONST_INT %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <CONST_INT> Lexeme %s found\n",lineNumber, yytext);}
 
 {CONST_FLOAT} {
         fprintf(tokenFile, "<CONST_FLOAT %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <CONST_FLOAT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+        fprintf(logFile, "Line no %d: Token <CONST_FLOAT> Lexeme %s found\n",lineNumber, yytext);}
 {FLOAT_ERR} {
         fprintf(tokenFile, "<FLOAT_ERR %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <FLOAT_ERR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        fprintf(logFile, "Line no %d: Token <FLOAT_ERR> Lexeme %s found\n",lineNumber, yytext);
         errorCount++;}
 
 {CONST_CHAR} {
-  
+        symbolTable.insert(yytext, "CONST_CHAR");
         fprintf(tokenFile, "<CONST_CHAR %c>\n", yytext[1]);
-        fprintf(logFile, "Line no %d: Token <CONST_CHAR %c> Lexeme %c found\n",lineNumber, yytext[1], yytext[1]);
+        fprintf(logFile, "Line no %d: Token <CONST_CHAR> Lexeme %c found\n",lineNumber, yytext[1]);
         }
 {CHAR_ERROR} {
         fprintf(tokenFile, "<CHAR_ERROR %s>\n", yytext);
@@ -266,76 +266,85 @@ FRAC [0-9]+
         fprintf(logFile, "Line no %d: Token <UNFINISHED_CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
         errorCount++;}
 {MULTI_COMMENT}     {
-                        
-                        fprintf(logFile, "Line no %d: Token <MULTI_COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+                        fprintf(logFile, "Line no %d: Token <COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+                        int i;
+                        for(i = 0; i < strlen(yytext); i++)
+                        {
+                            if(yytext[i] == '\n')
+                            {
+                                lineNumber++;
+                            }
+                        }
+                        }
+
 {COMMENT}           {
-                        fprintf(logFile, "Line no %d: Token <COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
-{ADDOP} 			{printf("%s matched in ADDOP rule\n",yytext);
+                        fprintf(logFile, "Line no %d: Token <COMMENT> Lexeme %s found\n",lineNumber, yytext);}
+{ADDOP} 			{
                     fprintf(tokenFile, "<%s %s>\n", "ADDOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "ADDOP", yytext, yytext);}
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "ADDOP", yytext);}
 
-{MULOP} 			{printf("%s matched in MULOP rule\n",yytext);
+{MULOP} 			{
                     fprintf(tokenFile, "<%s %s>\n", "MULOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "MULOP", yytext, yytext);}
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "MULOP", yytext);}
                             
-{ASSIGNOP} 			{printf("%s matched in ASSIGNOP rule\n",yytext);
+{ASSIGNOP} 			{
                     fprintf(tokenFile, "<%s %s>\n", "ASSIGNOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "ASSIGNOP", yytext, yytext);}
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "ASSIGNOP",  yytext);}
 
-{RELOP} 			{printf("%s matched in RELOP rule\n",yytext);
+{RELOP} 			{
                     fprintf(tokenFile, "<%s %s>\n", "RELOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "RELOP", yytext, yytext);}
-{BITOP} 			{printf("%s matched in BITOP rule\n",yytext);
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "RELOP",  yytext);}
+{BITOP} 			{
                     fprintf(tokenFile, "<%s %s>\n", "BITOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "BITOP", yytext, yytext);}
-{LOGICOP} 			{printf("%s matched in LOGICOP rule\n",yytext);
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "BITOP",  yytext);}
+{LOGICOP} 			{
                     fprintf(tokenFile, "<%s %s>\n", "LOGICOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LOGICOP", yytext, yytext);}
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "LOGICOP",  yytext);}
 
-{LOGICNOT} 			{printf("%s matched in LOGICNOT rule\n",yytext);
+{LOGICNOT} 			{
                     fprintf(tokenFile, "<%s %s>\n", "LOGICNOT",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LOGICNOT", yytext, yytext);}
-{INCOP}         {printf("%s matched in INCOP rule\n",yytext);
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "LOGICNOT",  yytext);}
+{INCOP}         {
                     fprintf(tokenFile, "<%s %s>\n", "INCOP",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "INCOP", yytext, yytext);}
-{LPAREN} 			{printf("%s matched in LPAREN rule\n",yytext);
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "INCOP",  yytext);}
+{LPAREN} 			{
                     fprintf(tokenFile, "<%s %s>\n", "LPAREN",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LPAREN", yytext, yytext);}
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "LPAREN",  yytext);}
                     
-{RPAREN} 			{printf("%s matched in RPAREN rule\n",yytext);
+{RPAREN} 			{
                     fprintf(tokenFile, "<%s %s>\n", "RPAREN",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "RPAREN", yytext, yytext);}
-{LCURL} 			{printf("%s matched in LCURL rule\n",yytext);
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "RPAREN",  yytext);}
+{LCURL} 			{
                     fprintf(tokenFile, "<%s %s>\n", "LCURL",yytext);
                     fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LCURL", yytext, yytext);
                     symbolTable.enterScope(7);
                     }
 
 
-{RCURL} 			{printf("%s matched in RCURL rule\n",yytext);
+{RCURL} 			{
                     fprintf(tokenFile, "<%s %s>\n", "RCURL",yytext);
-                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "RCURL", yytext, yytext);
+                    fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "RCURL",  yytext);
                     symbolTable.exitScope();
                     }
-{LTHIRD} 			{printf("%s matched in LTHIRD rule\n",yytext);
+{LTHIRD} 			{
                         fprintf(tokenFile, "<%s %s>\n", "LTHIRD",yytext);
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "LTHIRD", yytext, yytext);}
-{RTHIRD} 			{printf("%s matched in RTHIRD rule\n",yytext);
+                        fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "LTHIRD",  yytext);}
+{RTHIRD} 			{
                         fprintf(tokenFile, "<%s %s>\n", "RTHIRD",yytext);
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "RTHIRD", yytext, yytext);}
-{COMMA} 			{printf("%s matched in COMMA rule\n",yytext);
+                        fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "RTHIRD",  yytext);}
+{COMMA} 			{
                         fprintf(tokenFile, "<%s %s>\n", "COMMA",yytext);
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "COMMA", yytext, yytext);}
-{SEMICOLON} 		{printf("%s matched in SEMICOLON rule\n",yytext);
+                        fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "COMMA",  yytext);}
+{SEMICOLON} 		{
                         fprintf(tokenFile, "<%s %s>\n", "SEMICOLON",yytext);
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "SEMICOLON", yytext, yytext);}
+                        fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "SEMICOLON",  yytext);}
 {NEWLINE} 			{lineNumber++;}
 
 
-{ID} 				{printf("%s matched in ID rule\n",yytext);
+{ID} 				{
                         fprintf(tokenFile, "<%s %s>\n", "ID",yytext);
 
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "ID", yytext, yytext);
+                        fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "ID",  yytext);
                         if(!symbolTable.search(yytext))
                         {
                             symbolTable.insert(yytext, "ID");
@@ -354,8 +363,18 @@ FRAC [0-9]+
 
 
 {STRING} 			{ yytext[0] = ' ';yytext[strlen(yytext)-1] = '\0';
-                            fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
+fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
                     fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext); 
+                    int i ;
+                            for(i = 0; yytext[i] != '\0'; i++)
+                            {
+
+                                if(yytext[i] == '\n')
+                                {
+                                    lineNumber++;
+                                }
+                            }
+                            
                         }
 {UNFINISHED_STRING_ERROR} {
                         fprintf(tokenFile, "<%s %s>\n", "UNFINISHED_STRING_ERROR",yytext);
@@ -393,6 +412,9 @@ int main(int argc,char *argv[]){
 
 	yyin= fin;
 	yylex();
+    symbolTable.printAllScopesInFile(logFile);
+    fprintf(logFile, "Total number of errors: %d\n",errorCount);
+    fprintf(logFile, "Total number of lines: %d\n",lineNumber);
 	fclose(yyin);
     fclose(tokenFile);
     fclose(logFile);

@@ -59,7 +59,7 @@ void SymbolTable::enterScope(int size)
 
 void SymbolTable:: exitScope()
 {       
-    cout << "scope with id " << scopeTable->getShowId() <<" removed" << endl;
+    // cout << "scope with id " << scopeTable->getShowId() <<" removed" << endl;
     // ScopeTable *nextScope = 
     ScopeTable *temp = scopeTable;
      scopeTable = temp->getParentScope();
@@ -79,7 +79,7 @@ void SymbolTable::printCurrentScope()
 void SymbolTable::printAllScopes()
 
 {
-    cout << "print all scopes" << endl;
+    // cout << "print all scopes" << endl;
     ScopeTable *temp = scopeTable;
     
 

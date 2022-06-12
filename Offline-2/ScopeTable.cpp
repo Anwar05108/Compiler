@@ -64,7 +64,7 @@ ScopeTable::ScopeTable(int sibling, int n, ScopeTable *parentScope)
         
         this->bucket[i] = NULL;
     }
-    cout << "scope with id " << getShowId()<< " created" << endl;
+    // cout << "scope with id " << getShowId()<< " created" << endl;
     // " created and parentScope is"<< parentScope << endl;
 }
 
@@ -125,7 +125,7 @@ bool ScopeTable::insert(string name, string type )
     SymbolInfo *newSymbol = new SymbolInfo(name,type);
     newSymbol->setNext(this->bucket[index]);
     this->bucket[index] = newSymbol;
-    cout << "Inserted " << name << " " << type << " in scope " << getShowId() <<" in index "<<  index << endl;
+    // cout << "Inserted " << name << " " << type << " in scope " << getShowId() <<" in index "<<  index << endl;
     // cout << "in bucket " << index << endl;
     return true;
 }
@@ -174,7 +174,7 @@ SymbolInfo* ScopeTable::search(string name)
         {
             
             //  cout << "in bucket " << index ;
-        cout << "found in scope " << getShowId() <<" in index "<< index<< endl;
+        // cout << "found in scope " << getShowId() <<" in index "<< index<< endl;
             return temp;
         }
         temp = temp->getNext();
