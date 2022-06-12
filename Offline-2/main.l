@@ -12,65 +12,7 @@ FILE *tokenFile, *logFile;
 int lineNumber = 1;
 int errorCount = 0;
 
-void printError(char *errorMessage) {
-    fprintf(logFile, "Error: %s\n", errorMessage);
-}
 
-void printWarning(char *warningMessage) {
-    fprintf(logFile, "Warning: %s\n", warningMessage);
-}
-
-void printToken(char *token, char *tokenType) {
-    fprintf(tokenFile, "%s %s\n", token, tokenType);
-}
-
-void printToken(char *token, char *tokenType, int lineNumber) {
-    fprintf(tokenFile, "%s %s %d\n", token, tokenType, lineNumber);
-}
-
-void printToken(char *token, char *tokenType, int lineNumber, char *tokenValue) {
-    fprintf(tokenFile, "%s %s %d %s\n", token, tokenType, lineNumber, tokenValue);
-}
-
-void printToken(char *token, char *tokenType, int lineNumber, char *tokenValue, char *tokenValueType) {
-    fprintf(tokenFile, "%s %s %d %s %s\n", token, tokenType, lineNumber, tokenValue, tokenValueType);
-}
-
-void countLineNumber() {
-    lineNumber++;
-}
-
-string toUpper(string str) {
-    for (int i = 0; i < str.length(); i++) {
-        str[i] = toupper(str[i]);
-    }
-    return str;
-}
-
-string processToken(char *token) {
-    string tokenStr = string(token);
-    tokenStr = toUpper(tokenStr);
-    return tokenStr;
-}
-
-char processChar(char c) {
-    if (c== '\n') {
-        c = '\n';
-    }
-    else if(c == '\t') {
-        c = '\t';
-    }
-    else if(c == '\r') {
-        c = '\r';
-    }
-    else if(c == '\b') {
-        c = '\b';
-    }
-    else if(c == '\f') {
-        c = '\f';
-    }
-    return c;
-}
 
 %}
 
@@ -100,15 +42,15 @@ NEWLINE [\n]
 EMPTY_CHARACTER_ERROR ('')
 /*CHARS*/
 SPECIAL_CHAR (\\['nt\\afrbv0\"])
-NORMAL_CHAR [a-zA-Z0-9_]
+NORMAL_CHAR [a-zA-Z0-9_#@%$&*+-/;]
 CONST_CHAR  [']({NORMAL_CHAR}|{SPECIAL_CHAR})[']
 CHAR_ERROR [']({NORMAL_CHAR}{NORMAL_CHAR}+)[']
 /*comments*/
 COMMENT "//".*
 MULTI_COMMENT "/*"([^*]|\*+[^*/])*\*+"/"
 UNFINISHED_CHAR_ERROR [']({NORMAL_CHAR}|{SPECIAL_CHAR})*
-
-
+CHAR_GAP_ERROR [']({NORMAL_CHAR}|{SPECIAL_CHAR})*[ ]+[']
+UNFINISHED_MULTI_COMMENT "/*"([^*]|\*+[^*/])*
 
 
 
@@ -189,6 +131,8 @@ FRAC [0-9]+
 %%
 
 {WHITESPACE}  {  }
+
+
 {EMPTY_CHARACTER_ERROR}  {  fprintf(logFile, "Error: EMPTY character constant\n"); errorCount++; }
 {IF} { 
         fprintf(tokenFile, "<IF>\n");
@@ -199,6 +143,7 @@ FRAC [0-9]+
 {WHILE} {  
         fprintf(tokenFile, "<WHILE>\n");
         fprintf(logFile, "Line no %d: Token <WHILE> Lexeme while found\n",lineNumber);}
+        
 {RETURN} {  
         fprintf(tokenFile, "<RETURN>\n");
         fprintf(logFile, "Line no %d: Token <RETURN> Lexeme return found\n",lineNumber);}
@@ -248,7 +193,6 @@ FRAC [0-9]+
         fprintf(tokenFile, "<CONST_FLOAT %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <CONST_FLOAT> Lexeme %s found\n",lineNumber, yytext);}
 {FLOAT_ERR} {
-        fprintf(tokenFile, "<FLOAT_ERR %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <FLOAT_ERR> Lexeme %s found\n",lineNumber, yytext);
         errorCount++;}
 
@@ -258,15 +202,17 @@ FRAC [0-9]+
         fprintf(logFile, "Line no %d: Token <CONST_CHAR> Lexeme %c found\n",lineNumber, yytext[1]);
         }
 {CHAR_ERROR} {
-        fprintf(tokenFile, "<CHAR_ERROR %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        fprintf(logFile, "Line no %d: Multi charError  Lexeme %s found\n",lineNumber,  yytext);
         errorCount++;}
 {UNFINISHED_CHAR_ERROR} {
-        fprintf(tokenFile, "<UNFINISHED_CHAR_ERROR %s>\n", yytext);
-        fprintf(logFile, "Line no %d: Token <UNFINISHED_CHAR_ERROR %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        fprintf(logFile, "Line no %d: UNFINISHED_CHAR_ERROR  Lexeme %s found\n",lineNumber,  yytext);
+        errorCount++;}
+{CHAR_GAP_ERROR} {
+        
+        fprintf(logFile, "Line no %d: Error in character Lexeme %s found\n",lineNumber,  yytext);
         errorCount++;}
 {MULTI_COMMENT}     {
-                        fprintf(logFile, "Line no %d: Token <COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+                        fprintf(logFile, "Line no %d: Token <COMMENT> Lexeme %s found\n",lineNumber, yytext);
                         int i;
                         for(i = 0; i < strlen(yytext); i++)
                         {
@@ -326,9 +272,11 @@ FRAC [0-9]+
                     fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "RCURL",  yytext);
                     symbolTable.exitScope();
                     }
+                    
 {LTHIRD} 			{
                         fprintf(tokenFile, "<%s %s>\n", "LTHIRD",yytext);
                         fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "LTHIRD",  yytext);}
+
 {RTHIRD} 			{
                         fprintf(tokenFile, "<%s %s>\n", "RTHIRD",yytext);
                         fprintf(logFile, "Line no %d: Token <%s> Lexeme %s found\n",lineNumber, "RTHIRD",  yytext);}
@@ -356,7 +304,7 @@ FRAC [0-9]+
                         }
                         }
 
-{INVALID_ID}    {printf("%s matched in INVALID_ID rule\n",yytext);
+{INVALID_ID}    {
                     fprintf(tokenFile, "<%s %s>\n", "INVALID_ID",yytext);   
                     fprintf(logFile, "Line no %d: Error: %s is not a valid identifier\n",lineNumber, yytext);
                     errorCount++;}
@@ -380,8 +328,11 @@ fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
                         fprintf(tokenFile, "<%s %s>\n", "UNFINISHED_STRING_ERROR",yytext);
                     fprintf(logFile, "Line no %d: Error: Unfinished string\n",lineNumber);
                         errorCount++;}
+                        
 
-. {printf("Mysterious character %s found\n",yytext);}
+
+
+. {}
 %%
 int main(int argc,char *argv[]){
 	
@@ -396,13 +347,13 @@ int main(int argc,char *argv[]){
 		return 0;
 	}
 	
-    tokenFile=fopen("token.txt","w");
+    tokenFile=fopen("1805108_token.txt","w");
     if(tokenFile==NULL){
         printf("Cannot open token file\n");
         return 0;
     }
 
-    logFile = fopen("log.txt","w");
+    logFile = fopen("1805108_log.txt","w");
     if(logFile==NULL){
         printf("Cannot open log file\n");
         return 0;

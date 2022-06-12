@@ -100,3 +100,64 @@ void main(int argc, char *argv[]){
                         {
                             fprintf(logFile, "Line no %d: Error: %s already declared\n",lineNumber, yytext);
                         }
+
+
+						void printError(char *errorMessage) {
+    fprintf(logFile, "Error: %s\n", errorMessage);
+}
+
+void printWarning(char *warningMessage) {
+    fprintf(logFile, "Warning: %s\n", warningMessage);
+}
+
+void printToken(char *token, char *tokenType) {
+    fprintf(tokenFile, "%s %s\n", token, tokenType);
+}
+
+void printToken(char *token, char *tokenType, int lineNumber) {
+    fprintf(tokenFile, "%s %s %d\n", token, tokenType, lineNumber);
+}
+
+void printToken(char *token, char *tokenType, int lineNumber, char *tokenValue) {
+    fprintf(tokenFile, "%s %s %d %s\n", token, tokenType, lineNumber, tokenValue);
+}
+
+void printToken(char *token, char *tokenType, int lineNumber, char *tokenValue, char *tokenValueType) {
+    fprintf(tokenFile, "%s %s %d %s %s\n", token, tokenType, lineNumber, tokenValue, tokenValueType);
+}
+
+void countLineNumber() {
+    lineNumber++;
+}
+
+string toUpper(string str) {
+    for (int i = 0; i < str.length(); i++) {
+        str[i] = toupper(str[i]);
+    }
+    return str;
+}
+
+string processToken(char *token) {
+    string tokenStr = string(token);
+    tokenStr = toUpper(tokenStr);
+    return tokenStr;
+}
+
+char processChar(char c) {
+    if (c== '\n') {
+        c = '\n';
+    }
+    else if(c == '\t') {
+        c = '\t';
+    }
+    else if(c == '\r') {
+        c = '\r';
+    }
+    else if(c == '\b') {
+        c = '\b';
+    }
+    else if(c == '\f') {
+        c = '\f';
+    }
+    return c;
+}
