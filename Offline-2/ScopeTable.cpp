@@ -179,14 +179,14 @@ SymbolInfo* ScopeTable::search(string name)
         }
         temp = temp->getNext();
     }
-    if (this->parentScope != NULL)
-    {
+    // if (this->parentScope != NULL)
+    // {
         
-        // cout << "Searching in parent scope" << endl;
-        // cout << "in bucket " << index ;
-        // cout << "in scope " << this->id ;
-        return this->parentScope->search(name);
-    }
+    //     // cout << "Searching in parent scope" << endl;
+    //     // cout << "in bucket " << index ;
+    //     // cout << "in scope " << this->id ;
+    //     return this->parentScope->search(name);
+    // }
     return NULL;
 }
 // {

@@ -1,45 +1,7 @@
-<INT>
-<ID main>
-<LPAREN (>
-<RPAREN )>
-<LCURL {>
-<INT>
-<ID a>
-<COMMA ,>
-<ID b>
-<SEMICOLON ;>
+<FLOAT_NUM 1E10>
+<DIGIT 7>
+<FLOAT_NUM_ERR2 ..7>
+<FLOAT>
 <ID a>
 <ASSIGNOP =>
-<ID a>
-<ADDOP +>
-<DIGIT 1>
-<SEMICOLON ;>
-<CHAR>
-<ID ch>
-<ASSIGNOP =>
-<NORMAL_CHAR 'a'>
-<SEMICOLON ;>
-<ID ch>
-<ASSIGNOP =>
-<ID t>
-<SEMICOLON ;>
-<CHAR>
-<ID c>
-<LTHIRD [>
-<RTHIRD ]>
-<ASSIGNOP =>
-<STRING "ab\td">
-<SEMICOLON ;>
-<ID printf>
-<LPAREN (>
-<STRING "abc\
-def\
-ghi">
-<RPAREN )>
-<SEMICOLON ;>
-<ID a>
-<ID comment>
-<RETURN>
-<DIGIT 0>
-<SEMICOLON ;>
-<RCURL }>
+<FLOAT_NUM_ERR1 12..7>

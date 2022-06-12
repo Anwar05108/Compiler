@@ -1,6 +1,7 @@
 %option noyywrap
 
 %{
+    
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -9,6 +10,7 @@
 SymbolTable symbolTable(7);
 FILE *tokenFile, *logFile;
 int lineNumber = 1;
+int errorCount = 0;
 
 void printError(char *errorMessage) {
     fprintf(logFile, "Error: %s\n", errorMessage);
@@ -70,11 +72,6 @@ char processChar(char c) {
     return c;
 }
 
-
-
-
-
-
 %}
 
 
@@ -103,7 +100,7 @@ NEWLINE [\n]
 
 /*CHARS*/
 
-SPECIAL_CHAR [\t\n\r\f\v]
+SPECIAL_CHAR '([\t\r\b\f])'
 NORMAL_CHAR ['][a-zA-Z0-9_][']
 
 
@@ -156,10 +153,19 @@ STRING ["][^"]*["]
 
 
 
+DIGIT [0-9]
+NUMBER [0-9]+
+
+FLOAT_NUM [0-9]+.[0-9]+
+FLOAT_NUM_ERR1 [0-9]+.[.]+[0-9]+
+FLOAT_NUM_ERR2 .[.]+[0-9]+
+
+EXP [0-9]+[eE][ +-]?[0-9]+
+/*FLOATING POINTS
+FRAC [0-9]+
 
 /*constants*/
 
-DIGIT [0-9]+
 
 
 
@@ -207,6 +213,23 @@ DIGIT [0-9]+
 {DIGIT} {printf("%s\n", yytext);
         fprintf(tokenFile, "<DIGIT %s>\n", yytext);
         fprintf(logFile, "Line no %d: Token <DIGIT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+{NUMBER} {printf("%s\n", yytext);
+        fprintf(tokenFile, "<NUMBER %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <NUMBER %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
+{FLOAT_NUM} {
+        fprintf(tokenFile, "<FLOAT_NUM %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <FLOAT_NUM %s> Lexeme %s found\n",lineNumber, yytext, yytext);}         
+{FLOAT_NUM_ERR1} {
+        fprintf(tokenFile, "<FLOAT_NUM_ERR1 %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <FLOAT_NUM_ERR1 %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        errorCount++;}
+
+{FLOAT_NUM_ERR2} {  
+        fprintf(tokenFile, "<FLOAT_NUM_ERR2 %s>\n", yytext);
+        fprintf(logFile, "Line no %d: Token <FLOAT_NUM_ERR2 %s> Lexeme %s found\n",lineNumber, yytext, yytext);
+        errorCount++;}
+
+
 {MULTI_COMMENT}     {printf("%s matched in MULTI_COMMENT rule\n",yytext);
                         
                         fprintf(logFile, "Line no %d: Token <MULTI_COMMENT %s> Lexeme %s found\n",lineNumber, yytext, yytext);}
@@ -269,6 +292,7 @@ DIGIT [0-9]+
                         fprintf(tokenFile, "<%s %s>\n", "SEMICOLON",yytext);
                         fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "SEMICOLON", yytext, yytext);}
 {NEWLINE} 			{lineNumber++;}
+
 {SPECIAL_CHAR} 		{printf("%s matched in SPECIAL_CHAR rule\n",yytext);
                         fprintf(tokenFile, "<%s %s>\n", "SPECIAL_CHAR",yytext);
                         fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "SPECIAL_CHAR", yytext, yytext);}
@@ -288,9 +312,15 @@ DIGIT [0-9]+
                             fprintf(logFile, "Line no %d: Error: %s already declared\n",lineNumber, yytext);
                         }
                         }
+
+
+                        
+
 {STRING} 			{printf("%s matched in STRING rule\n",yytext);
                         fprintf(tokenFile, "<%s %s>\n", "STRING",yytext);
-                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext);} 
+                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext); 
+                        fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext);
+                    fprintf(logFile, "Line no %d: Token <%s %s> Lexeme %s found\n",lineNumber, "STRING", yytext, yytext);}
 . {printf("Mysterious character %s found\n",yytext);}
 %%
 int main(int argc,char *argv[]){

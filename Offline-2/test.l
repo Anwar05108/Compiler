@@ -42,6 +42,12 @@ ASSIGNOP [=]
 /*KEWORD ["int" "float" "double" "char" "string" "bool"]
 
 
+/*FLOATING POINTS
+EXP [e|E][+|-]?[0-9]+
+FRAC [0-9]+
+FLOAT [0-9]+\.[0-9]+[e|E][+|-]?[0-9]+
+
+
 
 
 
