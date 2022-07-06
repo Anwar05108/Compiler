@@ -1,23 +1,22 @@
 %{
-#include<stdio.h>
-#include<string.h>
-#include"SymbolTable.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// #include "ScopeTable.cpp"
+#include "SymbolTable.cpp"
+// #include "SymbolInfo.cpp"
+// #define YYSTYPE SymbolInfo*      /* yyparse() stack type */
 
-int lineCount = 1;
-int errorCount = 0;
+SymbolTable symbolTable(30);
 
-int yyparse(void);
+void yyerror(char *s){
+	printf("%s\n",s);
+}
+
 int yylex(void);
 
-void yyerror(const char* str) {
-    printf("Syntax error at line: %d : \"%s\" \n", lineCount, str);
-}
-    
 %}
 
-%union {
-    SymbolInfo *symbolInfo;
-}
 
 
 %token VOID NEWLINE NUMBER LESS GREATER EQUAL IF FOR ELSE WHILE BREAK CONTINUE CASE DEFAULT SWITCH DO
@@ -31,24 +30,18 @@ void yyerror(const char* str) {
 %token<symbolInfo>CONST_INT
 %token<symbolInfo>CONST_FLOAT
 
-%type <symbolInfo> start
 
 
 
-%%
-
-
-start:
-     {
-    
-     
-    printf("hello");
-        }
-    ;
 
 %%
+input : {
+    printf("hello\n");
+}
+%%
 
-int main(){
+main()
+{
     yyparse();
-    return 0;
+    exit(0);
 }

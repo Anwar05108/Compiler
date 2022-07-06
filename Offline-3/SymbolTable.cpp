@@ -1,24 +1,8 @@
-#include "ScopeTable.cpp"
-// #include "SymbolInfo.cpp"
-
-class SymbolTable
-{
-private:
-    ScopeTable *scopeTable;
-public:
-    SymbolTable(int);
-    ~SymbolTable();
-    bool insert(string, string);
-    bool deletef(string);
-    void enterScope( int );
-    void exitScope();
-    SymbolInfo* search(string);
-    void printCurrentScope();
-    void printAllScopes();
-    ScopeTable* getParentScope();
-    ScopeTable* getScopeTable();
-    void printAllScopesInFile(FILE *);
-};
+#include "SymbolTable.h"
+// #include "SymbolInfo.h"
+#include <string>
+#include <iostream>
+// #include "ScopeTable.h"
 
 SymbolTable::SymbolTable(int n)
 {

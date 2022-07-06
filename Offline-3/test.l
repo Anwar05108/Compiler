@@ -1,26 +1,26 @@
 %option noyywrap
 
 %{
-#include "bits/stdc++.h"
-// #include "SymbolTable.h"
-#include "SymbolInfo.h"
+    
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+// #include "SymbolInfo.cpp"
+// #include "SymbolTable.cpp"
+// #include "ScopeTable.cpp"
 #include "y.tab.h"
-using namespace std;
-
 #define YYSTYPE SymbolInfo*
 
-void yyerror(char*);
-
-extern FILE *logFile;
-
-extern int lineCount;
-extern int errorCount;
-// extern SymbolTable st;
-int lineNumber = 0;
+extern SymbolTable symbolTable;
+// SymbolTable symbolTable(7);
+FILE *tokenFile, *logFile;
+int lineNumber = 1;
+int errorCount = 0;
 
 
 
 %}
+
 
 /*operators*/
 ADDOP [+-]
