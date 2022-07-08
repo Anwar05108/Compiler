@@ -23,19 +23,19 @@ ScopeTable::ScopeTable(int sibling, int n, ScopeTable *parentScope)
 ScopeTable::~ScopeTable()
 {
 
-    // for (int i = 0; i < this->size; i++)
-    // {
-    //
-    //     SymbolInfo *temp = this->bucket[i];
-    //     while (temp != NULL)
-    //     {
-    //
-    //         SymbolInfo *temp2 = temp;
-    //         temp = temp->getNext();
-    //         delete temp2;
-    //     }
-    // }
-    // delete[] this->bucket;
+    for (int i = 0; i < this->size; i++)
+    {
+    
+        SymbolInfo *temp = this->bucket[i];
+        while (temp != NULL)
+        {
+    
+            SymbolInfo *temp2 = temp;
+            temp = temp->getNext();
+            delete temp2;
+        }
+    }
+    delete[] this->bucket;
 }
 
 bool ScopeTable::insert(string name, string type)

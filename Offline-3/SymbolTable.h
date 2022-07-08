@@ -1,6 +1,6 @@
 #include <string>
 using namespace std;
-#include "ScopeTable.h"
+#include "ScopeTable.cpp"
 // #include "SymbolInfo.cpp"
 
 class SymbolTable

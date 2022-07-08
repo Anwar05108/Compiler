@@ -12,6 +12,9 @@ SymbolTable::SymbolTable(int n)
 
 SymbolTable::~SymbolTable()
 {
+    delete this->scopeTable;
+
+    
 }
 
 bool SymbolTable::insert(string name, string type)
