@@ -1,1 +1,2 @@
-int func(int x)
+char funcd();
+char funcd();

@@ -2,15 +2,19 @@
 #include<stdio.h>
 #include<string.h>
 #include"SymbolTable.cpp"
+#include<fstream>
+#include<iostream>
 
 int lineCount = 1;
 int errorCount = 0;
 
 SymbolTable symbolTable(30);
 
-FILE *errorFile, *logFile;
+// FILE *errorFile, *logFile;
+ofstream errorFile, logFile;
 
 extern FILE *yyin;
+// extern ifstream yyin;
 
 int yyparse(void);
 int yylex(void);
@@ -22,7 +26,7 @@ void yyerror(const char* str) {
 %}
 
 
-
+%define parse.error verbose
 %union {
     SymbolInfo *symbolInfo;
 }
@@ -45,6 +49,7 @@ void yyerror(const char* str) {
 
 %type <symbolInfo> statement_list statement parameter_list parameter_declaration
 %type <symbolInfo> expression
+%type <symbolInfo> type_specifier
 
 %%
 
@@ -59,13 +64,13 @@ start: program
 
 program : program unit
             {
-            $$ = new SymbolInfo( $1->getName() + $2->getName(),"SYMBOL_PROGRAM");
-            printf("%s", $$->getName());
+            $$ = new SymbolInfo( $1->getName() +'\n' +$2->getName(),"SYMBOL_PROGRAM");
+            printf("%s\n", $$->getName());
             }
         | unit
             {
             $$ = $1;
-            printf("%s", $$->getName());
+            printf("%s\n", $$->getName());
             }
             
             
@@ -79,42 +84,80 @@ unit : variable_declaration
     | function_declaration
         {
         $$ = $1;
-        printf("%s", $1->getName());
+        printf("%s\n", $1->getName());
         }
     | function_definition
         {
         $$ = $1;
-        printf("%s", $$->getName());
+        printf("%s\n", $$->getName());
         }
     ;
 
 
-variable_declaration : INT ID
+variable_declaration : type_specifier ID SEMICOLON
                         {
                         $$ = new SymbolInfo($2->getName(), "SYMBOL_VARIABLE");
                         printf("%s", $$->getName());
-                        
-                        
-                         printf("integer declaration found");
+                        printf("integer declaration found");
                         }
                    
                     ;
 
-function_declaration : INT ID LPAREN parameter_list RPAREN
+function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         {
                         
-                        $$ = new SymbolInfo($2->getName(), "SYMBOL_VARIABLE");
+                      $$ = new SymbolInfo($2->getName(), "SYMBOL_VARIABLE");
+                        symbolTable.insert($2->getName(), $1->getName());
+                       symbolTable.printCurrentScope();
+                        printf("%s\n", $$->getName());
+                        printf("%s\n", $$->getType());
+                        printf("%s", $2->getName());
+                        printf("%s", $2->getType());
                         
-                        printf("%s", $$->getName());
                         
-                        printf("function_declaration found");
+                        
+                        printf("function_declaration found\n");
                         
                         }
+                    |   type_specifier ID LPAREN  RPAREN SEMICOLON
+                    {
+                        $$ = new SymbolInfo($2->getName(), $1->getName());
+                        string functionName = $2->getName();
+                        cout << functionName << endl;
+                        string functionType = $1->getName();
+                        cout << functionType << endl;
+                        if(symbolTable.search(functionName) == NULL)
+                        {
+                            symbolTable.insert(functionName, functionType);
+                        }
+                        else
+                        {
+                            printf("error: function already declared\n");
+                            errorCount++;
+                        }
+                        symbolTable.printCurrentScope();
+                        logFile <<functionName << " " << functionType << endl;
+                        
+                        printf("%s\n", $$->getName());
+                        printf("%s\n", $$->getType());
+                        printf("%s", $2->getName());
+                        printf("%s", $2->getType());
+                        cout << $2->getName() << endl;
+                        
+                        
+
+                        
+                        printf("function_declaration found\n");
+                        
+                        }
+                        
+                        
+                    
                    
                     ;
 
 
-function_definition : INT ID LPAREN parameter_list RPAREN LCURL statement_list RCURL
+function_definition : type_specifier ID LPAREN parameter_list RPAREN LCURL statement_list RCURL
                         {
                         $$ = new SymbolInfo($2->getName(), "SYMBOL_FUNCTION");
                         printf("%s", $$->getName());
@@ -218,6 +261,28 @@ expression : expression ADDOP expression
                 }
             
                 ;
+type_specifier : INT
+                {
+                $$ = new SymbolInfo("INT", "SYMBOL_TYPE");
+                printf("%s", $$->getName());
+                }
+            | FLOAT
+                {
+                $$ = new SymbolInfo("FLOAT", "SYMBOL_TYPE");
+                printf("%s", $$->getName());
+                }
+            | DOUBLE
+                {
+                $$ = new SymbolInfo("DOUBLE", "SYMBOL_TYPE");
+                printf("%s", $$->getName());
+                }
+            | CHAR
+                {
+                $$ = new SymbolInfo("CHAR", "SYMBOL_TYPE");
+                printf("%s", $$->getName());
+                }
+            ;
+
 
 
 %%
@@ -228,30 +293,35 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	
-	FILE *fin=fopen(argv[1],"r");
+
+    FILE *fin = fopen(argv[1], "r");
 	if(fin==NULL){
 		printf("Cannot open specified file\n");
 		return 0;
 	}
 	
-    errorFile=fopen("1805108_error.txt","w");
-    if(errorFile==NULL){
+    errorFile.open("1805108_error.txt");
+    if(!errorFile){
         printf("Cannot open error file\n");
         return 0;
     }
 
-    logFile = fopen("1805108_log.txt","w");
-    if(logFile==NULL){
+    logFile.open("1805108_log.txt");
+    if(!logFile){
         printf("Cannot open log file\n");
         return 0;
     }
 
+    
+
     // symbolTable.printAllScopesInFile(logFile);
 
 
-	yyin= fin;
+	yyin = fin;
     yyparse();
-    fclose(logFile);
-    fclose(errorFile);
+    // fclose(logFile);
+    logFile.close();
+    errorFile.close();
+    // fclose(errorFile);
     return 0;
 }

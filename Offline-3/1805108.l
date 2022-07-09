@@ -5,13 +5,16 @@
 // #include "SymbolTable.h"
 #include "SymbolInfo.h"
 #include "y.tab.h"
+#include <iostream>
+#include <fstream>
 using namespace std;
 
 #define YYSTYPE SymbolInfo*
 
 void yyerror(char*);
 
-extern FILE *logFile;
+// extern FILE *logFile;
+extern ofstream logFile;
 
 extern int lineCount;
 extern int errorCount;
