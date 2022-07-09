@@ -106,26 +106,9 @@ variable_declaration : type_specifier ID SEMICOLON
 function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         {
                         
-                      $$ = new SymbolInfo($2->getName(), "SYMBOL_VARIABLE");
-                        symbolTable.insert($2->getName(), $1->getName());
-                       symbolTable.printCurrentScope();
-                        printf("%s\n", $$->getName());
-                        printf("%s\n", $$->getType());
-                        printf("%s", $2->getName());
-                        printf("%s", $2->getType());
-                        
-                        
-                        
-                        printf("function_declaration found\n");
-                        
-                        }
-                    |   type_specifier ID LPAREN  RPAREN SEMICOLON
-                    {
-                        $$ = new SymbolInfo($2->getName(), $1->getName());
+                      $$ = new SymbolInfo($1->getName()+" "+ $2->getName()+"("+$4->getName()+");", "function_declaration");
                         string functionName = $2->getName();
-                        cout << functionName << endl;
                         string functionType = $1->getName();
-                        cout << functionType << endl;
                         if(symbolTable.search(functionName) == NULL)
                         {
                             symbolTable.insert(functionName, functionType);
@@ -134,26 +117,44 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         {
                             printf("error: function already declared\n");
                             errorCount++;
+                        logFile << "line number" << lineCount << ": " ;
+                            
+                            logFile << "error: function "<<functionName<<" already declared\n\n";
+                            errorFile << "error: function "<<functionName<<" already declared\n";
                         }
-                        symbolTable.printCurrentScope();
-                        logFile <<functionName << " " << functionType << endl;
-                        
-                        printf("%s\n", $$->getName());
-                        printf("%s\n", $$->getType());
-                        printf("%s", $2->getName());
-                        printf("%s", $2->getType());
-                        cout << $2->getName() << endl;
-                        
-                        
-
-                        
-                        printf("function_declaration found\n");
+                        // symbolTable.printCurrentScope();
+                        logFile << "line number" << lineCount << ": " ;
+                        logFile << "func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
+                        logFile << endl<<endl;
+                        logFile << $$->getName();
+                        logFile << endl << endl; 
                         
                         }
-                        
-                        
-                    
-                   
+                    |   type_specifier ID LPAREN  RPAREN SEMICOLON
+                    {
+                        $$ = new SymbolInfo($1->getName()+" "+ $2->getName()+"();", "SYMBOL_FUNCTION");
+                        string functionName = $2->getName();
+                        string functionType = $1->getName();
+                        if(symbolTable.search(functionName) == NULL)
+                        {
+                            symbolTable.insert(functionName, functionType);
+                        }
+                        else
+                        {
+                            printf("error: function already declared\n");
+                            errorCount++;
+                        logFile << "line number" << lineCount << ": " ;
+                            
+                            logFile << "error: function "<<functionName<<" already declared\n\n";
+                            errorFile << "error: function "<<functionName<<" already declared\n";
+                        }
+                        // symbolTable.printCurrentScope();
+                        logFile << "line number" << lineCount << ": " ;
+                        logFile << "func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
+                        logFile << endl<<endl;
+                        logFile << $$->getName();
+                        logFile << endl << endl;                                                                                     
+                        }                                   
                     ;
 
 
@@ -263,22 +264,22 @@ expression : expression ADDOP expression
                 ;
 type_specifier : INT
                 {
-                $$ = new SymbolInfo("INT", "SYMBOL_TYPE");
+                $$ = new SymbolInfo("int", "INT");
                 printf("%s", $$->getName());
                 }
             | FLOAT
                 {
-                $$ = new SymbolInfo("FLOAT", "SYMBOL_TYPE");
+                $$ = new SymbolInfo("float", "FLOAT");
                 printf("%s", $$->getName());
                 }
             | DOUBLE
                 {
-                $$ = new SymbolInfo("DOUBLE", "SYMBOL_TYPE");
+                $$ = new SymbolInfo("double", "DOUBLE");
                 printf("%s", $$->getName());
                 }
             | CHAR
                 {
-                $$ = new SymbolInfo("CHAR", "SYMBOL_TYPE");
+                $$ = new SymbolInfo("char", "CHAR");
                 printf("%s", $$->getName());
                 }
             ;

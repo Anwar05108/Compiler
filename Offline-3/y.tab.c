@@ -725,8 +725,8 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    57,    57,    65,    70,    79,    84,    89,    97,   106,
-     122,   160,   172,   177,   185,   190,   195,   200,   208,   213,
-     220,   225,   230,   264,   269,   274,   279
+     133,   161,   173,   178,   186,   191,   196,   201,   209,   214,
+     221,   226,   231,   265,   270,   275,   280
 };
 #endif
 
@@ -1656,30 +1656,9 @@ yyreduce:
 #line 107 "1805108.y"
                         {
                         
-                      (yyval.symbolInfo) = new SymbolInfo((yyvsp[-4].symbolInfo)->getName(), "SYMBOL_VARIABLE");
-                        symbolTable.insert((yyvsp[-4].symbolInfo)->getName(), (yyvsp[-5].symbolInfo)->getName());
-                       symbolTable.printCurrentScope();
-                        printf("%s\n", (yyval.symbolInfo)->getName());
-                        printf("%s\n", (yyval.symbolInfo)->getType());
-                        printf("%s", (yyvsp[-4].symbolInfo)->getName());
-                        printf("%s", (yyvsp[-4].symbolInfo)->getType());
-                        
-                        
-                        
-                        printf("function_declaration found\n");
-                        
-                        }
-#line 1673 "y.tab.c"
-    break;
-
-  case 10: /* function_declaration: type_specifier ID LPAREN RPAREN SEMICOLON  */
-#line 123 "1805108.y"
-                    {
-                        (yyval.symbolInfo) = new SymbolInfo((yyvsp[-3].symbolInfo)->getName(), (yyvsp[-4].symbolInfo)->getName());
-                        string functionName = (yyvsp[-3].symbolInfo)->getName();
-                        cout << functionName << endl;
-                        string functionType = (yyvsp[-4].symbolInfo)->getName();
-                        cout << functionType << endl;
+                      (yyval.symbolInfo) = new SymbolInfo((yyvsp[-5].symbolInfo)->getName()+" "+ (yyvsp[-4].symbolInfo)->getName()+"("+(yyvsp[-2].symbolInfo)->getName()+");", "function_declaration");
+                        string functionName = (yyvsp[-4].symbolInfo)->getName();
+                        string functionType = (yyvsp[-5].symbolInfo)->getName();
                         if(symbolTable.search(functionName) == NULL)
                         {
                             symbolTable.insert(functionName, functionType);
@@ -1688,27 +1667,53 @@ yyreduce:
                         {
                             printf("error: function already declared\n");
                             errorCount++;
+                        logFile << "line number" << lineCount << ": " ;
+                            
+                            logFile << "error: function "<<functionName<<" already declared\n\n";
+                            errorFile << "error: function "<<functionName<<" already declared\n";
                         }
-                        symbolTable.printCurrentScope();
-                        logFile <<functionName << " " << functionType << endl;
+                        // symbolTable.printCurrentScope();
+                        logFile << "line number" << lineCount << ": " ;
+                        logFile << "func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
+                        logFile << endl<<endl;
+                        logFile << (yyval.symbolInfo)->getName();
+                        logFile << endl << endl; 
                         
-                        printf("%s\n", (yyval.symbolInfo)->getName());
-                        printf("%s\n", (yyval.symbolInfo)->getType());
-                        printf("%s", (yyvsp[-3].symbolInfo)->getName());
-                        printf("%s", (yyvsp[-3].symbolInfo)->getType());
-                        cout << (yyvsp[-3].symbolInfo)->getName() << endl;
-                        
-                        
+                        }
+#line 1684 "y.tab.c"
+    break;
 
-                        
-                        printf("function_declaration found\n");
-                        
+  case 10: /* function_declaration: type_specifier ID LPAREN RPAREN SEMICOLON  */
+#line 134 "1805108.y"
+                    {
+                        (yyval.symbolInfo) = new SymbolInfo((yyvsp[-4].symbolInfo)->getName()+" "+ (yyvsp[-3].symbolInfo)->getName()+"();", "SYMBOL_FUNCTION");
+                        string functionName = (yyvsp[-3].symbolInfo)->getName();
+                        string functionType = (yyvsp[-4].symbolInfo)->getName();
+                        if(symbolTable.search(functionName) == NULL)
+                        {
+                            symbolTable.insert(functionName, functionType);
                         }
-#line 1708 "y.tab.c"
+                        else
+                        {
+                            printf("error: function already declared\n");
+                            errorCount++;
+                        logFile << "line number" << lineCount << ": " ;
+                            
+                            logFile << "error: function "<<functionName<<" already declared\n\n";
+                            errorFile << "error: function "<<functionName<<" already declared\n";
+                        }
+                        // symbolTable.printCurrentScope();
+                        logFile << "line number" << lineCount << ": " ;
+                        logFile << "func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
+                        logFile << endl<<endl;
+                        logFile << (yyval.symbolInfo)->getName();
+                        logFile << endl << endl;                                                                                     
+                        }
+#line 1713 "y.tab.c"
     break;
 
   case 11: /* function_definition: type_specifier ID LPAREN parameter_list RPAREN LCURL statement_list RCURL  */
-#line 161 "1805108.y"
+#line 162 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[-6].symbolInfo)->getName(), "SYMBOL_FUNCTION");
                         printf("%s", (yyval.symbolInfo)->getName());
@@ -1717,146 +1722,146 @@ yyreduce:
                         printf("function_definition found");
 
                         }
-#line 1721 "y.tab.c"
+#line 1726 "y.tab.c"
     break;
 
   case 12: /* parameter_list: parameter_declaration  */
-#line 173 "1805108.y"
+#line 174 "1805108.y"
                     {
                     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
                     printf("%s", (yyval.symbolInfo)->getName());
                     }
-#line 1730 "y.tab.c"
+#line 1735 "y.tab.c"
     break;
 
   case 13: /* parameter_list: parameter_list COMMA parameter_declaration  */
-#line 178 "1805108.y"
+#line 179 "1805108.y"
                     {
                     (yyval.symbolInfo) = (yyvsp[-2].symbolInfo) ;
                     printf("%s", (yyval.symbolInfo)->getName());
                     }
-#line 1739 "y.tab.c"
+#line 1744 "y.tab.c"
     break;
 
   case 14: /* parameter_declaration: INT ID  */
-#line 186 "1805108.y"
+#line 187 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                         printf("%s", (yyval.symbolInfo)->getName());
                         }
-#line 1748 "y.tab.c"
+#line 1753 "y.tab.c"
     break;
 
   case 15: /* parameter_declaration: FLOAT ID  */
-#line 191 "1805108.y"
+#line 192 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                         printf("%s", (yyval.symbolInfo)->getName());
                         }
-#line 1757 "y.tab.c"
+#line 1762 "y.tab.c"
     break;
 
   case 16: /* parameter_declaration: DOUBLE ID  */
-#line 196 "1805108.y"
+#line 197 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                         printf("%s", (yyval.symbolInfo)->getName());
                         }
-#line 1766 "y.tab.c"
+#line 1771 "y.tab.c"
     break;
 
   case 17: /* parameter_declaration: CHAR ID  */
-#line 201 "1805108.y"
+#line 202 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                         printf("%s", (yyval.symbolInfo)->getName());
                         }
-#line 1775 "y.tab.c"
+#line 1780 "y.tab.c"
     break;
 
   case 18: /* statement_list: statement  */
-#line 209 "1805108.y"
+#line 210 "1805108.y"
                     {
                     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
                     printf("%s", (yyval.symbolInfo)->getName());
                     }
-#line 1784 "y.tab.c"
+#line 1789 "y.tab.c"
     break;
 
   case 19: /* statement_list: statement_list statement  */
-#line 214 "1805108.y"
+#line 215 "1805108.y"
                     {
                     (yyval.symbolInfo) = (yyvsp[-1].symbolInfo) ;
                     printf("%s", (yyval.symbolInfo)->getName());
                     }
-#line 1793 "y.tab.c"
+#line 1798 "y.tab.c"
     break;
 
   case 20: /* statement: variable_declaration  */
-#line 221 "1805108.y"
+#line 222 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             printf("%s", (yyval.symbolInfo)->getName());
             }
-#line 1802 "y.tab.c"
+#line 1807 "y.tab.c"
     break;
 
   case 21: /* statement: function_declaration  */
-#line 226 "1805108.y"
+#line 227 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             printf("%s", (yyval.symbolInfo)->getName());
             }
-#line 1811 "y.tab.c"
+#line 1816 "y.tab.c"
     break;
 
   case 22: /* statement: function_definition  */
-#line 231 "1805108.y"
+#line 232 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             printf("%s", (yyval.symbolInfo)->getName());
             }
-#line 1820 "y.tab.c"
+#line 1825 "y.tab.c"
     break;
 
   case 23: /* type_specifier: INT  */
-#line 265 "1805108.y"
+#line 266 "1805108.y"
                 {
-                (yyval.symbolInfo) = new SymbolInfo("INT", "SYMBOL_TYPE");
+                (yyval.symbolInfo) = new SymbolInfo("int", "INT");
                 printf("%s", (yyval.symbolInfo)->getName());
                 }
-#line 1829 "y.tab.c"
+#line 1834 "y.tab.c"
     break;
 
   case 24: /* type_specifier: FLOAT  */
-#line 270 "1805108.y"
+#line 271 "1805108.y"
                 {
-                (yyval.symbolInfo) = new SymbolInfo("FLOAT", "SYMBOL_TYPE");
+                (yyval.symbolInfo) = new SymbolInfo("float", "FLOAT");
                 printf("%s", (yyval.symbolInfo)->getName());
                 }
-#line 1838 "y.tab.c"
+#line 1843 "y.tab.c"
     break;
 
   case 25: /* type_specifier: DOUBLE  */
-#line 275 "1805108.y"
+#line 276 "1805108.y"
                 {
-                (yyval.symbolInfo) = new SymbolInfo("DOUBLE", "SYMBOL_TYPE");
+                (yyval.symbolInfo) = new SymbolInfo("double", "DOUBLE");
                 printf("%s", (yyval.symbolInfo)->getName());
                 }
-#line 1847 "y.tab.c"
+#line 1852 "y.tab.c"
     break;
 
   case 26: /* type_specifier: CHAR  */
-#line 280 "1805108.y"
+#line 281 "1805108.y"
                 {
-                (yyval.symbolInfo) = new SymbolInfo("CHAR", "SYMBOL_TYPE");
+                (yyval.symbolInfo) = new SymbolInfo("char", "CHAR");
                 printf("%s", (yyval.symbolInfo)->getName());
                 }
-#line 1856 "y.tab.c"
+#line 1861 "y.tab.c"
     break;
 
 
-#line 1860 "y.tab.c"
+#line 1865 "y.tab.c"
 
       default: break;
     }
@@ -2080,7 +2085,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 288 "1805108.y"
+#line 289 "1805108.y"
 
 
 int main(int argc, char *argv[]) {

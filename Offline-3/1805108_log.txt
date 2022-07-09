@@ -1,2 +1,14 @@
-funcd CHAR
-funcd CHAR
+line number1: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+
+char funcd();
+
+line number1: error: function funcd already declared
+
+line number1: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+
+char funcd();
+
+line number1: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+
+int main(x);
+
