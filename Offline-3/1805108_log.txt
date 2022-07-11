@@ -1,14 +1,21 @@
-line number1: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+line number1: declaration_list: ID LTHIRD CONST INT RTHIRD 
 
-char funcd();
+a [9]
 
-line number1: error: function funcd already declared
+line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
 
-line number1: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+int a [9]
 
-char funcd();
+line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
 
-line number1: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+int a [9];
 
-int main(x);
+line number1: unit: variable_declaration 
 
+int a [9];
+
+line number1: program:  unit 
+
+int a [9];
+
+line number1: start: program
