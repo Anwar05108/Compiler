@@ -12,6 +12,9 @@ private:
     /* data */
     string name;
     string type;
+    int size;
+    bool defined;
+
 
     SymbolInfo *next;
 public:

@@ -1,4 +1,6 @@
 #include <string>
+#include <iostream>
+#include <fstream>
 using namespace std;
 #include "ScopeTable.cpp"
 // #include "SymbolInfo.cpp"
@@ -19,5 +21,6 @@ public:
     void printAllScopes();
     ScopeTable* getParentScope();
     ScopeTable* getScopeTable();
-    void printAllScopesInFile(FILE *);
+    void printAllScopesInFile(ofstream&);
+    
 };

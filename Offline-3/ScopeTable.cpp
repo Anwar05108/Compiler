@@ -267,9 +267,10 @@ string ScopeTable::getShowId()
     return str;
 }
 
-void ScopeTable::printInFile(FILE *fp)
+void ScopeTable::printInFile(ofstream &outFile)
 {
 
+    outFile << "Scope " << this->showId << endl;
     for (int i = 0; i < this->size; i++)
     {
 
@@ -277,8 +278,23 @@ void ScopeTable::printInFile(FILE *fp)
         while (temp != NULL)
         {
 
-            fprintf(fp, "%d --> < %s : %s >\n", i, temp->getName().c_str(), temp->getType().c_str());
+            outFile << "< " << temp->getName() << " ," << temp->getType() << " >";
             temp = temp->getNext();
         }
+        // outFile << endl;
     }
 }
+// {
+
+//     for (int i = 0; i < this->size; i++)
+//     {
+
+//         SymbolInfo *temp = this->bucket[i];
+//         while (temp != NULL)
+//         {
+
+//             fprintf(fp, "%d --> < %s : %s >\n", i, temp->getName().c_str(), temp->getType().c_str());
+//             temp = temp->getNext();
+//         }
+//     }
+// }

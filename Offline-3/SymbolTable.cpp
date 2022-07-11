@@ -92,16 +92,18 @@ void SymbolTable::printAllScopes()
 }
 
 
-void SymbolTable::printAllScopesInFile(FILE *fp)
+void SymbolTable::printAllScopesInFile(ofstream &file)
 {
     ScopeTable *temp = scopeTable;
+    file << "print all scopes" << endl;
+    
     while (temp != NULL)
     {
-        fprintf(fp, "ScopeTable: %s\n", temp->getShowId().c_str());
-        temp->printInFile(fp);
+        temp->printInFile(file);
         temp = temp->getParentScope();
     }
 }
+
 
 bool SymbolTable::deletef(string name)
 {

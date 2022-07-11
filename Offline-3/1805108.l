@@ -2,7 +2,7 @@
 
 %{
 #include "bits/stdc++.h"
-// #include "SymbolTable.h"
+// #include "SymbolTable.cpp"
 #include "SymbolInfo.h"
 #include "y.tab.h"
 #include <iostream>
@@ -15,11 +15,12 @@ void yyerror(char*);
 
 // extern FILE *logFile;
 extern ofstream logFile;
+extern ofstream errorFile;
 
 extern int lineCount;
 extern int errorCount;
-// extern SymbolTable st;
-int lineNumber = 0;
+// extern SymbolTable symbolTable;
+// int lineCount = 0;
 
 
 
@@ -33,7 +34,8 @@ RELOP ("<="|">="|"<"|">"|"!="|"==")
 LOGICOP ("&&"|"||")
 BITOP [&|^~]
 LOGICNOT [!]
-INCOP ("++"|"--")
+INCOP ("++")
+DECOP ("--")
 /*PARENTHESIS*/
 LPAREN [\(]
 RPAREN [\)]
@@ -219,25 +221,49 @@ FRAC [0-9]+
                         {
                             if(yytext[i] == '\n')
                             {
-                                lineNumber++;
+                                lineCount++;
                             }
                         }
                         }
 
 {COMMENT}  { }                      
-{ADDOP} {return ADDOP;}
+{ADDOP} {
+    
+    SymbolInfo *symbolInfo = new SymbolInfo(yytext, "ADDOP");
+    yylval.symbolInfo = (YYSTYPE)symbolInfo;
+
+    return ADDOP;}
                     
-{MULOP} { return MULOP;}
+{MULOP} { 
+    SymbolInfo *symbolInfo = new SymbolInfo(yytext, "MULOP");
+    yylval.symbolInfo = (YYSTYPE)symbolInfo;
+
+    return MULOP;}
                                                
-{ASSIGNOP} { return ASSIGNOP;}
+{ASSIGNOP} { 
+    
+
+    return ASSIGNOP;}
                     
-{RELOP} { return RELOP;}
+{RELOP} { 
+    SymbolInfo *symbolInfo = new SymbolInfo(yytext, "RELOP");
+    yylval.symbolInfo = (YYSTYPE)symbolInfo;
+
+    return RELOP;}
                     
                     
-{BITOP} { return BITOP;}
+{BITOP} { 
+    SymbolInfo *symbolInfo = new SymbolInfo(yytext, "BITOP");
+    yylval.symbolInfo = (YYSTYPE)symbolInfo;
+
+    return BITOP;}
                     
                     
-{LOGICOP} { return LOGICOP;}
+{LOGICOP} { 
+    SymbolInfo *symbolInfo = new SymbolInfo(yytext, "LOGICOP");
+    yylval.symbolInfo = (YYSTYPE)symbolInfo;
+
+    return LOGICOP;}
                     
                     
 
@@ -268,7 +294,7 @@ FRAC [0-9]+
 {SEMICOLON} { return SEMICOLON;}
                         
                         
-{NEWLINE} {lineNumber++;}
+{NEWLINE} {lineCount++;}
 
 
 {ID}    {  
@@ -289,7 +315,7 @@ FRAC [0-9]+
 
                                 if(yytext[i] == '\n')
                                 {
-                                    lineNumber++;
+                                    lineCount++;
                                 }
                             }
                             

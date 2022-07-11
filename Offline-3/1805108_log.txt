@@ -1,21 +1,33 @@
-line number1: declaration_list: ID LTHIRD CONST INT RTHIRD 
+line number1: type_specifier : INT
 
-a [9]
+line number1: declaration_list: ID 
+
+a
+
+line number1: declaration_list: declaration_list COMMA ID 
+
+a,b
+
+line number1: declaration_list: declaration_list COMMA ID 
+
+a,b,c
 
 line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
 
-int a [9]
+int a,b,c
 
 line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
 
-int a [9];
+int a,b,c;
 
 line number1: unit: variable_declaration 
 
-int a [9];
+int a,b,c;
 
-line number1: program:  unit 
+print all scopes
+Scope 
+< a,b,c ,int >line number1: program:  unit 
 
-int a [9];
+int a,b,c;
 
-line number1: start: program
+line number3: start: program

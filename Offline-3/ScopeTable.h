@@ -58,5 +58,5 @@ public:
     void setChild(int);
     void setSibling(int);
     string getShowId();
-    void printInFile(FILE *);
+    void printInFile(ofstream &);
 };

@@ -74,34 +74,35 @@ extern int yydebug;
     INCOP = 275,                   /* INCOP  */
     DECOP = 276,                   /* DECOP  */
     ASSIGNOP = 277,                /* ASSIGNOP  */
-    ADDOP = 278,                   /* ADDOP  */
-    MULOP = 279,                   /* MULOP  */
-    RELOP = 280,                   /* RELOP  */
-    BITOP = 281,                   /* BITOP  */
-    LOGICOP = 282,                 /* LOGICOP  */
-    LOGICNOT = 283,                /* LOGICNOT  */
-    NOT = 284,                     /* NOT  */
-    LPAREN = 285,                  /* LPAREN  */
-    RPAREN = 286,                  /* RPAREN  */
-    LCURL = 287,                   /* LCURL  */
-    RCURL = 288,                   /* RCURL  */
-    LTHIRD = 289,                  /* LTHIRD  */
-    RTHIRD = 290,                  /* RTHIRD  */
-    COMMA = 291,                   /* COMMA  */
-    SEMICOLON = 292,               /* SEMICOLON  */
-    COLON = 293,                   /* COLON  */
-    INT = 294,                     /* INT  */
-    FLOAT = 295,                   /* FLOAT  */
-    DOUBLE = 296,                  /* DOUBLE  */
-    CHAR = 297,                    /* CHAR  */
-    PLUS = 298,                    /* PLUS  */
-    MINUS = 299,                   /* MINUS  */
-    SLASH = 300,                   /* SLASH  */
-    ASTERISK = 301,                /* ASTERISK  */
+    LOGICNOT = 278,                /* LOGICNOT  */
+    NOT = 279,                     /* NOT  */
+    LPAREN = 280,                  /* LPAREN  */
+    RPAREN = 281,                  /* RPAREN  */
+    LCURL = 282,                   /* LCURL  */
+    RCURL = 283,                   /* RCURL  */
+    LTHIRD = 284,                  /* LTHIRD  */
+    RTHIRD = 285,                  /* RTHIRD  */
+    COMMA = 286,                   /* COMMA  */
+    SEMICOLON = 287,               /* SEMICOLON  */
+    COLON = 288,                   /* COLON  */
+    INT = 289,                     /* INT  */
+    FLOAT = 290,                   /* FLOAT  */
+    DOUBLE = 291,                  /* DOUBLE  */
+    CHAR = 292,                    /* CHAR  */
+    PLUS = 293,                    /* PLUS  */
+    MINUS = 294,                   /* MINUS  */
+    SLASH = 295,                   /* SLASH  */
+    ASTERISK = 296,                /* ASTERISK  */
+    ADDOP = 297,                   /* ADDOP  */
+    MULOP = 298,                   /* MULOP  */
+    RELOP = 299,                   /* RELOP  */
+    BITOP = 300,                   /* BITOP  */
+    LOGICOP = 301,                 /* LOGICOP  */
     ID = 302,                      /* ID  */
     CONST_CHAR = 303,              /* CONST_CHAR  */
     CONST_INT = 304,               /* CONST_INT  */
-    CONST_FLOAT = 305              /* CONST_FLOAT  */
+    CONST_FLOAT = 305,             /* CONST_FLOAT  */
+    LOWER_THAN_ELSE = 306          /* LOWER_THAN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -130,34 +131,35 @@ extern int yydebug;
 #define INCOP 275
 #define DECOP 276
 #define ASSIGNOP 277
-#define ADDOP 278
-#define MULOP 279
-#define RELOP 280
-#define BITOP 281
-#define LOGICOP 282
-#define LOGICNOT 283
-#define NOT 284
-#define LPAREN 285
-#define RPAREN 286
-#define LCURL 287
-#define RCURL 288
-#define LTHIRD 289
-#define RTHIRD 290
-#define COMMA 291
-#define SEMICOLON 292
-#define COLON 293
-#define INT 294
-#define FLOAT 295
-#define DOUBLE 296
-#define CHAR 297
-#define PLUS 298
-#define MINUS 299
-#define SLASH 300
-#define ASTERISK 301
+#define LOGICNOT 278
+#define NOT 279
+#define LPAREN 280
+#define RPAREN 281
+#define LCURL 282
+#define RCURL 283
+#define LTHIRD 284
+#define RTHIRD 285
+#define COMMA 286
+#define SEMICOLON 287
+#define COLON 288
+#define INT 289
+#define FLOAT 290
+#define DOUBLE 291
+#define CHAR 292
+#define PLUS 293
+#define MINUS 294
+#define SLASH 295
+#define ASTERISK 296
+#define ADDOP 297
+#define MULOP 298
+#define RELOP 299
+#define BITOP 300
+#define LOGICOP 301
 #define ID 302
 #define CONST_CHAR 303
 #define CONST_INT 304
 #define CONST_FLOAT 305
+#define LOWER_THAN_ELSE 306
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -167,7 +169,7 @@ union YYSTYPE
 
     SymbolInfo *symbolInfo;
 
-#line 171 "y.tab.h"
+#line 173 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
