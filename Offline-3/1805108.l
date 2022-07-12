@@ -5,10 +5,6 @@
 // #include "SymbolTable.cpp"
 #include "SymbolInfo.h"
 #include "y.tab.h"
-#include <iostream>
-#include <fstream>
-using namespace std;
-
 #define YYSTYPE SymbolInfo*
 
 void yyerror(char*);
@@ -107,6 +103,7 @@ UNFINISHED_STRING_ERROR ["][^"]*
 DIGIT [0-9]
 NUMBER [0-9]+
 EXP [eE][ +-]?[0-9]+
+CONST_INT [0-9]+
 
 FLOAT_NUM [0-9]+.[0-9]+
 FLOAT_NUM_1 ({FLOAT_NUM})({EXP})
@@ -193,7 +190,7 @@ FRAC [0-9]+
         
 {DOUBLE} { return DOUBLE;}
         
-{NUMBER} {
+{CONST_INT} {
         SymbolInfo *symbolInfo = new SymbolInfo(yytext,"CONST_INT");
         yylval.symbolInfo = (YYSTYPE)symbolInfo;
 
@@ -300,6 +297,8 @@ FRAC [0-9]+
 {ID}    {  
         SymbolInfo *temp = new SymbolInfo(yytext, "ID");
         yylval.symbolInfo = temp;
+        // symbolTable.insert(temp->getName(), temp->getType());
+
         return ID;
         }
 

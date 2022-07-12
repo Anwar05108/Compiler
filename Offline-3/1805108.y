@@ -4,10 +4,18 @@
 #include"SymbolTable.cpp"
 #include<fstream>
 #include<iostream>
+#include<bits/stdc++.h>
 
 int lineCount = 1;
 int errorCount = 0;
 
+struct nodeVar{
+    string name;
+    string type;
+    int arraySize;
+}tempNodeVar;
+
+vector<nodeVar> variable_list;
 SymbolTable symbolTable(30);
 
 // FILE *errorFile, *logFile;
@@ -197,7 +205,7 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN  compound_s
                         }
                         $$ = new SymbolInfo($1->getName()+" "+$2->getName()+" ( ) "+$5->getName() + "\n"  , "SYMBOL_FUNCTION");
                         logFile << "line number" << lineCount << ": " ;
-                        logFile << "func_definition : type_specifier ID LPAREN RPAREN compound_statement";
+                        logFile << "func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl<<endl;
                         logFile <<$$->getName()<< endl<<endl;
                         
                     }
@@ -272,19 +280,15 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                                 logFile << "line number" << lineCount << ": " ;
                                 logFile << "variable_declaration: void type is not allowed" << endl;
                             }
+                            else{
+                                for(int i = 0;i < variable_list.size();i++){
+                                    symbolTable.insert(variable_list[i].name, variable_list[i].type);
+                                }
+                            }
 
-                        if(symbolTable.search(variable_name) != NULL)
-                        {
-                            errorFile << "line number" << lineCount << ": " ;
-                            errorFile << "error: variable " << variable_name << " already declared" << endl;
-                            errorCount++;
-                        }
-                        else
-                        {
-                            symbolTable.insert(variable_name,variable_type);
-                            logFile << "line number" << lineCount << ": " ;
-                            logFile << "variable_declaration: type_specifier declaration_list SEMICOLON \n\n" << variable_type << " " << variable_name << endl<<endl;
-                        }
+                            variable_list.clear();
+
+                       
                         
                         $$ = new SymbolInfo($1->getName() + " " +$2->getName()+";", "SYMBOL_VARIABLE");
                         logFile << "line number" << lineCount << ": " ;
@@ -329,23 +333,67 @@ declaration_list : declaration_list COMMA ID
 
             {
 $$ = new SymbolInfo($1->getName() + "," +$3->getName(), "SYMBOL_VARIABLE");
+   tempNodeVar.name = $3->getName();
+    // tempNodeVar.type = $1->getName();
+    tempNodeVar.arraySize = -1;
+    variable_list.push_back(tempNodeVar);
+    if(symbolTable.search($3->getName()) != NULL)
+    {
+        errorFile << "line number" << lineCount << ": " ;
+        errorFile << "error: variable " << $3->getName() << " already declared" << endl;
+        errorCount++;
+    }
+    
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: declaration_list COMMA ID \n\n" << $$->getName() << endl<<endl;
             }
 | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD
 {
 $$ = new SymbolInfo($1->getName() + "," +$3->getName()+"["+$5->getName()+"]", "SYMBOL_VARIABLE");
+    tempNodeVar.name = $3->getName();
+    // tempNodeVar.type = "array";
+
+    tempNodeVar.arraySize = stoi($5->getName());
+    variable_list.push_back(tempNodeVar);
+    if(symbolTable.search($3->getName()) != NULL)
+    {
+        errorFile << "line number" << lineCount << ": " ;
+        errorFile << "error: variable " << $3->getName() << " already declared" << endl;
+        errorCount++;
+    }
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: declaration_list COMMA ID LTHIRD CONST INT RTHIRD \n\n" << $$->getName() << endl<<endl;
 }
 | ID
 {
 $$ = new SymbolInfo($1->getName(), "SYMBOL_VARIABLE");
+    tempNodeVar.name = $1->getName();
+    tempNodeVar.type = "SYMBOL_VARIABLE";
+    tempNodeVar.arraySize = -1;
+        variable_list.push_back(tempNodeVar);
+    if(symbolTable.search($1->getName()) != NULL)
+    {
+        errorFile << "line number" << lineCount << ": " ;
+        errorFile << "error: variable " << $1->getName() << " already declared" << endl;
+        errorCount++;
+    }
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: ID \n\n" << $$->getName() << endl<<endl;
 }
 | ID LTHIRD CONST_INT RTHIRD{
-$$ = new SymbolInfo($1->getName() + " [" + $3->getName()+"]", "SYMBOL_VARIABLE");
+    $$ = new SymbolInfo($1->getName() + " [" + $3->getName()+"]", "SYMBOL_VARIABLE");
+    tempNodeVar.name = $1->getName();
+    tempNodeVar.type = "array";
+    tempNodeVar.arraySize = stoi($3->getName());
+
+    variable_list.push_back(tempNodeVar);
+    if(symbolTable.search($1->getName()) != NULL)
+    {
+        errorFile << "line number" << lineCount << ": " ;
+        errorFile << "error: variable " << $1->getName() << " already declared" << endl;
+        errorCount++;
+    }
+    
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: ID LTHIRD CONST INT RTHIRD \n\n" << $$->getName() << endl<<endl;
 }
@@ -405,7 +453,7 @@ statement : variable_declaration
             logFile << "statement : WHILE LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< $$->getName() << endl<<endl;
             }
-        | IF LPAREN expression RPAREN statement
+        | IF LPAREN expression RPAREN statement %prec LOWER_THAN_ELSE
             {
             $$ = new SymbolInfo("if("+$3->getName()+")"+$5->getName(), "SYMBOL_IF_STATEMENT");
             logFile << "line number" << lineCount << ": " ;
@@ -693,6 +741,9 @@ int main(int argc, char *argv[]) {
 
 	yyin = fin;
     yyparse();
+    symbolTable.printAllScopesInFile(logFile);
+    logFile << "total no. of errors: " << errorCount << endl;
+    logFile << "total no. of lines" << lineCount << endl;
    
     logFile.close();
     errorFile.close();

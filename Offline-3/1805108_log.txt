@@ -1,33 +1,108 @@
-line number1: type_specifier : INT
+line number3: type_specifier : INT
 
-line number1: declaration_list: ID 
+line number3: type_specifier : INT
+
+line number3: parameter_list : type_specifier ID
+
+int a
+
+line number3: type_specifier : INT
+
+line number3: parameter_list : parameter_list COMMA type_specifier ID
+
+int a,int b
+
+line number4: variable : ID
 
 a
 
-line number1: declaration_list: declaration_list COMMA ID 
+line number4: factor : variable
 
-a,b
+a
 
-line number1: declaration_list: declaration_list COMMA ID 
+line number4: unary_expression : factor
 
-a,b,c
+a
 
-line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
+line number4: term : unary_expression
 
-int a,b,c
+a
 
-line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
+line number4: simple_expression : term
 
-int a,b,c;
+a
 
-line number1: unit: variable_declaration 
+line number4: variable : ID
 
-int a,b,c;
+b
 
+line number4: factor : variable
+
+b
+
+line number4: unary_expression : factor
+
+b
+
+line number4: term : unary_expression
+
+b
+
+line number4: simple_expression : simple_expression ADDOP term
+
+a+b
+
+line number4: expression : simple expression
+
+a+b
+
+line number4: logic_expression : rel_expression
+
+a+b
+
+line number4: expression : logic expression
+
+a+b
+
+line number4: expression_statement : expression SEMICOLON
+
+a+b;
+
+line number4: statement : expression_statement
+
+a+b;
+
+line number4: statement_list : statement
+
+a+b;
+
+line number5: compound_statement : LCURL statement_list RCURL
+
+{
+a+b;
+}
+
+line number5: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statementint var ( int a,int b ) {
+a+b;
+}
+
+
+line number5: unit: function_definition 
+
+int var ( int a,int b ) {
+a+b;
+}
+
+
+line number5: program:  unit 
+
+int var ( int a,int b ) {
+a+b;
+}
+
+
+line number5: start: program
 print all scopes
 Scope 
-< a,b,c ,int >line number1: program:  unit 
-
-int a,b,c;
-
-line number3: start: program
+total no. of errors: 0
+total no. of lines5

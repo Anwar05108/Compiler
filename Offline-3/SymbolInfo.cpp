@@ -50,3 +50,33 @@ void SymbolInfo::setType(string type)
     
     this->type = type;
 }
+
+
+void SymbolInfo::setArraySize(int arraySize)
+{
+    
+    this->arraySize = arraySize;
+}
+
+
+int SymbolInfo::getArraySize()
+{
+    
+    return this->arraySize;
+}
+
+
+void SymbolInfo::setDefined(bool defined)
+{
+    
+    this->defined = defined;
+}
+
+
+bool SymbolInfo::getDefined()
+{
+    
+    return this->defined;
+}
+
+

@@ -12,8 +12,9 @@ private:
     /* data */
     string name;
     string type;
-    int size;
+    int arraySize;
     bool defined;
+
 
 
     SymbolInfo *next;
@@ -26,5 +27,10 @@ public:
     string getType();
     void setName(string);
     void setType(string);
+    void setArraySize(int);
+    int getArraySize();
+    void setDefined(bool);
+    bool getDefined();
+    
 
 };
