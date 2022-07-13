@@ -1,10 +1,9 @@
 // #include<string>
-#include<string>
-#include<iostream>
+#include <string>
+#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
-
-
 
 class SymbolInfo
 {
@@ -15,14 +14,22 @@ private:
     int arraySize;
     bool defined;
 
-
+    
 
     SymbolInfo *next;
+
 public:
-    SymbolInfo(string,string);
+struct nodeParam
+    {
+        string name;
+        string type;
+    } tempNodeParam;
+
+    vector<nodeParam> paramList;
+    SymbolInfo(string, string);
     ~SymbolInfo();
-    SymbolInfo* getNext();
-    void setNext(SymbolInfo*);
+    SymbolInfo *getNext();
+    void setNext(SymbolInfo *);
     string getName();
     string getType();
     void setName(string);
@@ -31,6 +38,11 @@ public:
     int getArraySize();
     void setDefined(bool);
     bool getDefined();
-    
 
+    void setFunction(string, string, vector<nodeParam>);
+    vector<nodeParam> getParamList();
+    void insertParameter(string, string);
+    string getParameterName(int);
+    string getParameterType(int);
+    int getParamSize();
 };

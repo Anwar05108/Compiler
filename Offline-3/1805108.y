@@ -5,6 +5,7 @@
 #include<fstream>
 #include<iostream>
 #include<bits/stdc++.h>
+#include"Parameter.h"
 
 int lineCount = 1;
 int errorCount = 0;
@@ -15,7 +16,15 @@ struct nodeVar{
     int arraySize;
 }tempNodeVar;
 
+struct nodeParam{
+    string name;
+    string type;
+}tempNodeParam;
+
+
 vector<nodeVar> variable_list;
+vector<nodeParam> parameter_list;
+
 SymbolTable symbolTable(30);
 
 // FILE *errorFile, *logFile;
@@ -80,6 +89,8 @@ start: program
      logFile << "line number" << lineCount << ": " ;
 
     logFile << "start: program" << endl;
+    // symbolTable.printAllScopes();
+    
     }
     
     ;
@@ -105,7 +116,7 @@ unit : variable_declaration
         $$ = $1;
         logFile << "line number" << lineCount << ": " ;
         logFile << "unit: variable_declaration \n\n" << $$->getName() << endl<<endl;
-        symbolTable.printAllScopesInFile(logFile);
+        // symbolTable.printAllScopesInFile(logFile);
 
         }
     | function_declaration
@@ -134,6 +145,7 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         if(symbolTable.search(functionName) == NULL)
                         {
                             symbolTable.insert(functionName, functionType);
+                            $$->setDefined(false);
                         }
                         else
                         {
@@ -148,7 +160,20 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         logFile << "func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
                         logFile << endl<<endl;
                         logFile << $$->getName();
-                        logFile << endl << endl; 
+                        logFile << endl << endl;
+
+                        SymbolInfo *temp = symbolTable.search(functionName);
+
+                        for(int i = 0; i < parameter_list.size(); i++)
+                        {
+                            string parameterName = parameter_list[i].name;
+                            string parameterType = parameter_list[i].type;
+                            temp->insertParameter(parameterName, parameterType);
+                        }
+
+                      
+                       
+                        parameter_list.clear();
                         
                         }
                     |   type_specifier ID LPAREN  RPAREN SEMICOLON
@@ -159,6 +184,7 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         if(symbolTable.search(functionName) == NULL)
                         {
                             symbolTable.insert(functionName, functionType);
+                            $$->setDefined(false);
                         }
                         else
                         {
@@ -168,12 +194,14 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                             logFile << "error: function "<<functionName<<" already declared\n\n";
                             errorFile << "error: function "<<functionName<<" already declared\n";
                         }
+                        parameter_list.clear();
                         // symbolTable.printCurrentScope();
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON";
                         logFile << endl<<endl;
                         logFile << $$->getName();
-                        logFile << endl << endl;                                                                                     
+                        logFile << endl << endl;
+
                         }                                   
                     ;
 
@@ -182,9 +210,54 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN  compound_s
                         
                         {
                         $$ = new SymbolInfo($1->getName()+" "+$2->getName()+" ( " +$4->getName()+" ) "+$6->getName() + "\n"  , "SYMBOL_FUNCTION");
+                        string functionName = $2->getName();
+                        string functionType = $1->getName();
+                        SymbolInfo* function = symbolTable.search(functionName);
+                        if(symbolTable.search(functionName) == NULL)
+                        {
+                            symbolTable.insert(functionName, functionType);
+                            $$->setDefined(true);
+                        }
+                        else
+                        {
+                            if(function->getDefined() == false)
+                            {
+                                symbolTable.insert(functionName, functionType);
+                                $$->setDefined(true);
+                            }
+                            else
+                            {
+                                errorCount++;
+                                logFile << "line number" << lineCount << ": " ;
+                                logFile << "error: function "<<functionName<<" already defined\n\n";
+                                errorFile << "error: function "<<functionName<<" already defined\n";
+                            }
+                        }
+
+                        SymbolInfo *temp = symbolTable.search(functionName);
+
+                        for(int i = 0; i < temp->getParamSize(); i++ ){
+                            string declaredParameterName = temp->getParameterName(i);
+                            string declaredParameterType = temp->getParameterType(i);
+
+                            
+                       
+                            string definedParameterName = parameter_list[i].name;
+                            string definedParameterType = parameter_list[i].type;
+                            if(declaredParameterType != definedParameterType ){
+                                errorCount++;
+                                logFile << "line number" << lineCount << ": " ;
+                                logFile << "error: parameter "<<definedParameterName<<" has wrong type as declared\n\n";
+                                errorFile << "error: parameter "<<definedParameterName<<" has wrong type as declared\n";
+                            }else{
+                            symbolTable.insert(definedParameterName, definedParameterType);
+                            }
+                        }
+                        parameter_list.clear();
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement";
                         logFile <<$$->getName()<< endl<<endl;
+                        
 
 
                         }
@@ -219,6 +292,9 @@ parameter_list : parameter_list COMMA type_specifier ID
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "parameter_list : parameter_list COMMA type_specifier ID"<<endl<<endl ;
                     logFile<< $$->getName() << endl<<endl;
+                    tempNodeParam.name = $4->getName();
+                    tempNodeParam.type = $3->getName();
+                    parameter_list.push_back(tempNodeParam);
                     
                     }
                 | parameter_list COMMA type_specifier
@@ -227,7 +303,8 @@ parameter_list : parameter_list COMMA type_specifier ID
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "parameter_list : parameter_list COMMA type_specifier"<<endl<<endl ;
                     logFile<< $$->getName() << endl<<endl;
-                    
+                    tempNodeParam.name = "";
+                    tempNodeParam.type = $3->getName();
 
                     }
                 | type_specifier ID
@@ -236,6 +313,9 @@ parameter_list : parameter_list COMMA type_specifier ID
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "parameter_list : type_specifier ID"<<endl<<endl ;
                     logFile<< $$->getName() << endl<<endl;
+                    tempNodeParam.name = $2->getName();
+                    tempNodeParam.type = $1->getName();
+                    parameter_list.push_back(tempNodeParam);
                     
                     }
                 | type_specifier
@@ -244,6 +324,10 @@ parameter_list : parameter_list COMMA type_specifier ID
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "parameter_list : type_specifier"<<endl<<endl ;
                     logFile<< $$->getName() << endl<<endl;
+
+                    tempNodeParam.name = "";
+                    tempNodeParam.type = $1->getType();
+                    parameter_list.push_back(tempNodeParam);
                     
                     }
                 ;

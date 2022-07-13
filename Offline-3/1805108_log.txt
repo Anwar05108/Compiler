@@ -12,97 +12,126 @@ line number3: parameter_list : parameter_list COMMA type_specifier ID
 
 int a,int b
 
-line number4: variable : ID
+line number3: func_declaration : type_specifier ID LPAREN RPAREN SEMICOLON
+
+int var(int a,int b);
+
+line number3: unit: function_declaration 
+
+int var(int a,int b);
+
+line number3: program:  unit 
+
+int var(int a,int b);
+
+line number4: type_specifier : INT
+
+line number4: type_specifier : INT
+
+line number4: parameter_list : type_specifier ID
+
+int a
+
+line number4: type_specifier : FLOAT
+
+line number4: parameter_list : parameter_list COMMA type_specifier ID
+
+int a,float b
+
+line number5: variable : ID
 
 a
 
-line number4: factor : variable
+line number5: factor : variable
 
 a
 
-line number4: unary_expression : factor
+line number5: unary_expression : factor
 
 a
 
-line number4: term : unary_expression
+line number5: term : unary_expression
 
 a
 
-line number4: simple_expression : term
+line number5: simple_expression : term
 
 a
 
-line number4: variable : ID
+line number5: variable : ID
 
 b
 
-line number4: factor : variable
+line number5: factor : variable
 
 b
 
-line number4: unary_expression : factor
+line number5: unary_expression : factor
 
 b
 
-line number4: term : unary_expression
+line number5: term : unary_expression
 
 b
 
-line number4: simple_expression : simple_expression ADDOP term
+line number5: simple_expression : simple_expression ADDOP term
 
 a+b
 
-line number4: expression : simple expression
+line number5: expression : simple expression
 
 a+b
 
-line number4: logic_expression : rel_expression
+line number5: logic_expression : rel_expression
 
 a+b
 
-line number4: expression : logic expression
+line number5: expression : logic expression
 
 a+b
 
-line number4: expression_statement : expression SEMICOLON
+line number5: expression_statement : expression SEMICOLON
 
 a+b;
 
-line number4: statement : expression_statement
+line number5: statement : expression_statement
 
 a+b;
 
-line number4: statement_list : statement
+line number5: statement_list : statement
 
 a+b;
 
-line number5: compound_statement : LCURL statement_list RCURL
+line number6: compound_statement : LCURL statement_list RCURL
 
 {
 a+b;
 }
 
-line number5: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statementint var ( int a,int b ) {
+line number6: error: parameter b has wrong type as declared
+
+line number6: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statementint var ( int a,float b ) {
 a+b;
 }
 
 
-line number5: unit: function_definition 
+line number6: unit: function_definition 
 
-int var ( int a,int b ) {
+int var ( int a,float b ) {
 a+b;
 }
 
 
-line number5: program:  unit 
+line number6: program: program unit 
 
-int var ( int a,int b ) {
+int var(int a,int b);
+int var ( int a,float b ) {
 a+b;
 }
 
 
-line number5: start: program
+line number6: start: program
 print all scopes
 Scope 
-total no. of errors: 0
-total no. of lines5
+< a ,int >< var ,int >total no. of errors: 1
+total no. of lines6

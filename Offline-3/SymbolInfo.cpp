@@ -1,4 +1,9 @@
 #include "SymbolInfo.h"
+#include <bits/stdc++.h>
+
+
+
+
 
 SymbolInfo::SymbolInfo(string name,string type)
 {
@@ -78,5 +83,53 @@ bool SymbolInfo::getDefined()
     
     return this->defined;
 }
+
+
+void SymbolInfo::setFunction(string name,string type,vector<nodeParam> paramList)
+{
+    
+    this->name = name;
+    this->type = type;
+    this->paramList = paramList;
+}
+
+vector<struct SymbolInfo::nodeParam> SymbolInfo::getParamList()
+{
+    
+    return this->paramList;
+}
+
+
+void SymbolInfo::insertParameter(string name,string type)
+{
+    
+    struct nodeParam tempNodeParam;
+    tempNodeParam.name = name;
+    tempNodeParam.type = type;
+    this->paramList.push_back(tempNodeParam);
+}
+
+
+
+
+string SymbolInfo::getParameterName(int index)
+{
+    
+    return this->paramList[index].name;
+}
+
+
+string SymbolInfo::getParameterType(int index)
+{
+    
+    return this->paramList[index].type;
+}
+
+int SymbolInfo::getParamSize()
+{
+    
+    return this->paramList.size();
+}
+
 
 
