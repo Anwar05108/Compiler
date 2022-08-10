@@ -1,0 +1,170 @@
+line number1: type_specifier : INT
+
+int
+
+line number1: type_specifier : INT
+
+int
+
+line number1: parameter_list : type_specifier ID
+
+int c
+
+enterScopeline number2: type_specifier : INT
+
+int
+
+line number2: declaration_list: ID 
+
+a
+
+line number2: declaration_list: declaration_list COMMA ID 
+
+a,b
+
+line number2: variable_declaration: type_specifier declaration_list SEMICOLON 
+
+int a,b;
+
+line number2: statement : variable_declaration
+
+int a,b;
+
+line number2: statement_list : statement
+
+int a,b;
+
+line number3: argument_list :
+
+
+
+line number3: factor : ID LPAREN argument_list RPAREN
+
+printl (  )
+
+line number3: unary_expression : factor
+
+printl (  )
+
+line number3: term : unary_expression
+
+printl (  )
+
+line number3: simple_expression : term
+
+printl (  )
+
+line number3: expression : simple expression
+
+printl (  )
+
+line number3: logic_expression : rel_expression
+
+printl (  )
+
+line number3: expression : logic expression
+
+printl (  )
+
+line number3: expression_statement : expression SEMICOLON
+
+printl (  );
+
+line number3: statement : expression_statement
+
+printl (  );
+
+line number3: statement_list : statement_list statement
+
+int a,b;
+printl (  );
+
+line number4: factor : CONST_INT
+
+0
+
+line number4: unary_expression : factor
+
+0
+
+line number4: term : unary_expression
+
+0
+
+line number4: simple_expression : term
+
+0
+
+line number4: expression : simple expression
+
+0
+
+line number4: logic_expression : rel_expression
+
+0
+
+line number4: expression : logic expression
+
+0
+
+line number4: statement : RETURN expression
+
+return 0;
+
+line number4: statement_list : statement_list statement
+
+int a,b;
+printl (  );
+return 0;
+
+line number5: compound_statement : LCURL statement_list RCURL
+
+{
+int a,b;
+printl (  );
+return 0;
+}
+
+print all scopes
+ ScopeTable: 1.1
+
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < c ,ID >
+ ScopeTable: 1
+
+16--> < main ,ID >
+line number5: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+
+int main ( int c ) {
+int a,b;
+printl (  );
+return 0;
+}
+
+
+line number5: unit: function_definition 
+
+int main ( int c ) {
+int a,b;
+printl (  );
+return 0;
+}
+
+
+line number5: program:  unit 
+
+int main ( int c ) {
+int a,b;
+printl (  );
+return 0;
+}
+
+
+line number5: start: program
+print all scopes
+ ScopeTable: 1
+
+16--> < main ,ID >
+total no. of errors: 1
+total no. of lines5
