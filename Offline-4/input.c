@@ -1,9 +1,10 @@
 int main(){
-   int i;
-    for (i = 0; i < 9; i++)
+   int i,a;
+    while (i < a)
     {
-        
+       
     }
+    
     
    
 }

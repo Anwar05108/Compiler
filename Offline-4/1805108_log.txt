@@ -10,53 +10,21 @@ line number2: declaration_list: ID
 
 i
 
+line number2: declaration_list: declaration_list COMMA ID 
+
+i,a
+
 line number2: variable_declaration: type_specifier declaration_list SEMICOLON 
 
-int i;
+int i,a;
 
 line number2: statement : variable_declaration
 
-int i;
+int i,a;
 
 line number2: statement_list : statement
 
-int i;
-
-line number3: variable : ID
-
-i
-
-line number3: factor : CONST_INT
-
-0
-
-line number3: unary_expression : factor
-
-0
-
-line number3: term : unary_expression
-
-0
-
-line number3: simple_expression : term
-
-0
-
-line number3: expression : simple expression
-
-0
-
-line number3: logic_expression : rel_expression
-
-0
-
-line number3: expression : variable ASSIGNOP logic expression
-
-i=0
-
-line number3: expression_statement : expression SEMICOLON
-
-i=0;
+int i,a;
 
 line number3: variable : ID
 
@@ -78,69 +46,37 @@ line number3: simple_expression : term
 
 i
 
-line number3: factor : CONST_INT
+line number3: variable : ID
 
-9
+a
+
+line number3: factor : variable
+
+a
 
 line number3: unary_expression : factor
 
-9
+a
 
 line number3: term : unary_expression
 
-9
+a
 
 line number3: simple_expression : term
 
-9
+a
 
 line number3: expression : simple_expression RELOP simple_expression
 
-i<9
+i<a
 
 line number3: logic_expression : rel_expression
 
-i<9
+i<a
 
 line number3: expression : logic expression
 
-i<9
-
-line number3: expression_statement : expression SEMICOLON
-
-i<9;
-
-line number3: variable : ID
-
-i
-
-line number3: factor : variable INCOP
-
-i++
-
-line number3: unary_expression : factor
-
-i++
-
-line number3: term : unary_expression
-
-i++
-
-line number3: simple_expression : term
-
-i++
-
-line number3: expression : simple expression
-
-i++
-
-line number3: logic_expression : rel_expression
-
-i++
-
-line number3: expression : logic expression
-
-i++
+i<a
 
 line number6: compound_statement : LCURL RCURL
 
@@ -152,20 +88,23 @@ line number6: statement : compound_statement
 {
 }
 
-line number6: statement : FOR LPAREN expression statement expression statement expression RPAREN statement
+line number6: statement : WHILE LPAREN expression RPAREN statement
 
-fori=0;i<9;i++
+while(i<a){
+}
 
 line number6: statement_list : statement_list statement
 
-int i;
-fori=0;i<9;i++
+int i,a;
+while(i<a){
+}
 
-line number9: compound_statement : LCURL statement_list RCURL
+line number10: compound_statement : LCURL statement_list RCURL
 
 {
-int i;
-fori=0;i<9;i++
+int i,a;
+while(i<a){
+}
 }
 
 print all scopes
@@ -173,39 +112,43 @@ print all scopes
 
  ScopeTable: 1.1
 
+7--> < a ,ID >
 15--> < i ,ID >
  ScopeTable: 1
 
 16--> < main ,ID >
-line number9: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+line number10: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main ( ) {
-int i;
-fori=0;i<9;i++
+int i,a;
+while(i<a){
+}
 }
 
 
-line number9: unit: function_definition 
+line number10: unit: function_definition 
 
 int main ( ) {
-int i;
-fori=0;i<9;i++
+int i,a;
+while(i<a){
+}
 }
 
 
-line number9: program:  unit 
+line number10: program:  unit 
 
 int main ( ) {
-int i;
-fori=0;i<9;i++
+int i,a;
+while(i<a){
+}
 }
 
 
-line number9: MAIN PROC
+line number10: MAIN PROC
 MOV AX, @DATA
 MOV DS, AX
 label_0: 
-mov ax, temp_1
+	mov ax, temp_0
 	cmp ax, 0
 	je label_1
 jmp label_0
@@ -219,9 +162,10 @@ start: program
 print all scopes
  ScopeTable: 1.1
 
+7--> < a ,ID >
 15--> < i ,ID >
  ScopeTable: 1
 
 16--> < main ,ID >
 total no. of errors: 0
-total no. of lines9
+total no. of lines10
