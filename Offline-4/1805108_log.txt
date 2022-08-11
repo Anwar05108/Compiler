@@ -2,169 +2,226 @@ line number1: type_specifier : INT
 
 int
 
-line number1: type_specifier : INT
-
-int
-
-line number1: parameter_list : type_specifier ID
-
-int c
-
-enterScopeline number2: type_specifier : INT
+line number2: type_specifier : INT
 
 int
 
 line number2: declaration_list: ID 
 
-a
-
-line number2: declaration_list: declaration_list COMMA ID 
-
-a,b
+i
 
 line number2: variable_declaration: type_specifier declaration_list SEMICOLON 
 
-int a,b;
+int i;
 
 line number2: statement : variable_declaration
 
-int a,b;
+int i;
 
 line number2: statement_list : statement
 
-int a,b;
+int i;
 
-line number3: argument_list :
+line number3: variable : ID
 
+i
 
+line number3: factor : CONST_INT
 
-line number3: factor : ID LPAREN argument_list RPAREN
-
-printl (  )
+0
 
 line number3: unary_expression : factor
 
-printl (  )
+0
 
 line number3: term : unary_expression
 
-printl (  )
+0
 
 line number3: simple_expression : term
 
-printl (  )
+0
 
 line number3: expression : simple expression
 
-printl (  )
+0
 
 line number3: logic_expression : rel_expression
 
-printl (  )
+0
 
-line number3: expression : logic expression
+line number3: expression : variable ASSIGNOP logic expression
 
-printl (  )
+i=0
 
 line number3: expression_statement : expression SEMICOLON
 
-printl (  );
+i=0;
 
-line number3: statement : expression_statement
+line number3: variable : ID
 
-printl (  );
+i
 
-line number3: statement_list : statement_list statement
+line number3: factor : variable
 
-int a,b;
-printl (  );
+i
 
-line number4: factor : CONST_INT
+line number3: unary_expression : factor
 
-0
+i
 
-line number4: unary_expression : factor
+line number3: term : unary_expression
 
-0
+i
 
-line number4: term : unary_expression
+line number3: simple_expression : term
 
-0
+i
 
-line number4: simple_expression : term
+line number3: factor : CONST_INT
 
-0
+9
 
-line number4: expression : simple expression
+line number3: unary_expression : factor
 
-0
+9
 
-line number4: logic_expression : rel_expression
+line number3: term : unary_expression
 
-0
+9
 
-line number4: expression : logic expression
+line number3: simple_expression : term
 
-0
+9
 
-line number4: statement : RETURN expression
+line number3: expression : simple_expression RELOP simple_expression
 
-return 0;
+i<9
 
-line number4: statement_list : statement_list statement
+line number3: logic_expression : rel_expression
 
-int a,b;
-printl (  );
-return 0;
+i<9
 
-line number5: compound_statement : LCURL statement_list RCURL
+line number3: expression : logic expression
+
+i<9
+
+line number3: expression_statement : expression SEMICOLON
+
+i<9;
+
+line number3: variable : ID
+
+i
+
+line number3: factor : variable INCOP
+
+i++
+
+line number3: unary_expression : factor
+
+i++
+
+line number3: term : unary_expression
+
+i++
+
+line number3: simple_expression : term
+
+i++
+
+line number3: expression : simple expression
+
+i++
+
+line number3: logic_expression : rel_expression
+
+i++
+
+line number3: expression : logic expression
+
+i++
+
+line number6: compound_statement : LCURL RCURL
 
 {
-int a,b;
-printl (  );
-return 0;
 }
 
+line number6: statement : compound_statement
+
+{
+}
+
+line number6: statement : FOR LPAREN expression statement expression statement expression RPAREN statement
+
+fori=0;i<9;i++
+
+line number6: statement_list : statement_list statement
+
+int i;
+fori=0;i<9;i++
+
+line number9: compound_statement : LCURL statement_list RCURL
+
+{
+int i;
+fori=0;i<9;i++
+}
+
+print all scopes
+ ScopeTable: 1.1.1
+
+ ScopeTable: 1.1
+
+15--> < i ,ID >
+ ScopeTable: 1
+
+16--> < main ,ID >
+line number9: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int main ( ) {
+int i;
+fori=0;i<9;i++
+}
+
+
+line number9: unit: function_definition 
+
+int main ( ) {
+int i;
+fori=0;i<9;i++
+}
+
+
+line number9: program:  unit 
+
+int main ( ) {
+int i;
+fori=0;i<9;i++
+}
+
+
+line number9: MAIN PROC
+MOV AX, @DATA
+MOV DS, AX
+label_0: 
+mov ax, temp_1
+	cmp ax, 0
+	je label_1
+jmp label_0
+label_1: 
+MOV AX, 4C00h
+INT 21h
+MAIN ENDP
+END MAIN
+
+start: program
 print all scopes
  ScopeTable: 1.1
 
-7--> < a ,ID >
-8--> < b ,ID >
-9--> < c ,ID >
+15--> < i ,ID >
  ScopeTable: 1
 
 16--> < main ,ID >
-line number5: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
-
-int main ( int c ) {
-int a,b;
-printl (  );
-return 0;
-}
-
-
-line number5: unit: function_definition 
-
-int main ( int c ) {
-int a,b;
-printl (  );
-return 0;
-}
-
-
-line number5: program:  unit 
-
-int main ( int c ) {
-int a,b;
-printl (  );
-return 0;
-}
-
-
-line number5: start: program
-print all scopes
- ScopeTable: 1
-
-16--> < main ,ID >
-total no. of errors: 1
-total no. of lines5
+total no. of errors: 0
+total no. of lines9

@@ -9,6 +9,21 @@
 
 int lineCount = 1;
 int errorCount = 0;
+int tempCount = 0;
+int labelCount = 0;
+
+string newTemp(){
+    stringstream ss;
+    ss << "temp_" << tempCount++;
+    return ss.str();
+}
+
+string newLabel(){
+    stringstream ss;
+    ss << "label_" << labelCount++;
+    return ss.str();
+}
+
 vector<string> split (string s, string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     string token;
@@ -101,6 +116,14 @@ start: program
     {
      $$ = $1;
      logFile << "line number" << lineCount << ": " ;
+     asmFile << ".model small\n";
+     asmFile << ".stack 100h\n\n";
+    asmFile << ".data\n\n";
+
+    asmFile << ".code\n\n";
+    asmFile << $$->getAsmCodes();
+    logFile << $$->getAsmCodes() << endl;
+    
 
     logFile << "start: program" << endl;
     // symbolTable.printAllScopes();
@@ -112,6 +135,7 @@ start: program
 program : program unit
             {
             $$ = new SymbolInfo( $1->getName() +"\n" +$2->getName(),"SYMBOL_PROGRAM");
+            $$ -> setAsmCodes($1->getAsmCodes() + $2->getAsmCodes());
             logFile << "line number" << lineCount << ": " ;
             logFile << "program: program unit \n\n" << $$->getName() << endl<<endl;
             }
@@ -335,14 +359,21 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
 
                             }
                             else{
-                                asmCodes    = asmCodes + "PROC "+functionName+"\n";
-                                // asmCodes = $7->getName();
-                                asmCodes += "MOV AX, 4C00h\n";
+                                asmCodes    = functionName+ "PROC "+"\n";
+                                asmCodes += "\tPOP BP\n";
+                                // asmCodes += paramete recieved code
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes = $7->getAsmCodes();
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes += "\tRET\n";
+                                asmCodes += functionName+ "ENDP\n";
+                                
+                                
                             }
                         }
                                 $$->setAsmCodes(asmCodes);
-                                asmFile << $$->getAsmCodes();
-                                asmFile << endl;
+                                // asmFile << $$->getAsmCodes();
+                                // asmFile << endl;
                                 // asmFile << asmCodes;
 
                         logFile << "line number" << lineCount << ": " ;
@@ -387,6 +418,37 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                     }
                     compound_statement{
                         $$ = new SymbolInfo($1->getName()+" "+$2->getName()+" ( ) "+$6->getName() + "\n"  , "SYMBOL_FUNCTION");
+                        string functionName = $2->getName();
+                        string asmCodes = "";
+                        SymbolInfo* function = symbolTable.search(functionName);
+                        
+                            if(functionName == "main"){
+                                asmCodes    +=   "MAIN PROC\n";
+                                asmCodes   += "MOV AX, @DATA\n";
+                                asmCodes   += "MOV DS, AX\n";
+                                // asmCodes   += "MOV AX, @BSS\n";
+                                asmCodes += $6->getAsmCodes();
+                                asmCodes += "MOV AX, 4C00h\n";
+                                asmCodes += "INT 21h\n";
+                                asmCodes += "MAIN ENDP\n";
+                                asmCodes += "END MAIN\n";
+                            }
+                            else{
+                                asmCodes    = functionName+ "PROC "+"\n";
+                                asmCodes += "\tPOP BP\n";
+                                // asmCodes += paramete recieved code
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes = $6->getAsmCodes();
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes += "\tRET\n";
+                                asmCodes += functionName+ "ENDP\n";
+                                
+                                
+                            }
+
+                            $$->setAsmCodes(asmCodes);
+                            
+                        
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl<<endl;
                         logFile <<$$->getName()<< endl<<endl;
@@ -451,6 +513,7 @@ parameter_list : parameter_list COMMA type_specifier ID
 
 compound_statement : LCURL statement_list RCURL{
     $$ = new SymbolInfo("{\n"+$2->getName()+"\n}", "SYMBOL_COMPOUND_STATEMENT");
+    $$->setAsmCodes($2->getAsmCodes());
     logFile << "line number" << lineCount << ": " ;
     logFile << "compound_statement : LCURL statement_list RCURL"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -504,7 +567,7 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                    
                     ;
 
-                    type_specifier : INT
+type_specifier : INT
                 {
                 $$ = new SymbolInfo("int", "int");
                 logFile << "line number" << lineCount << ": " ;
@@ -631,6 +694,7 @@ statement_list : statement
                 | statement_list statement
                     {
                     $$ = new SymbolInfo($1->getName() + "\n" + $2->getName(), "SYMBOL_STATEMENT_LIST");
+                    $$->setAsmCodes($1->getAsmCodes() + $2->getAsmCodes());
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "statement_list : statement_list statement"<<endl<<endl ;
                     logFile<< $$->getName() << endl<<endl;
@@ -663,13 +727,62 @@ statement : variable_declaration
     RPAREN statement
     {
     $$ = new SymbolInfo("for"+$3->getName()+$4->getName()+$5->getName(), "SYMBOL_FOR_STATEMENT");
+    string asmCodes = "";
+    string initCode = $3->getAsmCodes();
+    string conditonAsm = $4 -> getAsmName();
+    string conditionCode = $4 -> getAsmCodes();
+    string incrementCode = $5 -> getAsmCodes();
+    string bodyCode = $7 -> getAsmCodes();
+
+
+    string firstStatement = $3 -> getName();
+    string secondStatement = $4 -> getName();
+
+    asmCodes += initCode;
+    if(firstStatement != ";" && secondStatement != ";"){
+        string label1 = newLabel();
+        string label2 = newLabel();
+
+        asmCodes += label1 + ": \n" + conditionCode  ;
+        asmCodes += "mov ax, " + conditonAsm  + "\n";
+        asmCodes += "\tcmp ax, 0\n";
+        asmCodes += "\tje " + label2 + "\n";
+
+        asmCodes += bodyCode;
+        asmCodes += incrementCode;
+        asmCodes += "jmp " + label1 + "\n";
+        asmCodes += label2 + ": \n";
+
+    }
+
+    $$ -> setAsmCodes(asmCodes);
+
     logFile << "line number" << lineCount << ": " ;
     logFile << "statement : FOR LPAREN expression statement expression statement expression RPAREN statement"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
     }
         | WHILE LPAREN expression RPAREN statement
             {
+
+                string bodyCode = $5 -> getAsmCodes();
+                string conditionCode = $3 -> getAsmCodes();
+                string conditonAsm = $3 -> getAsmName();
+
+                string label1 = newLabel();
+                string label2 = newLabel();
+
+                string asmCodes = "";
+                asmCodes += label1 + ": \n" + conditionCode  ;
+                asmCodes += "\tmov ax, " + conditonAsm  + "\n";
+                asmCodes += "\tcmp ax, 0\n";
+                asmCodes += "\tje " + label2 + "\n";
+
+                asmCodes += bodyCode;
+                asmCodes += "jmp " + label1 + "\n";
+                asmCodes += label2 + ": \n";
+
             $$ = new SymbolInfo("while("+$3->getName()+")"+$5->getName(), "SYMBOL_WHILE_STATEMENT");
+            $$ -> setAsmCodes(asmCodes);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : WHILE LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< $$->getName() << endl<<endl;
@@ -714,7 +827,16 @@ statement : variable_declaration
                 }
                }}
             
-            $$ = new SymbolInfo ("printf("+$3->getName()+");", "statement");
+            string asmCode = "";
+            asmCode += "mov ax, " + $3->getAsmName() + "\n";
+            asmCode += "\tmov print_var , ax\n";
+            asmCode += "\tcall println\n";
+
+            
+
+            
+            $$ = new SymbolInfo ("println("+$3->getName()+");", "statement");
+            $$ -> setAsmCodes(asmCode);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : PRINTLN LPAREN expression RPAREN SEMICOLON"<<endl<<endl ;
             logFile<< $$->getName() << endl<<endl;
@@ -731,6 +853,9 @@ expression_statement :  SEMICOLON
             | expression SEMICOLON
                         {
                         $$ = new SymbolInfo($1->getName()+";", "SYMBOL_EXPRESSION_STATEMENT");
+                        $$ -> setAsmCodes($1->getAsmCodes());
+                        $$ -> setAsmName($1->getAsmName());
+                        
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "expression_statement : expression SEMICOLON"<<endl<<endl ;
                         logFile<< $$->getName() << endl<<endl;
@@ -781,6 +906,10 @@ variable : ID{
     }}}
     
     $$ = new SymbolInfo($1->getName()+"["+$3->getName()+"]", $1->getType());
+     string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "variable : ID LTHIRD expression RTHIRD"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -847,6 +976,10 @@ expression : logic_expression{
     // }
    
     $$ = new SymbolInfo($1->getName()+"="+$3->getName(), "SYMBOL_ASSIGNMENT_EXPRESSION");
+     string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : variable ASSIGNOP logic expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -870,6 +1003,10 @@ logic_expression : rel_expression {
     }
    
     $$ = new SymbolInfo($1->getName()+$2->getName()+$3->getName(), type);
+     string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "logic_expression : logic_expression AND rel_expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -886,9 +1023,14 @@ rel_expression : simple_expression
 }
 | simple_expression RELOP simple_expression{
     $$ = new SymbolInfo($1->getName()+$2->getName()+$3->getName(), $1->getType());
+     string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : simple_expression RELOP simple_expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
+
 };
 
 simple_expression : term{
@@ -910,6 +1052,10 @@ simple_expression : term{
         type = "float";
     }
     $$ = new SymbolInfo($1->getName()+$2->getName()+$3->getName(), type);
+     string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "simple_expression : simple_expression ADDOP term"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -959,9 +1105,11 @@ term : unary_expression {
     }
     
     
-
-
+    string asmCodes = "";
+    string temp = newTemp();
     $$ = new SymbolInfo($1->getName()+$2->getName()+$3->getName(), type);
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "term : term MULOP unary_expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -971,6 +1119,10 @@ term : unary_expression {
 unary_expression: ADDOP unary_expression
 {
     $$ = new SymbolInfo($1->getName()+$2->getName(), $2->getType());
+    string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : ADDOP unary expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -978,6 +1130,10 @@ unary_expression: ADDOP unary_expression
 | NOT unary_expression
 {
     $$ = new SymbolInfo(" !"+$2->getName(), $2->getType());
+    string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : NOT unary_expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1051,6 +1207,10 @@ factor : variable
     
 
     $$ = new SymbolInfo($1->getName()+" ( "+$3->getName()+" )",type );
+    string temp = newTemp();
+    string asmCodes = "";
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : ID LPAREN argument_list RPAREN"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1058,6 +1218,8 @@ factor : variable
 | LPAREN expression RPAREN
 {
     $$ = new SymbolInfo(" ( "+$2->getName()+" ) ", $2->getType());
+    $$->setAsmCodes($2->getAsmCodes());
+    $$->setAsmName($2->getAsmName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : LPAREN expression RPAREN"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1065,12 +1227,15 @@ factor : variable
 | CONST_INT
 {
     $$ = yylval.symbolInfo;
+    $$-> setAsmName(yylval.symbolInfo->getName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : CONST_INT"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
 }
 | CONST_FLOAT{
     $$ = yylval.symbolInfo;
+    $$-> setAsmName(yylval.symbolInfo->getName());
+
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : CONST_FLOAT"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1079,6 +1244,10 @@ factor : variable
 | variable INCOP
 {
     $$ = new SymbolInfo($1->getName()+"++", $1->getType());
+     string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$ -> setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : variable INCOP"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1087,6 +1256,10 @@ factor : variable
 | variable DECOP
 {
     $$ = new SymbolInfo($1->getName()+"--", $1->getType());
+    string asmCodes = "";
+    string temp = newTemp();
+    $$->setAsmCodes(asmCodes);
+    $$ -> setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : variable DECOP"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1106,6 +1279,7 @@ argument_list : arguments{
 | 
 {
     $$ = new SymbolInfo("", "SYMBOL_ARGUMENT_LIST");
+    $$ -> setAsmName("");
     logFile << "line number" << lineCount << ": " ;
     logFile << "argument_list :"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1115,6 +1289,9 @@ argument_list : arguments{
  arguments: arguments COMMA logic_expression
 {
     $$ = new SymbolInfo($1->getName()+","+$3->getName(), $1->getType()+","+$3->getType());
+    string asmCodes = $1->getAsmCodes()+$3->getAsmCodes();
+    $$->setAsmCodes(asmCodes);
+    $$->setAsmName($1->getAsmName()+","+$3->getAsmName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "argument_list : arguments COMMA logic_expression"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;

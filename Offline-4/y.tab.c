@@ -79,6 +79,21 @@
 
 int lineCount = 1;
 int errorCount = 0;
+int tempCount = 0;
+int labelCount = 0;
+
+string newTemp(){
+    stringstream ss;
+    ss << "temp_" << tempCount++;
+    return ss.str();
+}
+
+string newLabel(){
+    stringstream ss;
+    ss << "label_" << labelCount++;
+    return ss.str();
+}
+
 vector<string> split (string s, string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
     string token;
@@ -124,7 +139,7 @@ void yyerror(const char* str) {
 }
     
 
-#line 128 "y.tab.c"
+#line 143 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -281,11 +296,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 59 "1805108.y"
+#line 74 "1805108.y"
 
     SymbolInfo *symbolInfo;
 
-#line 289 "y.tab.c"
+#line 304 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -775,13 +790,13 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   100,   100,   112,   118,   128,   136,   143,   153,   202,
-     237,   235,   354,   353,   397,   409,   421,   432,   452,   461,
-     469,   507,   515,   523,   531,   546,   564,   581,   601,   624,
-     631,   640,   648,   655,   655,   662,   670,   677,   684,   691,
-     698,   726,   731,   740,   754,   790,   797,   856,   862,   880,
-     887,   894,   900,   919,   925,   971,   978,   985,   995,  1002,
-    1058,  1065,  1072,  1079,  1087,  1100,  1107,  1115,  1122
+       0,   115,   115,   135,   142,   152,   160,   167,   177,   226,
+     261,   259,   385,   384,   459,   471,   483,   494,   514,   524,
+     532,   570,   578,   586,   594,   609,   627,   644,   664,   687,
+     694,   704,   712,   719,   719,   726,   764,   790,   797,   804,
+     811,   848,   853,   865,   879,   919,   926,   989,   995,  1017,
+    1024,  1036,  1042,  1065,  1071,  1119,  1130,  1141,  1151,  1158,
+    1218,  1227,  1235,  1244,  1256,  1273,  1280,  1289,  1299
 };
 #endif
 
@@ -1435,40 +1450,49 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: program  */
-#line 101 "1805108.y"
+#line 116 "1805108.y"
     {
      (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
      logFile << "line number" << lineCount << ": " ;
+     asmFile << ".model small\n";
+     asmFile << ".stack 100h\n\n";
+    asmFile << ".data\n\n";
+
+    asmFile << ".code\n\n";
+    asmFile << (yyval.symbolInfo)->getAsmCodes();
+    logFile << (yyval.symbolInfo)->getAsmCodes() << endl;
+    
 
     logFile << "start: program" << endl;
     // symbolTable.printAllScopes();
     
     }
-#line 1448 "y.tab.c"
+#line 1471 "y.tab.c"
     break;
 
   case 3: /* program: program unit  */
-#line 113 "1805108.y"
+#line 136 "1805108.y"
             {
             (yyval.symbolInfo) = new SymbolInfo( (yyvsp[-1].symbolInfo)->getName() +"\n" +(yyvsp[0].symbolInfo)->getName(),"SYMBOL_PROGRAM");
+            (yyval.symbolInfo) -> setAsmCodes((yyvsp[-1].symbolInfo)->getAsmCodes() + (yyvsp[0].symbolInfo)->getAsmCodes());
             logFile << "line number" << lineCount << ": " ;
             logFile << "program: program unit \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 1458 "y.tab.c"
+#line 1482 "y.tab.c"
     break;
 
   case 4: /* program: unit  */
-#line 119 "1805108.y"
+#line 143 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             logFile << "line number" << lineCount << ": " ;
             logFile << "program:  unit \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 1468 "y.tab.c"
+#line 1492 "y.tab.c"
     break;
 
   case 5: /* unit: variable_declaration  */
-#line 129 "1805108.y"
+#line 153 "1805108.y"
         {
         (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
         logFile << "line number" << lineCount << ": " ;
@@ -1476,22 +1500,22 @@ yyreduce:
         // symbolTable.printAllScopesInFile(logFile);
 
         }
-#line 1480 "y.tab.c"
+#line 1504 "y.tab.c"
     break;
 
   case 6: /* unit: function_declaration  */
-#line 137 "1805108.y"
+#line 161 "1805108.y"
         {
         (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
         logFile << "line number" << lineCount << ": " ;
         logFile << "unit: function_declaration \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 
         }
-#line 1491 "y.tab.c"
+#line 1515 "y.tab.c"
     break;
 
   case 7: /* unit: function_definition  */
-#line 144 "1805108.y"
+#line 168 "1805108.y"
         {
         (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
         logFile << "line number" << lineCount << ": " ;
@@ -1499,11 +1523,11 @@ yyreduce:
 
 
         }
-#line 1503 "y.tab.c"
+#line 1527 "y.tab.c"
     break;
 
   case 8: /* function_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON  */
-#line 154 "1805108.y"
+#line 178 "1805108.y"
                         {
                         
                       (yyval.symbolInfo) = new SymbolInfo((yyvsp[-5].symbolInfo)->getName()+" "+ (yyvsp[-4].symbolInfo)->getName()+"("+(yyvsp[-2].symbolInfo)->getName()+");", "function_declaration");
@@ -1552,11 +1576,11 @@ yyreduce:
                         parameter_list.clear();
                         
                         }
-#line 1556 "y.tab.c"
+#line 1580 "y.tab.c"
     break;
 
   case 9: /* function_declaration: type_specifier ID LPAREN RPAREN SEMICOLON  */
-#line 203 "1805108.y"
+#line 227 "1805108.y"
                     {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[-4].symbolInfo)->getName()+" "+ (yyvsp[-3].symbolInfo)->getName()+"();", "SYMBOL_FUNCTION");
                         string functionName = (yyvsp[-3].symbolInfo)->getName();
@@ -1586,11 +1610,11 @@ yyreduce:
                         logFile << endl << endl;
 
                         }
-#line 1590 "y.tab.c"
+#line 1614 "y.tab.c"
     break;
 
   case 10: /* $@1: %empty  */
-#line 237 "1805108.y"
+#line 261 "1805108.y"
                         {
                         string functionName = (yyvsp[-3].symbolInfo)->getName();
                         string functionType = (yyvsp[-4].symbolInfo)->getName();
@@ -1665,11 +1689,11 @@ yyreduce:
 
 
                         }
-#line 1669 "y.tab.c"
+#line 1693 "y.tab.c"
     break;
 
   case 11: /* function_definition: type_specifier ID LPAREN parameter_list RPAREN $@1 compound_statement  */
-#line 311 "1805108.y"
+#line 335 "1805108.y"
                                           {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[-6].symbolInfo)->getName()+" "+(yyvsp[-5].symbolInfo)->getName()+" ( " +(yyvsp[-3].symbolInfo)->getName()+" ) "+(yyvsp[0].symbolInfo)->getName() + "\n"  , "SYMBOL_FUNCTION");
                         string functionName = (yyvsp[-5].symbolInfo)->getName();
@@ -1697,25 +1721,32 @@ yyreduce:
 
                             }
                             else{
-                                asmCodes    = asmCodes + "PROC "+functionName+"\n";
-                                // asmCodes = $7->getName();
-                                asmCodes += "MOV AX, 4C00h\n";
+                                asmCodes    = functionName+ "PROC "+"\n";
+                                asmCodes += "\tPOP BP\n";
+                                // asmCodes += paramete recieved code
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes = (yyvsp[0].symbolInfo)->getAsmCodes();
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes += "\tRET\n";
+                                asmCodes += functionName+ "ENDP\n";
+                                
+                                
                             }
                         }
                                 (yyval.symbolInfo)->setAsmCodes(asmCodes);
-                                asmFile << (yyval.symbolInfo)->getAsmCodes();
-                                asmFile << endl;
+                                // asmFile << $$->getAsmCodes();
+                                // asmFile << endl;
                                 // asmFile << asmCodes;
 
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl<<endl;
                         logFile <<(yyval.symbolInfo)->getName()<< endl<<endl;
                         }
-#line 1715 "y.tab.c"
+#line 1746 "y.tab.c"
     break;
 
   case 12: /* $@2: %empty  */
-#line 354 "1805108.y"
+#line 385 "1805108.y"
                     {
                         string functionName = (yyvsp[-2].symbolInfo)->getName();
                         string functionType = (yyvsp[-3].symbolInfo)->getName();
@@ -1750,22 +1781,53 @@ yyreduce:
                         symbolTable.enterScope(30);
                         
                     }
-#line 1754 "y.tab.c"
+#line 1785 "y.tab.c"
     break;
 
   case 13: /* function_definition: type_specifier ID LPAREN RPAREN $@2 compound_statement  */
-#line 388 "1805108.y"
+#line 419 "1805108.y"
                                       {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[-5].symbolInfo)->getName()+" "+(yyvsp[-4].symbolInfo)->getName()+" ( ) "+(yyvsp[0].symbolInfo)->getName() + "\n"  , "SYMBOL_FUNCTION");
+                        string functionName = (yyvsp[-4].symbolInfo)->getName();
+                        string asmCodes = "";
+                        SymbolInfo* function = symbolTable.search(functionName);
+                        
+                            if(functionName == "main"){
+                                asmCodes    +=   "MAIN PROC\n";
+                                asmCodes   += "MOV AX, @DATA\n";
+                                asmCodes   += "MOV DS, AX\n";
+                                // asmCodes   += "MOV AX, @BSS\n";
+                                asmCodes += (yyvsp[0].symbolInfo)->getAsmCodes();
+                                asmCodes += "MOV AX, 4C00h\n";
+                                asmCodes += "INT 21h\n";
+                                asmCodes += "MAIN ENDP\n";
+                                asmCodes += "END MAIN\n";
+                            }
+                            else{
+                                asmCodes    = functionName+ "PROC "+"\n";
+                                asmCodes += "\tPOP BP\n";
+                                // asmCodes += paramete recieved code
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes = (yyvsp[0].symbolInfo)->getAsmCodes();
+                                asmCodes += "\tPUSH BP\n";
+                                asmCodes += "\tRET\n";
+                                asmCodes += functionName+ "ENDP\n";
+                                
+                                
+                            }
+
+                            (yyval.symbolInfo)->setAsmCodes(asmCodes);
+                            
+                        
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl<<endl;
                         logFile <<(yyval.symbolInfo)->getName()<< endl<<endl;
                     }
-#line 1765 "y.tab.c"
+#line 1827 "y.tab.c"
     break;
 
   case 14: /* parameter_list: parameter_list COMMA type_specifier ID  */
-#line 399 "1805108.y"
+#line 461 "1805108.y"
                     {
                     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-3].symbolInfo)->getName() + "," + (yyvsp[-1].symbolInfo)->getName() + " " + (yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                     logFile << "line number" << lineCount << ": " ;
@@ -1776,11 +1838,11 @@ yyreduce:
                     parameter_list.push_back(tempNodeParam);
                     
                     }
-#line 1780 "y.tab.c"
+#line 1842 "y.tab.c"
     break;
 
   case 15: /* parameter_list: parameter_list COMMA type_specifier  */
-#line 410 "1805108.y"
+#line 472 "1805108.y"
                     {
                     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName() + "," + (yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                     logFile << "line number" << lineCount << ": " ;
@@ -1792,11 +1854,11 @@ yyreduce:
 
 
                     }
-#line 1796 "y.tab.c"
+#line 1858 "y.tab.c"
     break;
 
   case 16: /* parameter_list: type_specifier ID  */
-#line 422 "1805108.y"
+#line 484 "1805108.y"
                     {
                     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-1].symbolInfo)->getName() + " " + (yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                     logFile << "line number" << lineCount << ": " ;
@@ -1807,11 +1869,11 @@ yyreduce:
                     parameter_list.push_back(tempNodeParam);
                     
                     }
-#line 1811 "y.tab.c"
+#line 1873 "y.tab.c"
     break;
 
   case 17: /* parameter_list: type_specifier  */
-#line 433 "1805108.y"
+#line 495 "1805108.y"
                     {
                     (yyval.symbolInfo) = new SymbolInfo((yyvsp[0].symbolInfo)->getName(), "SYMBOL_PARAMETER");
                     logFile << "line number" << lineCount << ": " ;
@@ -1823,13 +1885,14 @@ yyreduce:
                     parameter_list.push_back(tempNodeParam);
                     
                     }
-#line 1827 "y.tab.c"
+#line 1889 "y.tab.c"
     break;
 
   case 18: /* compound_statement: LCURL statement_list RCURL  */
-#line 452 "1805108.y"
+#line 514 "1805108.y"
                                                {
     (yyval.symbolInfo) = new SymbolInfo("{\n"+(yyvsp[-1].symbolInfo)->getName()+"\n}", "SYMBOL_COMPOUND_STATEMENT");
+    (yyval.symbolInfo)->setAsmCodes((yyvsp[-1].symbolInfo)->getAsmCodes());
     logFile << "line number" << lineCount << ": " ;
     logFile << "compound_statement : LCURL statement_list RCURL"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
@@ -1837,22 +1900,22 @@ yyreduce:
     symbolTable.exitScope();
     
 }
-#line 1841 "y.tab.c"
+#line 1904 "y.tab.c"
     break;
 
   case 19: /* compound_statement: LCURL RCURL  */
-#line 461 "1805108.y"
+#line 524 "1805108.y"
               {
     (yyval.symbolInfo) = new SymbolInfo("{\n}", "SYMBOL_COMPOUND_STATEMENT");
     logFile << "line number" << lineCount << ": " ;
     logFile << "compound_statement : LCURL RCURL"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 1852 "y.tab.c"
+#line 1915 "y.tab.c"
     break;
 
   case 20: /* variable_declaration: type_specifier declaration_list SEMICOLON  */
-#line 470 "1805108.y"
+#line 533 "1805108.y"
                         {
 
                             string variable_name = (yyvsp[-1].symbolInfo)->getName();
@@ -1887,11 +1950,11 @@ yyreduce:
                         logFile << "variable_declaration: type_specifier declaration_list SEMICOLON \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 
                         }
-#line 1891 "y.tab.c"
+#line 1954 "y.tab.c"
     break;
 
   case 21: /* type_specifier: INT  */
-#line 508 "1805108.y"
+#line 571 "1805108.y"
                 {
                 (yyval.symbolInfo) = new SymbolInfo("int", "int");
                 logFile << "line number" << lineCount << ": " ;
@@ -1899,11 +1962,11 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 1903 "y.tab.c"
+#line 1966 "y.tab.c"
     break;
 
   case 22: /* type_specifier: FLOAT  */
-#line 516 "1805108.y"
+#line 579 "1805108.y"
                 {
                 (yyval.symbolInfo) = new SymbolInfo("float", "float");
                 logFile << "line number" << lineCount << ": " ;
@@ -1911,11 +1974,11 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 1915 "y.tab.c"
+#line 1978 "y.tab.c"
     break;
 
   case 23: /* type_specifier: DOUBLE  */
-#line 524 "1805108.y"
+#line 587 "1805108.y"
                 {
                 (yyval.symbolInfo) = new SymbolInfo("double", "double");
                 logFile << "line number" << lineCount << ": " ;
@@ -1923,11 +1986,11 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 1927 "y.tab.c"
+#line 1990 "y.tab.c"
     break;
 
   case 24: /* type_specifier: VOID  */
-#line 532 "1805108.y"
+#line 595 "1805108.y"
                 {
                 (yyval.symbolInfo) = new SymbolInfo("void", "VOID");
                 logFile << "line number" << lineCount << ": " ;
@@ -1935,11 +1998,11 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 1939 "y.tab.c"
+#line 2002 "y.tab.c"
     break;
 
   case 25: /* declaration_list: declaration_list COMMA ID  */
-#line 548 "1805108.y"
+#line 611 "1805108.y"
             {
 (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName() + "," +(yyvsp[0].symbolInfo)->getName(), (yyvsp[0].symbolInfo)->getType());
    tempNodeVar.name = (yyvsp[0].symbolInfo)->getName();
@@ -1956,11 +2019,11 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: declaration_list COMMA ID \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 1960 "y.tab.c"
+#line 2023 "y.tab.c"
     break;
 
   case 26: /* declaration_list: declaration_list COMMA ID LTHIRD CONST_INT RTHIRD  */
-#line 565 "1805108.y"
+#line 628 "1805108.y"
 {
 (yyval.symbolInfo) = new SymbolInfo((yyvsp[-5].symbolInfo)->getName() + "," +(yyvsp[-3].symbolInfo)->getName()+"["+(yyvsp[-1].symbolInfo)->getName()+"]", (yyvsp[-3].symbolInfo)->getType());
     tempNodeVar.name = (yyvsp[-3].symbolInfo)->getName();
@@ -1977,11 +2040,11 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: declaration_list COMMA ID LTHIRD CONST INT RTHIRD \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 1981 "y.tab.c"
+#line 2044 "y.tab.c"
     break;
 
   case 27: /* declaration_list: ID  */
-#line 582 "1805108.y"
+#line 645 "1805108.y"
 {
 (yyval.symbolInfo) = new SymbolInfo((yyvsp[0].symbolInfo)->getName(), (yyvsp[0].symbolInfo)->getType());
     tempNodeVar.name = (yyvsp[0].symbolInfo)->getName();
@@ -2001,11 +2064,11 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: ID \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2005 "y.tab.c"
+#line 2068 "y.tab.c"
     break;
 
   case 28: /* declaration_list: ID LTHIRD CONST_INT RTHIRD  */
-#line 601 "1805108.y"
+#line 664 "1805108.y"
                             {
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-3].symbolInfo)->getName() + " [" + (yyvsp[-1].symbolInfo)->getName()+"]", (yyvsp[-3].symbolInfo)->getType());
     tempNodeVar.name = (yyvsp[-3].symbolInfo)->getName();
@@ -2026,33 +2089,34 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: ID LTHIRD CONST INT RTHIRD \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2030 "y.tab.c"
+#line 2093 "y.tab.c"
     break;
 
   case 29: /* statement_list: statement  */
-#line 625 "1805108.y"
+#line 688 "1805108.y"
                     {
                     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "statement_list : statement"<<endl<<endl ;
                     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
                     }
-#line 2041 "y.tab.c"
+#line 2104 "y.tab.c"
     break;
 
   case 30: /* statement_list: statement_list statement  */
-#line 632 "1805108.y"
+#line 695 "1805108.y"
                     {
                     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-1].symbolInfo)->getName() + "\n" + (yyvsp[0].symbolInfo)->getName(), "SYMBOL_STATEMENT_LIST");
+                    (yyval.symbolInfo)->setAsmCodes((yyvsp[-1].symbolInfo)->getAsmCodes() + (yyvsp[0].symbolInfo)->getAsmCodes());
                     logFile << "line number" << lineCount << ": " ;
                     logFile << "statement_list : statement_list statement"<<endl<<endl ;
                     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
                     }
-#line 2052 "y.tab.c"
+#line 2116 "y.tab.c"
     break;
 
   case 31: /* statement: variable_declaration  */
-#line 641 "1805108.y"
+#line 705 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             logFile << "line number" << lineCount << ": " ;
@@ -2060,94 +2124,143 @@ yyreduce:
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 
             }
-#line 2064 "y.tab.c"
+#line 2128 "y.tab.c"
     break;
 
   case 32: /* statement: expression_statement  */
-#line 649 "1805108.y"
+#line 713 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : expression_statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2075 "y.tab.c"
+#line 2139 "y.tab.c"
     break;
 
   case 33: /* $@3: %empty  */
-#line 655 "1805108.y"
+#line 719 "1805108.y"
           {symbolTable.enterScope(30);}
-#line 2081 "y.tab.c"
+#line 2145 "y.tab.c"
     break;
 
   case 34: /* statement: $@3 compound_statement  */
-#line 656 "1805108.y"
+#line 720 "1805108.y"
             {
             (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : compound_statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2092 "y.tab.c"
+#line 2156 "y.tab.c"
     break;
 
   case 35: /* statement: FOR LPAREN expression_statement expression_statement expression RPAREN statement  */
-#line 664 "1805108.y"
+#line 728 "1805108.y"
     {
     (yyval.symbolInfo) = new SymbolInfo("for"+(yyvsp[-4].symbolInfo)->getName()+(yyvsp[-3].symbolInfo)->getName()+(yyvsp[-2].symbolInfo)->getName(), "SYMBOL_FOR_STATEMENT");
+    string asmCodes = "";
+    string initCode = (yyvsp[-4].symbolInfo)->getAsmCodes();
+    string conditonAsm = (yyvsp[-3].symbolInfo) -> getAsmName();
+    string conditionCode = (yyvsp[-3].symbolInfo) -> getAsmCodes();
+    string incrementCode = (yyvsp[-2].symbolInfo) -> getAsmCodes();
+    string bodyCode = (yyvsp[0].symbolInfo) -> getAsmCodes();
+
+
+    string firstStatement = (yyvsp[-4].symbolInfo) -> getName();
+    string secondStatement = (yyvsp[-3].symbolInfo) -> getName();
+
+    asmCodes += initCode;
+    if(firstStatement != ";" && secondStatement != ";"){
+        string label1 = newLabel();
+        string label2 = newLabel();
+
+        asmCodes += label1 + ": \n" + conditionCode  ;
+        asmCodes += "mov ax, " + conditonAsm  + "\n";
+        asmCodes += "\tcmp ax, 0\n";
+        asmCodes += "\tje " + label2 + "\n";
+
+        asmCodes += bodyCode;
+        asmCodes += incrementCode;
+        asmCodes += "jmp " + label1 + "\n";
+        asmCodes += label2 + ": \n";
+
+    }
+
+    (yyval.symbolInfo) -> setAsmCodes(asmCodes);
+
     logFile << "line number" << lineCount << ": " ;
     logFile << "statement : FOR LPAREN expression statement expression statement expression RPAREN statement"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
     }
-#line 2103 "y.tab.c"
+#line 2197 "y.tab.c"
     break;
 
   case 36: /* statement: WHILE LPAREN expression RPAREN statement  */
-#line 671 "1805108.y"
+#line 765 "1805108.y"
             {
+
+                string bodyCode = (yyvsp[0].symbolInfo) -> getAsmCodes();
+                string conditionCode = (yyvsp[-2].symbolInfo) -> getAsmCodes();
+                string conditonAsm = (yyvsp[-2].symbolInfo) -> getAsmName();
+
+                string label1 = newLabel();
+                string label2 = newLabel();
+
+                string asmCodes = "";
+                asmCodes += label1 + ": \n" + conditionCode  ;
+                asmCodes += "\tmov ax, " + conditonAsm  + "\n";
+                asmCodes += "\tcmp ax, 0\n";
+                asmCodes += "\tje " + label2 + "\n";
+
+                asmCodes += bodyCode;
+                asmCodes += "jmp " + label1 + "\n";
+                asmCodes += label2 + ": \n";
+
             (yyval.symbolInfo) = new SymbolInfo("while("+(yyvsp[-2].symbolInfo)->getName()+")"+(yyvsp[0].symbolInfo)->getName(), "SYMBOL_WHILE_STATEMENT");
+            (yyval.symbolInfo) -> setAsmCodes(asmCodes);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : WHILE LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2114 "y.tab.c"
+#line 2227 "y.tab.c"
     break;
 
   case 37: /* statement: IF LPAREN expression RPAREN statement  */
-#line 678 "1805108.y"
+#line 791 "1805108.y"
             {
             (yyval.symbolInfo) = new SymbolInfo("if("+(yyvsp[-2].symbolInfo)->getName()+")"+(yyvsp[0].symbolInfo)->getName(), "SYMBOL_IF_STATEMENT");
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : IF LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2125 "y.tab.c"
+#line 2238 "y.tab.c"
     break;
 
   case 38: /* statement: IF LPAREN expression RPAREN statement ELSE statement  */
-#line 685 "1805108.y"
+#line 798 "1805108.y"
             {
             (yyval.symbolInfo) = new SymbolInfo("if("+(yyvsp[-4].symbolInfo)->getName()+")"+(yyvsp[-2].symbolInfo)->getName()+"else"+(yyvsp[0].symbolInfo)->getName(), "SYMBOL_IF_STATEMENT");
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2136 "y.tab.c"
+#line 2249 "y.tab.c"
     break;
 
   case 39: /* statement: RETURN expression SEMICOLON  */
-#line 692 "1805108.y"
+#line 805 "1805108.y"
             {
             (yyval.symbolInfo) = new SymbolInfo ("return "+(yyvsp[-1].symbolInfo)->getName()+";", "SYMBOL_RETURN_STATEMENT");
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : RETURN expression"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2147 "y.tab.c"
+#line 2260 "y.tab.c"
     break;
 
   case 40: /* statement: PRINTLN LPAREN ID RPAREN SEMICOLON  */
-#line 699 "1805108.y"
+#line 812 "1805108.y"
             {
                 SymbolInfo *temp = symbolTable.search((yyvsp[-2].symbolInfo)->getName());
             if(symbolTable.search((yyvsp[-2].symbolInfo)->getName()) == NULL)
@@ -2166,36 +2279,48 @@ yyreduce:
                 }
                }}
             
-            (yyval.symbolInfo) = new SymbolInfo ("printf("+(yyvsp[-2].symbolInfo)->getName()+");", "statement");
+            string asmCode = "";
+            asmCode += "mov ax, " + (yyvsp[-2].symbolInfo)->getAsmName() + "\n";
+            asmCode += "\tmov print_var , ax\n";
+            asmCode += "\tcall println\n";
+
+            
+
+            
+            (yyval.symbolInfo) = new SymbolInfo ("println("+(yyvsp[-2].symbolInfo)->getName()+");", "statement");
+            (yyval.symbolInfo) -> setAsmCodes(asmCode);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : PRINTLN LPAREN expression RPAREN SEMICOLON"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2175 "y.tab.c"
+#line 2297 "y.tab.c"
     break;
 
   case 41: /* expression_statement: SEMICOLON  */
-#line 727 "1805108.y"
+#line 849 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo(";", "SYMBOL_EXPRESSION_STATEMENT");
                         
                         }
-#line 2184 "y.tab.c"
+#line 2306 "y.tab.c"
     break;
 
   case 42: /* expression_statement: expression SEMICOLON  */
-#line 732 "1805108.y"
+#line 854 "1805108.y"
                         {
                         (yyval.symbolInfo) = new SymbolInfo((yyvsp[-1].symbolInfo)->getName()+";", "SYMBOL_EXPRESSION_STATEMENT");
+                        (yyval.symbolInfo) -> setAsmCodes((yyvsp[-1].symbolInfo)->getAsmCodes());
+                        (yyval.symbolInfo) -> setAsmName((yyvsp[-1].symbolInfo)->getAsmName());
+                        
                         logFile << "line number" << lineCount << ": " ;
                         logFile << "expression_statement : expression SEMICOLON"<<endl<<endl ;
                         logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
                         }
-#line 2195 "y.tab.c"
+#line 2320 "y.tab.c"
     break;
 
   case 43: /* variable: ID  */
-#line 740 "1805108.y"
+#line 865 "1805108.y"
              {
     SymbolInfo *temp = symbolTable.search((yyvsp[0].symbolInfo)->getName());
     if(temp != NULL){
@@ -2210,11 +2335,11 @@ yyreduce:
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 
 }
-#line 2214 "y.tab.c"
+#line 2339 "y.tab.c"
     break;
 
   case 44: /* variable: ID LTHIRD expression RTHIRD  */
-#line 754 "1805108.y"
+#line 879 "1805108.y"
                              {
     SymbolInfo *currentId = symbolTable.search((yyvsp[-3].symbolInfo)->getName());
     if(currentId == NULL)
@@ -2245,26 +2370,30 @@ yyreduce:
     }}}
     
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-3].symbolInfo)->getName()+"["+(yyvsp[-1].symbolInfo)->getName()+"]", (yyvsp[-3].symbolInfo)->getType());
+     string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "variable : ID LTHIRD expression RTHIRD"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2253 "y.tab.c"
+#line 2382 "y.tab.c"
     break;
 
   case 45: /* expression: logic_expression  */
-#line 790 "1805108.y"
+#line 919 "1805108.y"
                              {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : logic expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2264 "y.tab.c"
+#line 2393 "y.tab.c"
     break;
 
   case 46: /* expression: variable ASSIGNOP logic_expression  */
-#line 797 "1805108.y"
+#line 926 "1805108.y"
                                     {
     // logFile << $1->getType()<< $3->getType() << endl;
     // logFile << $3->getName() << endl;
@@ -2318,26 +2447,30 @@ yyreduce:
     // }
    
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName()+"="+(yyvsp[0].symbolInfo)->getName(), "SYMBOL_ASSIGNMENT_EXPRESSION");
+     string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : variable ASSIGNOP logic expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2326 "y.tab.c"
+#line 2459 "y.tab.c"
     break;
 
   case 47: /* logic_expression: rel_expression  */
-#line 856 "1805108.y"
+#line 989 "1805108.y"
                                   {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "logic_expression : rel_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2337 "y.tab.c"
+#line 2470 "y.tab.c"
     break;
 
   case 48: /* logic_expression: rel_expression LOGICOP rel_expression  */
-#line 862 "1805108.y"
+#line 995 "1805108.y"
                                         {
     string type = "int";
     if((yyvsp[-2].symbolInfo)->getType() != "int" || (yyvsp[0].symbolInfo)->getType() != "int")
@@ -2349,48 +2482,57 @@ yyreduce:
     }
    
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName()+(yyvsp[-1].symbolInfo)->getName()+(yyvsp[0].symbolInfo)->getName(), type);
+     string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "logic_expression : logic_expression AND rel_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2357 "y.tab.c"
+#line 2494 "y.tab.c"
     break;
 
   case 49: /* rel_expression: simple_expression  */
-#line 881 "1805108.y"
+#line 1018 "1805108.y"
 {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : simple expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2368 "y.tab.c"
+#line 2505 "y.tab.c"
     break;
 
   case 50: /* rel_expression: simple_expression RELOP simple_expression  */
-#line 887 "1805108.y"
+#line 1024 "1805108.y"
                                            {
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName()+(yyvsp[-1].symbolInfo)->getName()+(yyvsp[0].symbolInfo)->getName(), (yyvsp[-2].symbolInfo)->getType());
+     string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : simple_expression RELOP simple_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
+
 }
-#line 2379 "y.tab.c"
+#line 2521 "y.tab.c"
     break;
 
   case 51: /* simple_expression: term  */
-#line 894 "1805108.y"
+#line 1036 "1805108.y"
                         {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "simple_expression : term"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2390 "y.tab.c"
+#line 2532 "y.tab.c"
     break;
 
   case 52: /* simple_expression: simple_expression ADDOP term  */
-#line 901 "1805108.y"
+#line 1043 "1805108.y"
 {
     //problem in getting the plus and minus
     string type;
@@ -2403,26 +2545,30 @@ yyreduce:
         type = "float";
     }
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName()+(yyvsp[-1].symbolInfo)->getName()+(yyvsp[0].symbolInfo)->getName(), type);
+     string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "simple_expression : simple_expression ADDOP term"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2411 "y.tab.c"
+#line 2557 "y.tab.c"
     break;
 
   case 53: /* term: unary_expression  */
-#line 919 "1805108.y"
+#line 1065 "1805108.y"
                         {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "term : unary_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2422 "y.tab.c"
+#line 2568 "y.tab.c"
     break;
 
   case 54: /* term: term MULOP unary_expression  */
-#line 925 "1805108.y"
+#line 1071 "1805108.y"
                               {
 
     string leftType = (yyvsp[-2].symbolInfo)->getType();
@@ -2460,62 +2606,72 @@ yyreduce:
     }
     
     
-
-
+    string asmCodes = "";
+    string temp = newTemp();
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName()+(yyvsp[-1].symbolInfo)->getName()+(yyvsp[0].symbolInfo)->getName(), type);
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "term : term MULOP unary_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2471 "y.tab.c"
+#line 2619 "y.tab.c"
     break;
 
   case 55: /* unary_expression: ADDOP unary_expression  */
-#line 972 "1805108.y"
+#line 1120 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-1].symbolInfo)->getName()+(yyvsp[0].symbolInfo)->getName(), (yyvsp[0].symbolInfo)->getType());
+    string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : ADDOP unary expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2482 "y.tab.c"
+#line 2634 "y.tab.c"
     break;
 
   case 56: /* unary_expression: NOT unary_expression  */
-#line 979 "1805108.y"
+#line 1131 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo(" !"+(yyvsp[0].symbolInfo)->getName(), (yyvsp[0].symbolInfo)->getType());
+    string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "expression : NOT unary_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2493 "y.tab.c"
+#line 2649 "y.tab.c"
     break;
 
   case 57: /* unary_expression: factor  */
-#line 986 "1805108.y"
+#line 1142 "1805108.y"
 {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "unary_expression : factor"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2504 "y.tab.c"
+#line 2660 "y.tab.c"
     break;
 
   case 58: /* factor: variable  */
-#line 996 "1805108.y"
+#line 1152 "1805108.y"
 {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : variable\n\n" ;
     logFile<< (yyval.symbolInfo)->getName() << "\n\n";
 }
-#line 2515 "y.tab.c"
+#line 2671 "y.tab.c"
     break;
 
   case 59: /* factor: ID LPAREN argument_list RPAREN  */
-#line 1003 "1805108.y"
+#line 1159 "1805108.y"
 {
     // cout << "factor : ID LPAREN argument_list RPAREN"<<endl;
     SymbolInfo *func = symbolTable.searchInGlobalScope((yyvsp[-3].symbolInfo)->getName());
@@ -2567,103 +2723,124 @@ yyreduce:
     
 
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-3].symbolInfo)->getName()+" ( "+(yyvsp[-1].symbolInfo)->getName()+" )",type );
+    string temp = newTemp();
+    string asmCodes = "";
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : ID LPAREN argument_list RPAREN"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2575 "y.tab.c"
+#line 2735 "y.tab.c"
     break;
 
   case 60: /* factor: LPAREN expression RPAREN  */
-#line 1059 "1805108.y"
+#line 1219 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo(" ( "+(yyvsp[-1].symbolInfo)->getName()+" ) ", (yyvsp[-1].symbolInfo)->getType());
+    (yyval.symbolInfo)->setAsmCodes((yyvsp[-1].symbolInfo)->getAsmCodes());
+    (yyval.symbolInfo)->setAsmName((yyvsp[-1].symbolInfo)->getAsmName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : LPAREN expression RPAREN"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2586 "y.tab.c"
+#line 2748 "y.tab.c"
     break;
 
   case 61: /* factor: CONST_INT  */
-#line 1066 "1805108.y"
+#line 1228 "1805108.y"
 {
     (yyval.symbolInfo) = yylval.symbolInfo;
+    (yyval.symbolInfo)-> setAsmName(yylval.symbolInfo->getName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : CONST_INT"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2597 "y.tab.c"
+#line 2760 "y.tab.c"
     break;
 
   case 62: /* factor: CONST_FLOAT  */
-#line 1072 "1805108.y"
+#line 1235 "1805108.y"
              {
     (yyval.symbolInfo) = yylval.symbolInfo;
+    (yyval.symbolInfo)-> setAsmName(yylval.symbolInfo->getName());
+
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : CONST_FLOAT"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2608 "y.tab.c"
+#line 2773 "y.tab.c"
     break;
 
   case 63: /* factor: variable INCOP  */
-#line 1080 "1805108.y"
+#line 1245 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-1].symbolInfo)->getName()+"++", (yyvsp[-1].symbolInfo)->getType());
+     string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo) -> setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : variable INCOP"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2619 "y.tab.c"
+#line 2788 "y.tab.c"
     break;
 
   case 64: /* factor: variable DECOP  */
-#line 1088 "1805108.y"
+#line 1257 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-1].symbolInfo)->getName()+"--", (yyvsp[-1].symbolInfo)->getType());
+    string asmCodes = "";
+    string temp = newTemp();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo) -> setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
     logFile << "factor : variable DECOP"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2630 "y.tab.c"
+#line 2803 "y.tab.c"
     break;
 
   case 65: /* argument_list: arguments  */
-#line 1100 "1805108.y"
+#line 1273 "1805108.y"
                          {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     logFile << "line number" << lineCount << ": " ;
     logFile << "argument_list : arguments"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2641 "y.tab.c"
+#line 2814 "y.tab.c"
     break;
 
   case 66: /* argument_list: %empty  */
-#line 1107 "1805108.y"
+#line 1280 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo("", "SYMBOL_ARGUMENT_LIST");
+    (yyval.symbolInfo) -> setAsmName("");
     logFile << "line number" << lineCount << ": " ;
     logFile << "argument_list :"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2652 "y.tab.c"
+#line 2826 "y.tab.c"
     break;
 
   case 67: /* arguments: arguments COMMA logic_expression  */
-#line 1116 "1805108.y"
+#line 1290 "1805108.y"
 {
     (yyval.symbolInfo) = new SymbolInfo((yyvsp[-2].symbolInfo)->getName()+","+(yyvsp[0].symbolInfo)->getName(), (yyvsp[-2].symbolInfo)->getType()+","+(yyvsp[0].symbolInfo)->getType());
+    string asmCodes = (yyvsp[-2].symbolInfo)->getAsmCodes()+(yyvsp[0].symbolInfo)->getAsmCodes();
+    (yyval.symbolInfo)->setAsmCodes(asmCodes);
+    (yyval.symbolInfo)->setAsmName((yyvsp[-2].symbolInfo)->getAsmName()+","+(yyvsp[0].symbolInfo)->getAsmName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "argument_list : arguments COMMA logic_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2663 "y.tab.c"
+#line 2840 "y.tab.c"
     break;
 
   case 68: /* arguments: logic_expression  */
-#line 1123 "1805108.y"
+#line 1300 "1805108.y"
 {
     (yyval.symbolInfo) = (yyvsp[0].symbolInfo);
     // $$ = new SymbolInfo($1->getName(), "SYMBOL_ARGUMENTS");
@@ -2671,11 +2848,11 @@ yyreduce:
     logFile << "argument_list : logic_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2675 "y.tab.c"
+#line 2852 "y.tab.c"
     break;
 
 
-#line 2679 "y.tab.c"
+#line 2856 "y.tab.c"
 
       default: break;
     }
@@ -2868,7 +3045,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 1141 "1805108.y"
+#line 1318 "1805108.y"
 
 
 int main(int argc, char *argv[]) {

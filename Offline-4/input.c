@@ -1,5 +1,9 @@
-int main(int c){
-    int a,b;
-    printl("Enter two numbers: ");
-    return 0;
+int main(){
+   int i;
+    for (i = 0; i < 9; i++)
+    {
+        
+    }
+    
+   
 }
