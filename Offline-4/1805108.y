@@ -790,13 +790,43 @@ statement : variable_declaration
         | IF LPAREN expression RPAREN statement %prec LOWER_THAN_ELSE
             {
             $$ = new SymbolInfo("if("+$3->getName()+")"+$5->getName(), "SYMBOL_IF_STATEMENT");
+            string asmCodes = "";
+            string conditionCode = $3 -> getAsmCodes();
+            string conditonAsm = $3 -> getAsmName();
+            string bodyCode = $5 -> getAsmCodes();
+            string label = newLabel();
+            asmCodes += conditionCode;
+            asmCodes += "mov ax, " + conditonAsm  + "\n";
+            asmCodes += "\tcmp ax, 0\n";
+            asmCodes += "\tje " + label + "\n";
+            asmCodes += bodyCode;
+            asmCodes += label + ": \n";
+            $$ -> setAsmCodes(asmCodes);
+
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : IF LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< $$->getName() << endl<<endl;
             }
         | IF LPAREN expression RPAREN statement ELSE statement
             {
+                string asmCodes = "";
+            string conditionCode = $3 -> getAsmCodes();
+            string conditonAsm = $3 -> getAsmName();
+            string bodyCodeIf = $5 -> getAsmCodes();
+            string bodyCodeElse = $7 -> getAsmCodes();
+            string label1 = newLabel();
+            string label2 = newLabel();
+            asmCodes += conditionCode;
+            asmCodes += "mov ax, " + conditonAsm  + "\n";
+            asmCodes += "\tcmp ax, 0\n";
+            asmCodes += "\tje " + label1 + "\n";
+            asmCodes += bodyCodeIf;
+            asmCodes += "jmp " + label2 + "\n";
+            asmCodes += label1 + ": \n";
+            asmCodes += bodyCodeElse;
+            asmCodes += label2 + ": \n";
             $$ = new SymbolInfo("if("+$3->getName()+")"+$5->getName()+"else"+$7->getName(), "SYMBOL_IF_STATEMENT");
+            $$ -> setAsmCodes(asmCodes);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl<<endl ;
             logFile<< $$->getName() << endl<<endl;
@@ -804,6 +834,16 @@ statement : variable_declaration
         | RETURN expression SEMICOLON
             {
             $$ = new SymbolInfo ("return "+$2->getName()+";", "SYMBOL_RETURN_STATEMENT");
+            string asmCodes = "";
+            string expressionCode = $2 -> getAsmCodes();
+            string expressionAsm = $2 -> getAsmName();
+            asmCodes += expressionCode;
+            asmCodes += "\tpop bp\n";
+            asmCodes += "\tpush " + expressionAsm + "\n";
+            // asmCodes += "mov ax, " + expressionAsm  + "\n";
+            // asmCodes += "\tmov [bp - 4], ax\n";
+            // asmCodes += "\tjmp [bp - 8]\n";
+            $$ -> setAsmCodes(asmCodes);
             logFile << "line number" << lineCount << ": " ;
             logFile << "statement : RETURN expression"<<endl<<endl ;
             logFile<< $$->getName() << endl<<endl;

@@ -26,85 +26,106 @@ line number2: statement_list : statement
 
 int i,a;
 
-line number3: variable : ID
+line number5: variable : ID
 
 i
 
-line number3: factor : variable
+line number5: factor : variable
 
 i
 
-line number3: unary_expression : factor
+line number5: unary_expression : factor
 
 i
 
-line number3: term : unary_expression
+line number5: term : unary_expression
 
 i
 
-line number3: simple_expression : term
+line number5: simple_expression : term
 
 i
 
-line number3: variable : ID
+line number5: variable : ID
 
 a
 
-line number3: factor : variable
+line number5: factor : variable
 
 a
 
-line number3: unary_expression : factor
+line number5: unary_expression : factor
 
 a
 
-line number3: term : unary_expression
+line number5: term : unary_expression
 
 a
 
-line number3: simple_expression : term
+line number5: simple_expression : term
 
 a
 
-line number3: expression : simple_expression RELOP simple_expression
+line number5: expression : simple_expression RELOP simple_expression
 
 i<a
 
-line number3: logic_expression : rel_expression
+line number5: logic_expression : rel_expression
 
 i<a
 
-line number3: expression : logic expression
+line number5: expression : logic expression
 
 i<a
 
-line number6: compound_statement : LCURL RCURL
+line number7: argument_list :
+
+
+
+line number7: factor : ID LPAREN argument_list RPAREN
+
+println (  )
+
+line number7: unary_expression : factor
+
+println (  )
+
+line number7: term : unary_expression
+
+println (  )
+
+line number7: simple_expression : term
+
+println (  )
+
+line number7: expression : simple expression
+
+println (  )
+
+line number7: logic_expression : rel_expression
+
+println (  )
+
+line number7: expression : logic expression
+
+println (  )
+
+line number7: expression_statement : expression SEMICOLON
+
+println (  );
+
+line number7: statement : expression_statement
+
+println (  );
+
+line number7: statement_list : statement
+
+println (  );
+
+line number8: compound_statement : LCURL statement_list RCURL
 
 {
-}
-
-line number6: statement : compound_statement
-
-{
-}
-
-line number6: statement : WHILE LPAREN expression RPAREN statement
-
-while(i<a){
-}
-
-line number6: statement_list : statement_list statement
-
-int i,a;
-while(i<a){
-}
-
-line number10: compound_statement : LCURL statement_list RCURL
-
-{
-int i,a;
-while(i<a){
-}
+println (  );
 }
 
 print all scopes
@@ -117,48 +138,106 @@ print all scopes
  ScopeTable: 1
 
 16--> < main ,ID >
-line number10: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+line number8: statement : compound_statement
 
-int main ( ) {
+{
+println (  );
+}
+
+line number11: argument_list :
+
+
+
+line number11: factor : ID LPAREN argument_list RPAREN
+
+println (  )
+
+line number11: unary_expression : factor
+
+println (  )
+
+line number11: term : unary_expression
+
+println (  )
+
+line number11: simple_expression : term
+
+println (  )
+
+line number11: expression : simple expression
+
+println (  )
+
+line number11: logic_expression : rel_expression
+
+println (  )
+
+line number11: expression : logic expression
+
+println (  )
+
+line number11: expression_statement : expression SEMICOLON
+
+println (  );
+
+line number11: statement : expression_statement
+
+println (  );
+
+line number11: statement_list : statement
+
+println (  );
+
+line number12: compound_statement : LCURL statement_list RCURL
+
+{
+println (  );
+}
+
+print all scopes
+ ScopeTable: 1.1.2
+
+ ScopeTable: 1.1
+
+7--> < a ,ID >
+15--> < i ,ID >
+ ScopeTable: 1
+
+16--> < main ,ID >
+line number12: statement : compound_statement
+
+{
+println (  );
+}
+
+line number12: statement : IF LPAREN expression RPAREN statement ELSE statement
+
+if(i<a){
+println (  );
+}else{
+println (  );
+}
+
+line number12: statement_list : statement_list statement
+
 int i,a;
-while(i<a){
+if(i<a){
+println (  );
+}else{
+println (  );
 }
-}
 
+line number19: compound_statement : LCURL statement_list RCURL
 
-line number10: unit: function_definition 
-
-int main ( ) {
+{
 int i,a;
-while(i<a){
+if(i<a){
+println (  );
+}else{
+println (  );
 }
 }
 
-
-line number10: program:  unit 
-
-int main ( ) {
-int i,a;
-while(i<a){
-}
-}
-
-
-line number10: MAIN PROC
-MOV AX, @DATA
-MOV DS, AX
-label_0: 
-	mov ax, temp_0
-	cmp ax, 0
-	je label_1
-jmp label_0
-label_1: 
-MOV AX, 4C00h
-INT 21h
-MAIN ENDP
-END MAIN
-
-start: program
 print all scopes
  ScopeTable: 1.1
 
@@ -167,5 +246,60 @@ print all scopes
  ScopeTable: 1
 
 16--> < main ,ID >
-total no. of errors: 0
-total no. of lines10
+line number19: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int main ( ) {
+int i,a;
+if(i<a){
+println (  );
+}else{
+println (  );
+}
+}
+
+
+line number19: unit: function_definition 
+
+int main ( ) {
+int i,a;
+if(i<a){
+println (  );
+}else{
+println (  );
+}
+}
+
+
+line number19: program:  unit 
+
+int main ( ) {
+int i,a;
+if(i<a){
+println (  );
+}else{
+println (  );
+}
+}
+
+
+line number19: MAIN PROC
+MOV AX, @DATA
+MOV DS, AX
+mov ax, temp_0
+	cmp ax, 0
+	je label_0
+jmp label_1
+label_0: 
+label_1: 
+MOV AX, 4C00h
+INT 21h
+MAIN ENDP
+END MAIN
+
+start: program
+print all scopes
+ ScopeTable: 1
+
+16--> < main ,ID >
+total no. of errors: 2
+total no. of lines19
