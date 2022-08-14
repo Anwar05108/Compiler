@@ -1,2 +1,2 @@
-line number7: error: function println not declared
-line number11: error: function println not declared
+line number7: error: variable i not declared
+line number11: error: variable i not declared

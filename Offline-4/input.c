@@ -4,11 +4,11 @@ int main(){
 
     if (i < a)
     {
-       println("i is less than a");
+       i = i + 1;
     }
     else
     {
-       println("i is greater than a");
+       i = i - 1;
     }
     
    
