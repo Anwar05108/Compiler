@@ -6,15 +6,25 @@
 #include<iostream>
 #include<bits/stdc++.h>
 
-
+struct nodeVar{
+    string name;
+    string type;
+    int arraySize;
+}tempNodeVar;
 int lineCount = 1;
 int errorCount = 0;
 int tempCount = 0;
 int labelCount = 0;
+vector<nodeVar> var_list_asm;
 
 string newTemp(){
     stringstream ss;
     ss << "temp_" << tempCount++;
+    nodeVar temp;
+    temp.name = ss.str();
+    temp.type = "int";
+    temp.arraySize = 0;
+    var_list_asm.push_back(temp);
     return ss.str();
 }
 
@@ -39,11 +49,8 @@ vector<string> split (string s, string delimiter) {
     return res;
 }
 
-struct nodeVar{
-    string name;
-    string type;
-    int arraySize;
-}tempNodeVar;
+
+
 
 struct nodeParam{
     string name;
@@ -119,6 +126,14 @@ start: program
      asmFile << ".model small\n";
      asmFile << ".stack 100h\n\n";
     asmFile << ".data\n\n";
+    for(int i = 0; i < var_list_asm.size(); i++){
+        if(var_list_asm[i].arraySize == 0 || var_list_asm[i].arraySize == -1){
+            asmFile << var_list_asm[i].name << ": dw ?\n";
+        }
+        else{
+            asmFile << var_list_asm[i].name << ": dw "+ to_string(var_list_asm[i].arraySize)+"\n";
+        }
+    }
 
     asmFile << ".code\n\n";
     asmFile << $$->getAsmCodes();
@@ -323,7 +338,7 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                         }}
                     }
                         // symbolTable.printAllScopesInFile(logFile);
-                        logFile<<"enterScope";
+                        // logFile<<"enterScope";
                         parameter_list.clear();
                         // logFile << "line number" << lineCount << ": " ;
                         // logFile << "func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl<<endl;
@@ -544,14 +559,22 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                             else{
                                 for(int i = 0;i < variable_list.size();i++){
                                     symbolTable.insert(variable_list[i].name, $1->getName());
-                                    if(variable_list[i].arraySize > 0){
+                                    var_list_asm.push_back(variable_list[i]);
+                                    string global_name = variable_list[i].name + (symbolTable.getScopeTable())->getShowId();
                                         SymbolInfo *temp = symbolTable.search(variable_list[i].name);
+                                    if(variable_list[i].arraySize > 0){
                                         if(temp != NULL){
                                             temp->setArraySize(variable_list[i].arraySize);
                                         }
                                         // temp->setArraySize(variable_list[i].arraySize);
                                         logFile << "array size of " << variable_list[i].name << " is " << temp->getArraySize() << endl;
                                     }
+                                   
+                                        if(temp != NULL){
+                                            temp->setAsmName(global_name);
+                                        }
+                                   
+                                   
                                 }
                             }
 

@@ -3,6 +3,11 @@
 
 .data
 
+i: dw ?
+a: dw ?
+temp_0: dw ?
+temp_1: dw ?
+temp_2: dw ?
 .code
 
 MAIN PROC
