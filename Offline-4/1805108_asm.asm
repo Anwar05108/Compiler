@@ -3,18 +3,21 @@
 
 .data
 
-i: dw ?
-a: dw ?
-temp_0: dw ?
-temp_1: dw ?
-temp_2: dw ?
+i dw ?
+a dw ?
+j dw ?
+temp_0 dw ?
+temp_1 dw ?
 .code
 
 MAIN PROC
 MOV AX, @DATA
 MOV DS, AX
+	mov ax,0
+	mov , ax
+label_2: 
 	mov ax, 
-	cmp bx, 
+	cmp bx, 10
 	jl label_1
 	mov ax, 0
 	mov temp_0, ax
@@ -25,17 +28,13 @@ label_1:
 label_0:
 mov ax, temp_0
 	cmp ax, 0
-	je label_2
-	mov ax, 
-	add ax, 1
+	je label_3
+	mov ax,
+	mov , ax
+	mov ax ,
 	mov temp_1, ax
-	mov ax, 
-jmp label_3
-label_2: 
-	mov ax, 
-	sub ax, 1
-	mov temp_2, ax
-	mov ax, 
+	inc
+jmp label_2
 label_3: 
 MOV AX, 4C00h
 INT 21h

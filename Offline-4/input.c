@@ -1,15 +1,13 @@
 int main(){
    int i,a;
+   int j;
     
 
-    if (i < a)
-    {
-       i = i + 1;
-    }
-    else
-    {
-       i = i - 1;
-    }
+   for ( j = 0; j < 10; j++)
+   {
+      i = j;
+   }
+   
     
    
     

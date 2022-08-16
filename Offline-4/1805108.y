@@ -128,10 +128,10 @@ start: program
     asmFile << ".data\n\n";
     for(int i = 0; i < var_list_asm.size(); i++){
         if(var_list_asm[i].arraySize == 0 || var_list_asm[i].arraySize == -1){
-            asmFile << var_list_asm[i].name << ": dw ?\n";
+            asmFile << var_list_asm[i].name << " dw ?\n";
         }
         else{
-            asmFile << var_list_asm[i].name << ": dw "+ to_string(var_list_asm[i].arraySize)+"\n";
+            asmFile << var_list_asm[i].name << " dw "+ to_string(var_list_asm[i].arraySize)+"\n";
         }
     }
 
@@ -571,7 +571,9 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                                     }
                                    
                                         if(temp != NULL){
+                                            cout << global_name << endl;
                                             temp->setAsmName(global_name);
+                                            // cout 
                                         }
                                    
                                    
@@ -756,6 +758,10 @@ statement : variable_declaration
     string conditionCode = $4 -> getAsmCodes();
     string incrementCode = $5 -> getAsmCodes();
     string bodyCode = $7 -> getAsmCodes();
+    cout << $7 -> getType() << endl;
+    cout << $7-> getAsmCodes() << endl;
+    cout << $3->getName() << endl;
+    cout << $3->getAsmCodes() << endl;
 
 
     string firstStatement = $3 -> getName();
@@ -1055,7 +1061,8 @@ expression : logic_expression{
     string rightCode = $3->getAsmCodes();
     asmCodes += leftCode;
     asmCodes += rightCode;
-    asmCodes += "\tmov ax" + lefAsm + ", " + lefAsm + "\n";
+    asmCodes += "\tmov ax," + rightAsm  + "\n";
+    asmCodes += "\tmov " + lefAsm + ", ax\n";
 
     // string temp = newTemp();
     $$->setAsmCodes(asmCodes);

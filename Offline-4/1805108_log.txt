@@ -26,126 +26,199 @@ line number2: statement_list : statement
 
 int i,a;
 
-line number5: variable : ID
+line number3: type_specifier : INT
+
+int
+
+line number3: declaration_list: ID 
+
+j
+
+line number3: variable_declaration: type_specifier declaration_list SEMICOLON 
+
+int j;
+
+line number3: statement : variable_declaration
+
+int j;
+
+line number3: statement_list : statement_list statement
+
+int i,a;
+int j;
+
+line number6: variable : ID
+
+j
+
+line number6: factor : CONST_INT
+
+0
+
+line number6: unary_expression : factor
+
+0
+
+line number6: term : unary_expression
+
+0
+
+line number6: simple_expression : term
+
+0
+
+line number6: expression : simple expression
+
+0
+
+line number6: logic_expression : rel_expression
+
+0
+
+line number6: expression : variable ASSIGNOP logic expression
+
+j=0
+
+line number6: expression_statement : expression SEMICOLON
+
+j=0;
+
+line number6: variable : ID
+
+j
+
+line number6: factor : variable
+
+j
+
+line number6: unary_expression : factor
+
+j
+
+line number6: term : unary_expression
+
+j
+
+line number6: simple_expression : term
+
+j
+
+line number6: factor : CONST_INT
+
+10
+
+line number6: unary_expression : factor
+
+10
+
+line number6: term : unary_expression
+
+10
+
+line number6: simple_expression : term
+
+10
+
+line number6: expression : simple_expression RELOP simple_expression
+
+j<10
+
+line number6: logic_expression : rel_expression
+
+j<10
+
+line number6: expression : logic expression
+
+j<10
+
+line number6: expression_statement : expression SEMICOLON
+
+j<10;
+
+line number6: variable : ID
+
+j
+
+line number6: factor : variable INCOP
+
+j++
+
+line number6: unary_expression : factor
+
+j++
+
+line number6: term : unary_expression
+
+j++
+
+line number6: simple_expression : term
+
+j++
+
+line number6: expression : simple expression
+
+j++
+
+line number6: logic_expression : rel_expression
+
+j++
+
+line number6: expression : logic expression
+
+j++
+
+line number8: variable : ID
 
 i
 
-line number5: factor : variable
+line number8: variable : ID
 
-i
+j
 
-line number5: unary_expression : factor
+line number8: factor : variable
 
-i
+j
 
-line number5: term : unary_expression
+line number8: unary_expression : factor
 
-i
+j
 
-line number5: simple_expression : term
+line number8: term : unary_expression
 
-i
+j
 
-line number5: variable : ID
+line number8: simple_expression : term
 
-a
+j
 
-line number5: factor : variable
+line number8: expression : simple expression
 
-a
+j
 
-line number5: unary_expression : factor
+line number8: logic_expression : rel_expression
 
-a
+j
 
-line number5: term : unary_expression
+line number8: expression : variable ASSIGNOP logic expression
 
-a
+i=j
 
-line number5: simple_expression : term
+line number8: expression_statement : expression SEMICOLON
 
-a
+i=j;
 
-line number5: expression : simple_expression RELOP simple_expression
+line number8: statement : expression_statement
 
-i<a
+i=j;
 
-line number5: logic_expression : rel_expression
+line number8: statement_list : statement
 
-i<a
+i=j;
 
-line number5: expression : logic expression
-
-i<a
-
-line number7: variable : ID
-
-i
-
-line number7: variable : ID
-
-i
-
-line number7: factor : variable
-
-i
-
-line number7: unary_expression : factor
-
-i
-
-line number7: term : unary_expression
-
-i
-
-line number7: simple_expression : term
-
-i
-
-line number7: factor : CONST_INT
-
-1
-
-line number7: unary_expression : factor
-
-1
-
-line number7: term : unary_expression
-
-1
-
-line number7: simple_expression : simple_expression ADDOP term
-
-i+1
-
-line number7: expression : simple expression
-
-i+1
-
-line number7: logic_expression : rel_expression
-
-i+1
-
-line number7: expression : variable ASSIGNOP logic expression
-
-i=i+1
-
-line number7: expression_statement : expression SEMICOLON
-
-i=i+1;
-
-line number7: statement : expression_statement
-
-i=i+1;
-
-line number7: statement_list : statement
-
-i=i+1;
-
-line number8: compound_statement : LCURL statement_list RCURL
+line number9: compound_statement : LCURL statement_list RCURL
 
 {
-i=i+1;
+i=j;
 }
 
 print all scopes
@@ -155,127 +228,32 @@ print all scopes
 
 7--> < a ,ID >
 15--> < i ,ID >
+16--> < j ,ID >
  ScopeTable: 1
 
 16--> < main ,ID >
-line number8: statement : compound_statement
+line number9: statement : compound_statement
 
 {
-i=i+1;
+i=j;
 }
 
-line number11: variable : ID
+line number9: statement : FOR LPAREN expression statement expression statement expression RPAREN statement
 
-i
+forj=0;j<10;j++
 
-line number11: variable : ID
-
-i
-
-line number11: factor : variable
-
-i
-
-line number11: unary_expression : factor
-
-i
-
-line number11: term : unary_expression
-
-i
-
-line number11: simple_expression : term
-
-i
-
-line number11: factor : CONST_INT
-
-1
-
-line number11: unary_expression : factor
-
-1
-
-line number11: term : unary_expression
-
-1
-
-line number11: simple_expression : simple_expression ADDOP term
-
-i-1
-
-line number11: expression : simple expression
-
-i-1
-
-line number11: logic_expression : rel_expression
-
-i-1
-
-line number11: expression : variable ASSIGNOP logic expression
-
-i=i-1
-
-line number11: expression_statement : expression SEMICOLON
-
-i=i-1;
-
-line number11: statement : expression_statement
-
-i=i-1;
-
-line number11: statement_list : statement
-
-i=i-1;
-
-line number12: compound_statement : LCURL statement_list RCURL
-
-{
-i=i-1;
-}
-
-print all scopes
- ScopeTable: 1.1.2
-
- ScopeTable: 1.1
-
-7--> < a ,ID >
-15--> < i ,ID >
- ScopeTable: 1
-
-16--> < main ,ID >
-line number12: statement : compound_statement
-
-{
-i=i-1;
-}
-
-line number12: statement : IF LPAREN expression RPAREN statement ELSE statement
-
-if(i<a){
-i=i+1;
-}else{
-i=i-1;
-}
-
-line number12: statement_list : statement_list statement
+line number9: statement_list : statement_list statement
 
 int i,a;
-if(i<a){
-i=i+1;
-}else{
-i=i-1;
-}
+int j;
+forj=0;j<10;j++
 
-line number19: compound_statement : LCURL statement_list RCURL
+line number17: compound_statement : LCURL statement_list RCURL
 
 {
 int i,a;
-if(i<a){
-i=i+1;
-}else{
-i=i-1;
-}
+int j;
+forj=0;j<10;j++
 }
 
 print all scopes
@@ -283,50 +261,45 @@ print all scopes
 
 7--> < a ,ID >
 15--> < i ,ID >
+16--> < j ,ID >
  ScopeTable: 1
 
 16--> < main ,ID >
-line number19: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+line number17: func_definition : type_specifier ID LPAREN RPAREN compound_statement
 
 int main ( ) {
 int i,a;
-if(i<a){
-i=i+1;
-}else{
-i=i-1;
-}
+int j;
+forj=0;j<10;j++
 }
 
 
-line number19: unit: function_definition 
+line number17: unit: function_definition 
 
 int main ( ) {
 int i,a;
-if(i<a){
-i=i+1;
-}else{
-i=i-1;
-}
+int j;
+forj=0;j<10;j++
 }
 
 
-line number19: program:  unit 
+line number17: program:  unit 
 
 int main ( ) {
 int i,a;
-if(i<a){
-i=i+1;
-}else{
-i=i-1;
-}
+int j;
+forj=0;j<10;j++
 }
 
 
-line number19: MAIN PROC
+line number17: MAIN PROC
 MOV AX, @DATA
 MOV DS, AX
+	mov ax,0
+	mov , ax
+label_2: 
 	mov ax, 
-	cmp bx, 
+	cmp bx, 10
 	jl label_1
 	mov ax, 0
 	mov temp_0, ax
@@ -337,17 +310,13 @@ label_1:
 label_0:
 mov ax, temp_0
 	cmp ax, 0
-	je label_2
-	mov ax, 
-	add ax, 1
+	je label_3
+	mov ax,
+	mov , ax
+	mov ax ,
 	mov temp_1, ax
-	mov ax, 
-jmp label_3
-label_2: 
-	mov ax, 
-	sub ax, 1
-	mov temp_2, ax
-	mov ax, 
+	inc
+jmp label_2
 label_3: 
 MOV AX, 4C00h
 INT 21h
@@ -360,4 +329,4 @@ print all scopes
 
 16--> < main ,ID >
 total no. of errors: 2
-total no. of lines19
+total no. of lines17
