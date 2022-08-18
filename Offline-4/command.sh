@@ -1,8 +1,8 @@
 #!/bin/bash
 
-yacc -Wcounterexamples -d -y 1805108.y
+bison -v --debug --defines=y.tab.h -Wconflicts-sr 1805108.y
 echo 'Generated the parser C file as well the header file'
-g++ -w -c -o y.o y.tab.c
+g++ -w -c -o y.o 1805108.tab.c
 echo 'Generated the parser object file'
 flex 1805108.l
 echo 'Generated the scanner C file'

@@ -54,7 +54,27 @@ void SymbolTable:: exitScope()
 
 SymbolInfo* SymbolTable::search(string name)
 {
-    return scopeTable->search(name);
+    SymbolInfo *symbolInfo = scopeTable->search(name);
+    ScopeTable *currentScopetable = scopeTable;
+    if(symbolInfo == NULL)
+    {
+        
+       while (currentScopetable->getParentScope() != NULL)
+       {
+           currentScopetable = currentScopetable->getParentScope();
+           symbolInfo = currentScopetable->search(name);
+           if(symbolInfo != NULL)
+           {
+               return symbolInfo;
+           }
+       }
+      
+       
+    }
+    else
+    {
+        return symbolInfo;
+    }
 }
 
 void SymbolTable::printCurrentScope()

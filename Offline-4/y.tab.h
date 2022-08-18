@@ -39,7 +39,7 @@
 # define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -107,71 +107,16 @@ extern int yydebug;
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
-#define VOID 258
-#define NEWLINE 259
-#define NUMBER 260
-#define LESS 261
-#define GREATER 262
-#define EQUAL 263
-#define IF 264
-#define FOR 265
-#define ELSE 266
-#define WHILE 267
-#define BREAK 268
-#define CONTINUE 269
-#define CASE 270
-#define DEFAULT 271
-#define SWITCH 272
-#define DO 273
-#define RETURN 274
-#define INCOP 275
-#define DECOP 276
-#define ASSIGNOP 277
-#define LOGICNOT 278
-#define NOT 279
-#define LPAREN 280
-#define RPAREN 281
-#define LCURL 282
-#define RCURL 283
-#define LTHIRD 284
-#define RTHIRD 285
-#define COMMA 286
-#define SEMICOLON 287
-#define COLON 288
-#define PRINTLN 289
-#define INT 290
-#define FLOAT 291
-#define DOUBLE 292
-#define CHAR 293
-#define PLUS 294
-#define MINUS 295
-#define SLASH 296
-#define ASTERISK 297
-#define ADDOP 298
-#define MULOP 299
-#define RELOP 300
-#define BITOP 301
-#define LOGICOP 302
-#define ID 303
-#define CONST_CHAR 304
-#define CONST_INT 305
-#define CONST_FLOAT 306
-#define LOWER_THAN_ELSE 307
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 81 "1805108.y"
+#line 82 "1805108.y"
 
     SymbolInfo *symbolInfo;
 
-#line 175 "y.tab.h"
+#line 120 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

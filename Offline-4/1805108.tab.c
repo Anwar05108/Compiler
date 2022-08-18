@@ -146,7 +146,7 @@ void yyerror(const char* str) {
 }
     
 
-#line 150 "y.tab.c"
+#line 150 "1805108.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -175,7 +175,7 @@ void yyerror(const char* str) {
 # define YY_YY_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -243,61 +243,6 @@ extern int yydebug;
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
-#define VOID 258
-#define NEWLINE 259
-#define NUMBER 260
-#define LESS 261
-#define GREATER 262
-#define EQUAL 263
-#define IF 264
-#define FOR 265
-#define ELSE 266
-#define WHILE 267
-#define BREAK 268
-#define CONTINUE 269
-#define CASE 270
-#define DEFAULT 271
-#define SWITCH 272
-#define DO 273
-#define RETURN 274
-#define INCOP 275
-#define DECOP 276
-#define ASSIGNOP 277
-#define LOGICNOT 278
-#define NOT 279
-#define LPAREN 280
-#define RPAREN 281
-#define LCURL 282
-#define RCURL 283
-#define LTHIRD 284
-#define RTHIRD 285
-#define COMMA 286
-#define SEMICOLON 287
-#define COLON 288
-#define PRINTLN 289
-#define INT 290
-#define FLOAT 291
-#define DOUBLE 292
-#define CHAR 293
-#define PLUS 294
-#define MINUS 295
-#define SLASH 296
-#define ASTERISK 297
-#define ADDOP 298
-#define MULOP 299
-#define RELOP 300
-#define BITOP 301
-#define LOGICOP 302
-#define ID 303
-#define CONST_CHAR 304
-#define CONST_INT 305
-#define CONST_FLOAT 306
-#define LOWER_THAN_ELSE 307
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -307,7 +252,7 @@ union YYSTYPE
 
     SymbolInfo *symbolInfo;
 
-#line 311 "y.tab.c"
+#line 256 "1805108.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -1808,7 +1753,7 @@ yyreduce:
     // symbolTable.printAllScopes();
     
     }
-#line 1812 "y.tab.c"
+#line 1757 "1805108.tab.c"
     break;
 
   case 3: /* program: program unit  */
@@ -1819,7 +1764,7 @@ yyreduce:
             logFile << "line number" << lineCount << ": " ;
             logFile << "program: program unit \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 1823 "y.tab.c"
+#line 1768 "1805108.tab.c"
     break;
 
   case 4: /* program: unit  */
@@ -1829,7 +1774,7 @@ yyreduce:
             logFile << "line number" << lineCount << ": " ;
             logFile << "program:  unit \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 1833 "y.tab.c"
+#line 1778 "1805108.tab.c"
     break;
 
   case 5: /* unit: variable_declaration  */
@@ -1841,7 +1786,7 @@ yyreduce:
         // symbolTable.printAllScopesInFile(logFile);
 
         }
-#line 1845 "y.tab.c"
+#line 1790 "1805108.tab.c"
     break;
 
   case 6: /* unit: function_declaration  */
@@ -1852,7 +1797,7 @@ yyreduce:
         logFile << "unit: function_declaration \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 
         }
-#line 1856 "y.tab.c"
+#line 1801 "1805108.tab.c"
     break;
 
   case 7: /* unit: function_definition  */
@@ -1864,7 +1809,7 @@ yyreduce:
 
 
         }
-#line 1868 "y.tab.c"
+#line 1813 "1805108.tab.c"
     break;
 
   case 8: /* function_declaration: type_specifier ID LPAREN parameter_list RPAREN SEMICOLON  */
@@ -1917,7 +1862,7 @@ yyreduce:
                         parameter_list.clear();
                         
                         }
-#line 1921 "y.tab.c"
+#line 1866 "1805108.tab.c"
     break;
 
   case 9: /* function_declaration: type_specifier ID LPAREN RPAREN SEMICOLON  */
@@ -1951,7 +1896,7 @@ yyreduce:
                         logFile << endl << endl;
 
                         }
-#line 1955 "y.tab.c"
+#line 1900 "1805108.tab.c"
     break;
 
   case 10: /* $@1: %empty  */
@@ -2030,7 +1975,7 @@ yyreduce:
 
 
                         }
-#line 2034 "y.tab.c"
+#line 1979 "1805108.tab.c"
     break;
 
   case 11: /* function_definition: type_specifier ID LPAREN parameter_list RPAREN $@1 compound_statement  */
@@ -2083,7 +2028,7 @@ yyreduce:
                         logFile << "func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl<<endl;
                         logFile <<(yyval.symbolInfo)->getName()<< endl<<endl;
                         }
-#line 2087 "y.tab.c"
+#line 2032 "1805108.tab.c"
     break;
 
   case 12: /* $@2: %empty  */
@@ -2122,7 +2067,7 @@ yyreduce:
                         symbolTable.enterScope(30);
                         
                     }
-#line 2126 "y.tab.c"
+#line 2071 "1805108.tab.c"
     break;
 
   case 13: /* function_definition: type_specifier ID LPAREN RPAREN $@2 compound_statement  */
@@ -2164,7 +2109,7 @@ yyreduce:
                         logFile << "func_definition : type_specifier ID LPAREN RPAREN compound_statement"<<endl<<endl;
                         logFile <<(yyval.symbolInfo)->getName()<< endl<<endl;
                     }
-#line 2168 "y.tab.c"
+#line 2113 "1805108.tab.c"
     break;
 
   case 14: /* parameter_list: parameter_list COMMA type_specifier ID  */
@@ -2179,7 +2124,7 @@ yyreduce:
                     parameter_list.push_back(tempNodeParam);
                     
                     }
-#line 2183 "y.tab.c"
+#line 2128 "1805108.tab.c"
     break;
 
   case 15: /* parameter_list: parameter_list COMMA type_specifier  */
@@ -2195,7 +2140,7 @@ yyreduce:
 
 
                     }
-#line 2199 "y.tab.c"
+#line 2144 "1805108.tab.c"
     break;
 
   case 16: /* parameter_list: type_specifier ID  */
@@ -2210,7 +2155,7 @@ yyreduce:
                     parameter_list.push_back(tempNodeParam);
                     
                     }
-#line 2214 "y.tab.c"
+#line 2159 "1805108.tab.c"
     break;
 
   case 17: /* parameter_list: type_specifier  */
@@ -2226,7 +2171,7 @@ yyreduce:
                     parameter_list.push_back(tempNodeParam);
                     
                     }
-#line 2230 "y.tab.c"
+#line 2175 "1805108.tab.c"
     break;
 
   case 18: /* compound_statement: LCURL statement_list RCURL  */
@@ -2241,7 +2186,7 @@ yyreduce:
     symbolTable.exitScope();
     
 }
-#line 2245 "y.tab.c"
+#line 2190 "1805108.tab.c"
     break;
 
   case 19: /* compound_statement: LCURL RCURL  */
@@ -2252,7 +2197,7 @@ yyreduce:
     logFile << "compound_statement : LCURL RCURL"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2256 "y.tab.c"
+#line 2201 "1805108.tab.c"
     break;
 
   case 20: /* variable_declaration: type_specifier declaration_list SEMICOLON  */
@@ -2303,7 +2248,7 @@ yyreduce:
                         logFile << "variable_declaration: type_specifier declaration_list SEMICOLON \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 
                         }
-#line 2307 "y.tab.c"
+#line 2252 "1805108.tab.c"
     break;
 
   case 21: /* type_specifier: INT  */
@@ -2315,7 +2260,7 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 2319 "y.tab.c"
+#line 2264 "1805108.tab.c"
     break;
 
   case 22: /* type_specifier: FLOAT  */
@@ -2327,7 +2272,7 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 2331 "y.tab.c"
+#line 2276 "1805108.tab.c"
     break;
 
   case 23: /* type_specifier: DOUBLE  */
@@ -2339,7 +2284,7 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 2343 "y.tab.c"
+#line 2288 "1805108.tab.c"
     break;
 
   case 24: /* type_specifier: VOID  */
@@ -2351,7 +2296,7 @@ yyreduce:
                 logFile << (yyval.symbolInfo)->getName() << endl<<endl;
 
                 }
-#line 2355 "y.tab.c"
+#line 2300 "1805108.tab.c"
     break;
 
   case 25: /* declaration_list: declaration_list COMMA ID  */
@@ -2372,7 +2317,7 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: declaration_list COMMA ID \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2376 "y.tab.c"
+#line 2321 "1805108.tab.c"
     break;
 
   case 26: /* declaration_list: declaration_list COMMA ID LTHIRD CONST_INT RTHIRD  */
@@ -2393,7 +2338,7 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: declaration_list COMMA ID LTHIRD CONST INT RTHIRD \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2397 "y.tab.c"
+#line 2342 "1805108.tab.c"
     break;
 
   case 27: /* declaration_list: ID  */
@@ -2420,7 +2365,7 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: ID \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2424 "y.tab.c"
+#line 2369 "1805108.tab.c"
     break;
 
   case 28: /* declaration_list: ID LTHIRD CONST_INT RTHIRD  */
@@ -2445,7 +2390,7 @@ yyreduce:
     logFile << "line number" << lineCount << ": " ;
     logFile << "declaration_list: ID LTHIRD CONST INT RTHIRD \n\n" << (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2449 "y.tab.c"
+#line 2394 "1805108.tab.c"
     break;
 
   case 29: /* statement_list: statement  */
@@ -2456,7 +2401,7 @@ yyreduce:
                     logFile << "statement_list : statement"<<endl<<endl ;
                     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
                     }
-#line 2460 "y.tab.c"
+#line 2405 "1805108.tab.c"
     break;
 
   case 30: /* statement_list: statement_list statement  */
@@ -2468,7 +2413,7 @@ yyreduce:
                     logFile << "statement_list : statement_list statement"<<endl<<endl ;
                     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
                     }
-#line 2472 "y.tab.c"
+#line 2417 "1805108.tab.c"
     break;
 
   case 31: /* statement: variable_declaration  */
@@ -2480,7 +2425,7 @@ yyreduce:
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 
             }
-#line 2484 "y.tab.c"
+#line 2429 "1805108.tab.c"
     break;
 
   case 32: /* statement: expression_statement  */
@@ -2491,13 +2436,13 @@ yyreduce:
             logFile << "statement : expression_statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2495 "y.tab.c"
+#line 2440 "1805108.tab.c"
     break;
 
   case 33: /* $@3: %empty  */
 #line 806 "1805108.y"
           {symbolTable.enterScope(30);}
-#line 2501 "y.tab.c"
+#line 2446 "1805108.tab.c"
     break;
 
   case 34: /* statement: $@3 compound_statement  */
@@ -2508,7 +2453,7 @@ yyreduce:
             logFile << "statement : compound_statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2512 "y.tab.c"
+#line 2457 "1805108.tab.c"
     break;
 
   case 35: /* statement: FOR LPAREN expression_statement expression_statement expression RPAREN statement  */
@@ -2554,7 +2499,7 @@ yyreduce:
     logFile << "statement : FOR LPAREN expression statement expression statement expression RPAREN statement"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
     }
-#line 2558 "y.tab.c"
+#line 2503 "1805108.tab.c"
     break;
 
   case 36: /* statement: WHILE LPAREN expression RPAREN statement  */
@@ -2584,7 +2529,7 @@ yyreduce:
             logFile << "statement : WHILE LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2588 "y.tab.c"
+#line 2533 "1805108.tab.c"
     break;
 
   case 37: /* statement: IF LPAREN expression RPAREN statement  */
@@ -2608,7 +2553,7 @@ yyreduce:
             logFile << "statement : IF LPAREN expression RPAREN statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2612 "y.tab.c"
+#line 2557 "1805108.tab.c"
     break;
 
   case 38: /* statement: IF LPAREN expression RPAREN statement ELSE statement  */
@@ -2636,7 +2581,7 @@ yyreduce:
             logFile << "statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2640 "y.tab.c"
+#line 2585 "1805108.tab.c"
     break;
 
   case 39: /* statement: RETURN expression SEMICOLON  */
@@ -2657,7 +2602,7 @@ yyreduce:
             logFile << "statement : RETURN expression"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2661 "y.tab.c"
+#line 2606 "1805108.tab.c"
     break;
 
   case 40: /* statement: PRINTLN LPAREN ID RPAREN SEMICOLON  */
@@ -2694,7 +2639,7 @@ yyreduce:
             logFile << "statement : PRINTLN LPAREN expression RPAREN SEMICOLON"<<endl<<endl ;
             logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
             }
-#line 2698 "y.tab.c"
+#line 2643 "1805108.tab.c"
     break;
 
   case 41: /* expression_statement: SEMICOLON  */
@@ -2703,7 +2648,7 @@ yyreduce:
                         (yyval.symbolInfo) = new SymbolInfo(";", "SYMBOL_EXPRESSION_STATEMENT");
                         
                         }
-#line 2707 "y.tab.c"
+#line 2652 "1805108.tab.c"
     break;
 
   case 42: /* expression_statement: expression SEMICOLON  */
@@ -2717,7 +2662,7 @@ yyreduce:
                         logFile << "expression_statement : expression SEMICOLON"<<endl<<endl ;
                         logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
                         }
-#line 2721 "y.tab.c"
+#line 2666 "1805108.tab.c"
     break;
 
   case 43: /* variable: ID  */
@@ -2738,7 +2683,7 @@ yyreduce:
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 
 }
-#line 2742 "y.tab.c"
+#line 2687 "1805108.tab.c"
     break;
 
   case 44: /* variable: ID LTHIRD expression RTHIRD  */
@@ -2790,7 +2735,7 @@ yyreduce:
     logFile << "variable : ID LTHIRD expression RTHIRD"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2794 "y.tab.c"
+#line 2739 "1805108.tab.c"
     break;
 
   case 45: /* expression: logic_expression  */
@@ -2801,7 +2746,7 @@ yyreduce:
     logFile << "expression : logic expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2805 "y.tab.c"
+#line 2750 "1805108.tab.c"
     break;
 
   case 46: /* expression: variable ASSIGNOP logic_expression  */
@@ -2879,7 +2824,7 @@ yyreduce:
     logFile << "expression : variable ASSIGNOP logic expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2883 "y.tab.c"
+#line 2828 "1805108.tab.c"
     break;
 
   case 47: /* logic_expression: rel_expression  */
@@ -2890,7 +2835,7 @@ yyreduce:
     logFile << "logic_expression : rel_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2894 "y.tab.c"
+#line 2839 "1805108.tab.c"
     break;
 
   case 48: /* logic_expression: rel_expression LOGICOP rel_expression  */
@@ -2955,7 +2900,7 @@ yyreduce:
     logFile << "logic_expression : logic_expression AND rel_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2959 "y.tab.c"
+#line 2904 "1805108.tab.c"
     break;
 
   case 49: /* rel_expression: simple_expression  */
@@ -2966,7 +2911,7 @@ yyreduce:
     logFile << "expression : simple expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 2970 "y.tab.c"
+#line 2915 "1805108.tab.c"
     break;
 
   case 50: /* rel_expression: simple_expression RELOP simple_expression  */
@@ -3055,7 +3000,7 @@ yyreduce:
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 
 }
-#line 3059 "y.tab.c"
+#line 3004 "1805108.tab.c"
     break;
 
   case 51: /* simple_expression: term  */
@@ -3066,7 +3011,7 @@ yyreduce:
     logFile << "simple_expression : term"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3070 "y.tab.c"
+#line 3015 "1805108.tab.c"
     break;
 
   case 52: /* simple_expression: simple_expression ADDOP term  */
@@ -3112,7 +3057,7 @@ yyreduce:
     logFile << "simple_expression : simple_expression ADDOP term"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3116 "y.tab.c"
+#line 3061 "1805108.tab.c"
     break;
 
   case 53: /* term: unary_expression  */
@@ -3123,7 +3068,7 @@ yyreduce:
     logFile << "term : unary_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3127 "y.tab.c"
+#line 3072 "1805108.tab.c"
     break;
 
   case 54: /* term: term MULOP unary_expression  */
@@ -3206,7 +3151,7 @@ yyreduce:
     logFile << "term : term MULOP unary_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3210 "y.tab.c"
+#line 3155 "1805108.tab.c"
     break;
 
   case 55: /* unary_expression: ADDOP unary_expression  */
@@ -3236,7 +3181,7 @@ yyreduce:
     logFile << "expression : ADDOP unary expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3240 "y.tab.c"
+#line 3185 "1805108.tab.c"
     break;
 
   case 56: /* unary_expression: NOT unary_expression  */
@@ -3270,7 +3215,7 @@ yyreduce:
     logFile << "expression : NOT unary_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3274 "y.tab.c"
+#line 3219 "1805108.tab.c"
     break;
 
   case 57: /* unary_expression: factor  */
@@ -3281,7 +3226,7 @@ yyreduce:
     logFile << "unary_expression : factor"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3285 "y.tab.c"
+#line 3230 "1805108.tab.c"
     break;
 
   case 58: /* factor: variable  */
@@ -3292,7 +3237,7 @@ yyreduce:
     logFile << "factor : variable\n\n" ;
     logFile<< (yyval.symbolInfo)->getName() << "\n\n";
 }
-#line 3296 "y.tab.c"
+#line 3241 "1805108.tab.c"
     break;
 
   case 59: /* factor: ID LPAREN argument_list RPAREN  */
@@ -3381,7 +3326,7 @@ yyreduce:
     logFile << "factor : ID LPAREN argument_list RPAREN"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3385 "y.tab.c"
+#line 3330 "1805108.tab.c"
     break;
 
   case 60: /* factor: LPAREN expression RPAREN  */
@@ -3394,7 +3339,7 @@ yyreduce:
     logFile << "factor : LPAREN expression RPAREN"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3398 "y.tab.c"
+#line 3343 "1805108.tab.c"
     break;
 
   case 61: /* factor: CONST_INT  */
@@ -3406,7 +3351,7 @@ yyreduce:
     logFile << "factor : CONST_INT"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3410 "y.tab.c"
+#line 3355 "1805108.tab.c"
     break;
 
   case 62: /* factor: CONST_FLOAT  */
@@ -3419,7 +3364,7 @@ yyreduce:
     logFile << "factor : CONST_FLOAT"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3423 "y.tab.c"
+#line 3368 "1805108.tab.c"
     break;
 
   case 63: /* factor: variable INCOP  */
@@ -3441,7 +3386,7 @@ yyreduce:
     logFile << "factor : variable INCOP"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3445 "y.tab.c"
+#line 3390 "1805108.tab.c"
     break;
 
   case 64: /* factor: variable DECOP  */
@@ -3463,7 +3408,7 @@ yyreduce:
     logFile << "factor : variable DECOP"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3467 "y.tab.c"
+#line 3412 "1805108.tab.c"
     break;
 
   case 65: /* argument_list: arguments  */
@@ -3474,7 +3419,7 @@ yyreduce:
     logFile << "argument_list : arguments"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3478 "y.tab.c"
+#line 3423 "1805108.tab.c"
     break;
 
   case 66: /* argument_list: %empty  */
@@ -3486,7 +3431,7 @@ yyreduce:
     logFile << "argument_list :"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3490 "y.tab.c"
+#line 3435 "1805108.tab.c"
     break;
 
   case 67: /* arguments: arguments COMMA logic_expression  */
@@ -3500,7 +3445,7 @@ yyreduce:
     logFile << "argument_list : arguments COMMA logic_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3504 "y.tab.c"
+#line 3449 "1805108.tab.c"
     break;
 
   case 68: /* arguments: logic_expression  */
@@ -3512,11 +3457,11 @@ yyreduce:
     logFile << "argument_list : logic_expression"<<endl<<endl ;
     logFile<< (yyval.symbolInfo)->getName() << endl<<endl;
 }
-#line 3516 "y.tab.c"
+#line 3461 "1805108.tab.c"
     break;
 
 
-#line 3520 "y.tab.c"
+#line 3465 "1805108.tab.c"
 
       default: break;
     }
@@ -3744,6 +3689,9 @@ yyreturnlab:
 
 
 int main(int argc, char *argv[]) {
+    #ifdef YYDEBUG
+    yydebug = 1;
+    #endif
     	if(argc!=2){
 		return 0;
 	}

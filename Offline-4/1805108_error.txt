@@ -1,2 +1,0 @@
-line number8: error: variable i not declared
-line number8: error: variable j not declared

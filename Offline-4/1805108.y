@@ -77,6 +77,7 @@ void yyerror(const char* str) {
     
 %}
 
+%define parse.error verbose
 
 %union {
     SymbolInfo *symbolInfo;
@@ -126,6 +127,8 @@ start: program
      asmFile << ".model small\n";
      asmFile << ".stack 100h\n\n";
     asmFile << ".data\n\n";
+    asmFile << "print_var dw ?\n";
+
     for(int i = 0; i < var_list_asm.size(); i++){
         if(var_list_asm[i].arraySize == 0 || var_list_asm[i].arraySize == -1){
             asmFile << var_list_asm[i].name << " dw ?\n";
@@ -136,6 +139,60 @@ start: program
     }
 
     asmFile << ".code\n\n";
+
+    asmFile << "println proc near\n";
+    asmFile << "\tpush ax\n";
+    asmFile << "\tpush bx\n";
+    asmFile << "\tpush cx\n";
+    asmFile << "\tpush dx\n\n";
+    // asmFIle << ""
+
+    asmFile << "\tmov ax, print_var\n";
+    asmFile << "\tor ax, ax\n";
+    asmFile << "\tjge end_if_1\n";
+    asmFile << "\tpush ax\n";
+    asmFile << "\tmov dl, '-'\n";
+    asmFile << "\tmov ah, 2\n";
+    asmFile << "\tint 21h\n";
+    asmFile << "\tpop ax\n";
+    asmFile << "\tneg ax\n\n";
+    
+    asmFile << "end_if_1:\n";
+    asmFile << "\txor cx,cx\n";
+    asmFile << "\tmov bx,10d\n\n";
+
+    asmFile << "loop_1:\n";
+    asmFile << "\txor dx, dx\n";
+    asmFile << "\tdiv bx\n";
+    asmFile << "\tpush dx\n";
+    asmFile << "\tinc cx\n";
+    asmFile << "\tor ax,ax\n";
+    asmFile << "\tjne loop_1\n";
+    asmFile << "\tmov ah, 2\n\n";
+
+    asmFile << "loop_2:\n";
+    asmFile << "\tpop dx\n";
+    asmFile << "\tor dl, 30h\n";
+    asmFile << "\tint 21h\n";
+    asmFile << "\tloop loop_2\n\n";
+    
+    asmFile << "\tmov dl, 0dh\n";
+    asmFile << "\tmov ah, 2\n";
+    asmFile << "\tint 21h\n\n";
+
+    asmFile << "\tmov dl, 0ah\n";
+    asmFile << "\tmov ah, 2\n";
+    asmFile << "\tint 21h\n\n";
+
+    asmFile << "\tpop dx\n";
+    asmFile << "\tpop cx\n";
+    asmFile << "\tpop bx\n";
+    asmFile << "\tpop ax\n";
+
+    asmFile << "\tret\n\n";
+    asmFile << "println endp\n\n";
+
+    // asmFile << 
     asmFile << $$->getAsmCodes();
     logFile << $$->getAsmCodes() << endl;
     
@@ -363,8 +420,8 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 // asmCodes   += "MOV AX, @BSS\n";
 
                                 // asmCodes = $7->getName();
-                                asmCodes += "MOV AX, 4C00h\n";
-                                asmCodes += "INT 21h\n";
+                                asmCodes += "\tMOV AX, 4C00h\n";
+                                asmCodes += "\tINT 21h\n";
                                 asmCodes += "MAIN ENDP\n";
                                 asmCodes += "END MAIN\n";
 
@@ -560,7 +617,8 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                                 for(int i = 0;i < variable_list.size();i++){
                                     symbolTable.insert(variable_list[i].name, $1->getName());
                                     var_list_asm.push_back(variable_list[i]);
-                                    string global_name = variable_list[i].name + (symbolTable.getScopeTable())->getShowId();
+                                    string global_name = variable_list[i].name ;
+                                    // + (symbolTable.getScopeTable())->getShowId();
                                         SymbolInfo *temp = symbolTable.search(variable_list[i].name);
                                     if(variable_list[i].arraySize > 0){
                                         if(temp != NULL){
@@ -573,6 +631,7 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                                         if(temp != NULL){
                                             cout << global_name << endl;
                                             temp->setAsmName(global_name);
+                                            cout << "temp-getAsm"<<temp->getAsmName() << endl;
                                             // cout 
                                         }
                                    
@@ -670,6 +729,7 @@ $$ = new SymbolInfo($1->getName() + "," +$3->getName()+"["+$5->getName()+"]", $3
 {
 $$ = new SymbolInfo($1->getName(), $1->getType());
     tempNodeVar.name = $1->getName();
+    $$->setAsmName($1->getAsmName());
     // SymbolInfo *temp; 
     // temp = symbolTable.search($1->getName());
     string type = "";
@@ -677,6 +737,8 @@ $$ = new SymbolInfo($1->getName(), $1->getType());
     tempNodeVar.type = type;
     tempNodeVar.arraySize = -1;
         variable_list.push_back(tempNodeVar);
+    // SymbolInfo *temp = symbolTable.search($1->getName());
+    // temp ->setAsmName($1->getAsmName());
     if(symbolTable.search($1->getName()) != NULL)
     {
         errorFile << "line number" << lineCount << ": " ;
@@ -751,17 +813,18 @@ statement : variable_declaration
         | FOR LPAREN expression_statement expression_statement expression
     RPAREN statement
     {
-    $$ = new SymbolInfo("for"+$3->getName()+$4->getName()+$5->getName(), "SYMBOL_FOR_STATEMENT");
+    $$ = new SymbolInfo("for("+$3->getName()+$4->getName()+")"+$5->getName(), "SYMBOL_FOR_STATEMENT");
     string asmCodes = "";
     string initCode = $3->getAsmCodes();
     string conditonAsm = $4 -> getAsmName();
     string conditionCode = $4 -> getAsmCodes();
     string incrementCode = $5 -> getAsmCodes();
     string bodyCode = $7 -> getAsmCodes();
-    cout << $7 -> getType() << endl;
-    cout << $7-> getAsmCodes() << endl;
-    cout << $3->getName() << endl;
-    cout << $3->getAsmCodes() << endl;
+    // cout << $7 -> getType() << endl;
+    // cout << $7-> getAsmCodes() << endl;
+    // cout << $3->getName() << endl;
+    // cout << $3->getAsmCodes() << endl;
+    cout << initCode << endl;
 
 
     string firstStatement = $3 -> getName();
@@ -897,7 +960,7 @@ statement : variable_declaration
                }}
             
             string asmCode = "";
-            asmCode += "mov ax, " + $3->getAsmName() + "\n";
+            asmCode += "\tmov ax, " + $3->getName() + "\n";
             asmCode += "\tmov print_var , ax\n";
             asmCode += "\tcall println\n";
 
@@ -936,10 +999,12 @@ variable : ID{
     if(temp != NULL){
 
     $$ = new SymbolInfo($1->getName(), temp->getType());
+    $$ -> setAsmName(temp->getAsmName());
     }
     else{
         $$ = new SymbolInfo($1->getName(), "undeclared");
     }
+    cout << "variable "<<$1->getName()<<": ID" << $1->getAsmName()<<endl;
     logFile << "line number" << lineCount << ": " ;
     logFile << "variable : ID"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -1056,6 +1121,9 @@ expression : logic_expression{
     $$ = new SymbolInfo($1->getName()+"="+$3->getName(), "SYMBOL_ASSIGNMENT_EXPRESSION");
      string asmCodes = "";
     string lefAsm = $1->getAsmName();
+    cout << $1->getName() << endl;
+    cout << $1->getAsmName() << endl;
+
     string rightAsm = $3->getAsmName();
     string leftCode = $1->getAsmCodes();
     string rightCode = $3->getAsmCodes();
@@ -1097,6 +1165,7 @@ logic_expression : rel_expression {
     string rightCode = $3->getAsmCodes();
     asmCodes += leftCode;
     asmCodes += rightCode;
+    string temp = newTemp();
     string return0 = newLabel();
     string return1 = newLabel();
     string logicOperator = $2->getName();
@@ -1108,25 +1177,30 @@ logic_expression : rel_expression {
         asmCodes += "\tcmp ax, 0\n";
         asmCodes += "\tje " + return1 + "\n";
         asmCodes += "\tmov ax, 1\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
+        asmCodes += "\tmov " + temp + ", ax\n";
+        asmCodes += "\tjmp " + return1 + "\n";
         asmCodes += return0 + ":\n";
+        asmCodes += "\tmov ax, 0\n";
+        asmCodes += "\tmov " + temp + ", ax\n";
+        asmCodes += return1 + ":\n";
     }
     else if(logicOperator == "||"){
         asmCodes += "\tmov ax, " + leftAsm + "\n";
         asmCodes += "\tcmp ax, 0\n";
-        asmCodes += "\tjne " + return1 + "\n";
+        asmCodes += "\tjne " + return0 + "\n";
         asmCodes += "\tmov ax, " + rightAsm + "\n";
         asmCodes += "\tcmp ax, 0\n";
-        asmCodes += "\tjne " + return1 + "\n";
+        asmCodes += "\tjne " + return0 + "\n";
         asmCodes += "\tmov ax, 0\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
+        asmCodes += "\tmov " + temp + ", ax\n";
+        asmCodes += "\tjmp " + return1 + "\n";
         asmCodes += return0 + ":\n";
+        asmCodes += "\tmov ax, 1\n";
+        asmCodes += "\tmov " + temp + ", ax\n";
+        asmCodes += return1 + ":\n";
     }
 
-    string temp = newTemp();
+    // string temp = newTemp();
     $$->setAsmCodes(asmCodes);
     $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
@@ -1156,7 +1230,7 @@ rel_expression : simple_expression
     asmCodes += leftCode;
     asmCodes += rightCode;
     asmCodes += "\tmov ax, " + lefAsm + "\n";
-    asmCodes += "\tcmp bx, " + rightAsm + "\n";
+    asmCodes += "\tcmp ax, " + rightAsm + "\n";
 
     string relOperator = $2->getName();
     if(relOperator == "=="){
@@ -1334,19 +1408,25 @@ term : unary_expression {
     if(mulOperator == "*"){
         
         asmCodes += "\tmov ax, " + lefAsm + "\n";
-        asmCodes += "\timul ax, " + rightAsm + "\n";
+        asmCodes += "mov bx, " + rightAsm + "\n";
+        asmCodes += "\timul bx\n";
         asmCodes += "\tmov " + temp + ", ax\n";
     }
     else if(mulOperator == "/"){
         
         asmCodes += "\tmov ax, " + lefAsm + "\n";
-        asmCodes += "\tdiv ax, " + rightAsm + "\n";
+        asmCodes += "\tcwd\n";
+        asmCodes += "\tmov bx, " + rightAsm + "\n";
+        asmCodes += "\tidiv bx\n";
+        // asmCodes += "\tdiv ax, " + rightAsm + "\n";
         asmCodes += "\tmov " + temp + ", ax\n";
     }
     else if(mulOperator == "%"){
         
         asmCodes += "\tmov ax, " + lefAsm + "\n";
-        asmCodes += "\tdiv ax, " + rightAsm + "\n";
+        asmCodes += "\tcwd\n";
+        asmCodes += "\tmov bx, " + rightAsm + "\n";
+        asmCodes += "\tidiv bx\n";
         asmCodes += "\tmov " + temp + ", dx\n";
     }
     $$ = new SymbolInfo($1->getName()+$2->getName()+$3->getName(), type);
@@ -1552,7 +1632,7 @@ factor : variable
     asmCodes += varCode;
     asmCodes += "\tmov ax ,"  + varAsmName + "\n";
     asmCodes += "\tmov " + temp + ", ax\n";
-    asmCodes += "\tinc"+ varAsmName + "\n";
+    asmCodes += "\tinc "+ varAsmName + "\n";
 
     $$->setAsmCodes(asmCodes);
     $$ -> setAsmName(temp);
@@ -1571,7 +1651,7 @@ factor : variable
     asmCodes += varCode;
     asmCodes += "\tmov ax,"  + varAsmName + "\n";
     asmCodes += "\tmov " + temp + ", ax\n";
-    asmCodes += "\tdec"+ varAsmName + "\n";
+    asmCodes += "\tdec a"+ varAsmName + "\n";
 
     $$->setAsmCodes(asmCodes);
     $$ -> setAsmName(temp);
@@ -1633,6 +1713,9 @@ argument_list : arguments{
 %%
 
 int main(int argc, char *argv[]) {
+    #ifdef YYDEBUG
+    yydebug = 1;
+    #endif
     	if(argc!=2){
 		return 0;
 	}
