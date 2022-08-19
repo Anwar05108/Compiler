@@ -1,14 +1,18 @@
+int f(int e){
+    return 2*e;
+}
+
+int g(int c, int d){
+    int x;
+    x=f(c)+c+d;
+    return x;
+}
+
 int main(){
-    int a,b,c,i;
-    b=0;
-	c=1;
-    for(i=0;i<4;i++){
-        a=3;
-        while(a--){
-            b++;
-        }
-    }
+    int a,b;
+    a=1;
+    b=2;
+    a=g(a,b);
     println(a);
-    println(b);
-    println(c);
+    return 0;
 }

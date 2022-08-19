@@ -4,14 +4,17 @@
 .data
 
 print_var dw ?
-a dw ?
-b dw ?
-c dw ?
-i dw ?
 temp_0 dw ?
+x dw ?
 temp_1 dw ?
 temp_2 dw ?
 temp_3 dw ?
+a dw ?
+b dw ?
+temp_4 dw ?
+e dw ?
+c dw ?
+d dw ?
 .code
 
 println proc near
@@ -65,57 +68,74 @@ loop_2:
 
 println endp
 
+f PROC 
+	POP BP
+	POP e
+	PUSH BP
+	mov ax, 2
+	mov bx, e
+	imul bx
+	mov temp_0, ax
+	pop bp
+	push temp_0
+	PUSH BP
+	RET
+f ENDP
+g PROC 
+	POP BP
+	POP d
+	POP c
+	PUSH BP
+	push ax
+	push bx
+	push cx
+	push dx
+	push 
+	call f
+	pop temp_1
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+	mov ax, temp_1
+	add ax, 
+	mov temp_2, ax
+	mov ax, temp_2
+	add ax, 
+	mov temp_3, ax
+	mov ax,temp_3
+	mov x, ax
+	pop bp
+	push x
+	PUSH BP
+	RET
+g ENDP
 MAIN PROC
 MOV AX, @DATA
 MOV DS, AX
-	mov ax,0
-	mov b, ax
 	mov ax,1
-	mov c, ax
-	mov ax,0
-	mov i, ax
-label_4: 
-	mov ax, i
-	cmp ax, 4
-	jl label_1
-	mov ax, 0
-	mov temp_0, ax
-	jmp label_0
-label_1:
-	mov ax, 1
-	mov temp_0, ax
-label_0:
-mov ax, temp_0
-	cmp ax, 0
-	je label_5
-	mov ax,3
 	mov a, ax
-label_2: 
-	mov ax,a
-	mov temp_2, ax
-	deca
-	mov ax, temp_2
-	cmp ax, 0
-	je label_3
-	mov ax ,b
-	mov temp_3, ax
-	inc b
-jmp label_2
-label_3: 
-	mov ax ,i
-	mov temp_1, ax
-	inc i
-jmp label_4
-label_5: 
+	mov ax,2
+	mov b, ax
+	push ax
+	push bx
+	push cx
+	push dx
+	push a
+	push b
+	call g
+	pop temp_4
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+	mov ax,temp_4
+	mov a, ax
 	mov ax, a
 	mov print_var , ax
 	call println
-	mov ax, b
-	mov print_var , ax
-	call println
-	mov ax, c
-	mov print_var , ax
-	call println
+	pop bp
+	push 0
 MOV AX, 4C00h
 INT 21h
 MAIN ENDP

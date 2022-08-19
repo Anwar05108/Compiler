@@ -60,6 +60,7 @@ struct nodeParam{
 
 vector<nodeVar> variable_list;
 vector<nodeParam> parameter_list;
+vector<nodeParam> parameter_list_asm;
 
 SymbolTable symbolTable(30);
 
@@ -137,6 +138,13 @@ start: program
             asmFile << var_list_asm[i].name << " dw "+ to_string(var_list_asm[i].arraySize)+"\n";
         }
     }
+
+    for(int i = 0; i < parameter_list_asm.size(); i++){
+        
+            asmFile << parameter_list_asm[i].name << " dw ?\n";
+       
+    }
+    // for(int i = )
 
     asmFile << ".code\n\n";
 
@@ -286,6 +294,9 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         {
                             string parameterName = parameter_list[i].name;
                             string parameterType = parameter_list[i].type;
+                                    parameter_list_asm.push_back(parameter_list[i]);
+                            cout << "parameter_list_asm:"<<parameter_list_asm[i].name<<endl;
+
                             temp->insertParameter(parameterName, parameterType);
                         }
                         }
@@ -348,6 +359,8 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 // logFile << "parameter_list: " << parameter_list[i].name << " " << parameter_list[i].type << endl;
                                 string parameterName = parameter_list[i].name;
                                 string parameterType = parameter_list[i].type;
+                                parameter_list_asm.push_back(parameter_list[i]);
+                                cout << "parameter_list_asm:"<<parameter_list_asm[i].name<<endl;
                                 symbolTable.insert(parameterName, parameterType);
                             }
                         }
@@ -378,10 +391,7 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
 
                         for(int i = 0; i < temp->getParamSize(); i++ ){
                             string declaredParameterName = temp->getParameterName(i);
-                            string declaredParameterType = temp->getParameterType(i);
-
-                            
-                       
+                            string declaredParameterType = temp->getParameterType(i);                                                 
                             string definedParameterName = parameter_list[i].name;
                             string definedParameterType = parameter_list[i].type;
                             if(declaredParameterType != definedParameterType ){
@@ -396,7 +406,12 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                     }
                         // symbolTable.printAllScopesInFile(logFile);
                         // logFile<<"enterScope";
-                        parameter_list.clear();
+                        string parameter_code = "";
+                        for(int i = 0; i < parameter_list.size(); i++)
+                        {
+                            parameter_code += "\tpop" + parameter_list[i].name ;
+                        }
+                        // parameter_list.clear();
                         // logFile << "line number" << lineCount << ": " ;
                         // logFile << "func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement"<<endl<<endl;
                         // logFile <<$$->getName()<< endl<<endl;
@@ -419,7 +434,7 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 asmCodes   += "MOV DS, AX\n";
                                 // asmCodes   += "MOV AX, @BSS\n";
 
-                                // asmCodes = $7->getName();
+                                asmCodes = $7->getAsmCodes();
                                 asmCodes += "\tMOV AX, 4C00h\n";
                                 asmCodes += "\tINT 21h\n";
                                 asmCodes += "MAIN ENDP\n";
@@ -431,18 +446,24 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
 
                             }
                             else{
-                                asmCodes    = functionName+ "PROC "+"\n";
+                                asmCodes    += functionName+ " PROC "+"\n";
                                 asmCodes += "\tPOP BP\n";
                                 // asmCodes += paramete recieved code
+                                for(int i = parameter_list.size()-1; i >= 0; i--)
+                                {
+                                    asmCodes += "\tPOP " + parameter_list[i].name + "\n";
+                                }
+                                // asmCodes += parameter_code;
                                 asmCodes += "\tPUSH BP\n";
-                                asmCodes = $7->getAsmCodes();
+                                asmCodes += $7->getAsmCodes();
                                 asmCodes += "\tPUSH BP\n";
                                 asmCodes += "\tRET\n";
-                                asmCodes += functionName+ "ENDP\n";
+                                asmCodes += functionName+ " ENDP\n";
                                 
                                 
                             }
                         }
+                                parameter_list.clear();
                                 $$->setAsmCodes(asmCodes);
                                 // asmFile << $$->getAsmCodes();
                                 // asmFile << endl;
@@ -614,6 +635,7 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                                 logFile << "variable_declaration: void type is not allowed" << endl;
                             }
                             else{
+                                cout << "#####" << endl;
                                 for(int i = 0;i < variable_list.size();i++){
                                     symbolTable.insert(variable_list[i].name, $1->getName());
                                     var_list_asm.push_back(variable_list[i]);
@@ -1397,7 +1419,7 @@ term : unary_expression {
     
     string asmCodes = "";
     string lefAsm = $1->getAsmName();
-    string rightAsm = $3->getAsmName();
+    string rightAsm = $3->getName();
     string leftCode = $1->getAsmCodes();
     string rightCode = $3->getAsmCodes();
     // string mulOperator = $2->getName();
@@ -1408,7 +1430,7 @@ term : unary_expression {
     if(mulOperator == "*"){
         
         asmCodes += "\tmov ax, " + lefAsm + "\n";
-        asmCodes += "mov bx, " + rightAsm + "\n";
+        asmCodes += "\tmov bx, " + rightAsm + "\n";
         asmCodes += "\timul bx\n";
         asmCodes += "\tmov " + temp + ", ax\n";
     }
@@ -1565,6 +1587,11 @@ factor : variable
     
     string argument_asm_list = $3->getAsmName();
     vector<string> argument_asm_vector = split(argument_asm_list, ",");
+    cout << argument_asm_list <<endl;
+    for(int i = 0;i < argument_asm_vector.size(); i++){
+        cout <<"splitted "<< argument_asm_vector[i] <<endl;
+    }
+    // cout << "argument_asm_vector: " << argument_asm_vector << endl;
 
     $$ = new SymbolInfo($1->getName()+" ( "+$3->getName()+" )",type );
     string temp = newTemp();;
@@ -1578,8 +1605,9 @@ factor : variable
     asmCodes += "\tpush dx\n";
 
     int asmSize = argument_asm_vector.size();
-    for(int i = 0; i < asmSize; i++){
-        asmCodes += "\tpush , " + argument_asm_vector[i] + "\n";
+    for(int i = 0;i < argument_asm_vector.size(); i++){
+        
+        asmCodes += "\tpush " + argument_asm_vector[i] + "\n";
         // asmCodes += "\tmov [bp-" + to_string(i*2) + "], ax\n";
     }
     asmCodes += "\tcall " + funcName + "\n";
@@ -1651,7 +1679,7 @@ factor : variable
     asmCodes += varCode;
     asmCodes += "\tmov ax,"  + varAsmName + "\n";
     asmCodes += "\tmov " + temp + ", ax\n";
-    asmCodes += "\tdec a"+ varAsmName + "\n";
+    asmCodes += "\tdec "+ varAsmName + "\n";
 
     $$->setAsmCodes(asmCodes);
     $$ -> setAsmName(temp);
@@ -1713,9 +1741,9 @@ argument_list : arguments{
 %%
 
 int main(int argc, char *argv[]) {
-    #ifdef YYDEBUG
-    yydebug = 1;
-    #endif
+    // #ifdef YYDEBUG
+    // yydebug = 1;
+    // #endif
     	if(argc!=2){
 		return 0;
 	}

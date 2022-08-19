@@ -255,7 +255,7 @@ string ScopeTable::getShowId()
     while (temp != NULL)
     {
 
-        str = to_string(temp->getId()) + "." + str;
+        str = to_string(temp->getId()) + "_" + str;
         temp = temp->getParentScope();
     }
     // cout << "show id " << str << endl;
