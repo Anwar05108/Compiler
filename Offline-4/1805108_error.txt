@@ -1,2 +1,0 @@
-line number8: error: function f expects 0 arguments
-line number16: error: function g expects 0 arguments

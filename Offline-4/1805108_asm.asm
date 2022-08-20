@@ -4,17 +4,17 @@
 .data
 
 print_var dw ?
-a1_1 dw ?
+i1_1 dw ?
+j1_1 dw ?
+k1_1 dw ?
+ll1_1 dw ?
 temp_0 dw ?
-a1_2 dw ?
-b1_2 dw ?
-x1_2 dw ?
 temp_1 dw ?
 temp_2 dw ?
 temp_3 dw ?
-a1_3 dw ?
-b1_3 dw ?
 temp_4 dw ?
+temp_5 dw ?
+temp_6 dw ?
 .code
 
 println proc near
@@ -68,72 +68,109 @@ loop_2:
 
 println endp
 
-f PROC 
-	POP BP
-	POP a1_1
-	PUSH BP
-	mov ax, 2
-	mov bx, a1_1
-	imul bx
-	mov temp_0, ax
-	pop bp
-	push temp_0
-	mov ax,9
-	mov a1_1, ax
-	PUSH BP
-	RET
-f ENDP
-g PROC 
-	POP BP
-	POP b1_2
-	POP a1_2
-	PUSH BP
-	push ax
-	push bx
-	push cx
-	push dx
-	push a1_2
-	call f
-	pop temp_1
-	pop dx
-	pop cx
-	pop bx
-	pop ax
-	mov ax, temp_1
-	add ax, a1_2
-	mov temp_2, ax
-	mov ax, temp_2
-	add ax, b1_2
-	mov temp_3, ax
-	mov ax,temp_3
-	mov a1_1, ax
-	pop bp
-	push a1_1
-	PUSH BP
-	RET
-g ENDP
 MAIN PROC
 MOV AX, @DATA
 MOV DS, AX
-	mov ax,1
-	mov a1_1, ax
-	mov ax,2
+;for loop
+ ; assignment expression:i=0
+	mov ax,0
+	mov i1_1, ax
+label_2: 
+ ; Relational Operation: i<6
+	mov ax, i1_1
+	cmp ax, 6
+	jl label_1
+	mov ax, 0
 	mov temp_0, ax
-	push ax
-	push bx
-	push cx
-	push dx
-	push a1_1
-	push temp_0
-	call g
-	pop temp_4
-	pop dx
-	pop cx
-	pop bx
-	pop ax
-	mov ax,temp_4
-	mov a1_1, ax
-	mov ax, a1_1
+	jmp label_0
+label_1:
+	mov ax, 1
+	mov temp_0, ax
+label_0:
+mov ax, temp_0
+	cmp ax, 0
+	je label_3
+ ; println(i)
+	mov ax, i1_1
+	mov print_var , ax
+	call println
+; increment: i++
+	mov ax ,i1_1
+	mov temp_1, ax
+	inc i1_1
+jmp label_2
+label_3: 
+ ; assignment expression:k=4
+	mov ax,4
+	mov k1_1, ax
+ ; assignment expression:ll=6
+	mov ax,6
+	mov ll1_1, ax
+;while loop
+label_6: 
+ ; Relational Operation: k>0
+	mov ax, k1_1
+	cmp ax, 0
+	jg label_5
+	mov ax, 0
+	mov temp_2, ax
+	jmp label_4
+label_5:
+	mov ax, 1
+	mov temp_2, ax
+label_4:
+	mov ax, temp_2
+	cmp ax, 0
+	je label_7
+ ; assignment expression:ll=ll+3
+	mov ax, ll1_1
+	add ax, 3
+	mov temp_3, ax
+	mov ax,temp_3
+	mov ll1_1, ax
+; decrement: k--
+	mov ax,k1_1
+	mov temp_4, ax
+	dec k1_1
+jmp label_6
+label_7: 
+ ; println(ll)
+	mov ax, ll1_1
+	mov print_var , ax
+	call println
+ ; println(k)
+	mov ax, k1_1
+	mov print_var , ax
+	call println
+ ; assignment expression:k=4
+	mov ax,4
+	mov k1_1, ax
+ ; assignment expression:ll=6
+	mov ax,6
+	mov ll1_1, ax
+;while loop
+label_8: 
+; decrement: k--
+	mov ax,k1_1
+	mov temp_5, ax
+	dec k1_1
+	mov ax, temp_5
+	cmp ax, 0
+	je label_9
+ ; assignment expression:ll=ll+3
+	mov ax, ll1_1
+	add ax, 3
+	mov temp_6, ax
+	mov ax,temp_6
+	mov ll1_1, ax
+jmp label_8
+label_9: 
+ ; println(ll)
+	mov ax, ll1_1
+	mov print_var , ax
+	call println
+ ; println(k)
+	mov ax, k1_1
 	mov print_var , ax
 	call println
 	pop bp
