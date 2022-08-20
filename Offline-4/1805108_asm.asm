@@ -4,17 +4,17 @@
 .data
 
 print_var dw ?
+a1_1 dw ?
 temp_0 dw ?
-x dw ?
+a1_2 dw ?
+b1_2 dw ?
+x1_2 dw ?
 temp_1 dw ?
 temp_2 dw ?
 temp_3 dw ?
-a dw ?
-b dw ?
+a1_3 dw ?
+b1_3 dw ?
 temp_4 dw ?
-e dw ?
-c dw ?
-d dw ?
 .code
 
 println proc near
@@ -70,27 +70,29 @@ println endp
 
 f PROC 
 	POP BP
-	POP e
+	POP a1_1
 	PUSH BP
 	mov ax, 2
-	mov bx, e
+	mov bx, a1_1
 	imul bx
 	mov temp_0, ax
 	pop bp
 	push temp_0
+	mov ax,9
+	mov a1_1, ax
 	PUSH BP
 	RET
 f ENDP
 g PROC 
 	POP BP
-	POP d
-	POP c
+	POP b1_2
+	POP a1_2
 	PUSH BP
 	push ax
 	push bx
 	push cx
 	push dx
-	push 
+	push a1_2
 	call f
 	pop temp_1
 	pop dx
@@ -98,15 +100,15 @@ g PROC
 	pop bx
 	pop ax
 	mov ax, temp_1
-	add ax, 
+	add ax, a1_2
 	mov temp_2, ax
 	mov ax, temp_2
-	add ax, 
+	add ax, b1_2
 	mov temp_3, ax
 	mov ax,temp_3
-	mov x, ax
+	mov a1_1, ax
 	pop bp
-	push x
+	push a1_1
 	PUSH BP
 	RET
 g ENDP
@@ -114,15 +116,15 @@ MAIN PROC
 MOV AX, @DATA
 MOV DS, AX
 	mov ax,1
-	mov a, ax
+	mov a1_1, ax
 	mov ax,2
-	mov b, ax
+	mov temp_0, ax
 	push ax
 	push bx
 	push cx
 	push dx
-	push a
-	push b
+	push a1_1
+	push temp_0
 	call g
 	pop temp_4
 	pop dx
@@ -130,8 +132,8 @@ MOV DS, AX
 	pop bx
 	pop ax
 	mov ax,temp_4
-	mov a, ax
-	mov ax, a
+	mov a1_1, ax
+	mov ax, a1_1
 	mov print_var , ax
 	call println
 	pop bp

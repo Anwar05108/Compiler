@@ -60,7 +60,7 @@ struct nodeParam{
 
 vector<nodeVar> variable_list;
 vector<nodeParam> parameter_list;
-vector<nodeParam> parameter_list_asm;
+vector<nodeVar> parameter_list_asm;
 
 SymbolTable symbolTable(30);
 
@@ -139,11 +139,11 @@ start: program
         }
     }
 
-    for(int i = 0; i < parameter_list_asm.size(); i++){
+    // for(int i = 0; i < parameter_list_asm.size(); i++){
         
-            asmFile << parameter_list_asm[i].name << " dw ?\n";
+    //         asmFile << parameter_list_asm[i].name << " dw ?\n";
        
-    }
+    // }
     // for(int i = )
 
     asmFile << ".code\n\n";
@@ -294,8 +294,8 @@ function_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON
                         {
                             string parameterName = parameter_list[i].name;
                             string parameterType = parameter_list[i].type;
-                                    parameter_list_asm.push_back(parameter_list[i]);
-                            cout << "parameter_list_asm:"<<parameter_list_asm[i].name<<endl;
+                                    // parameter_list_asm.push_back(parameter_list[i]);
+                            // cout << "parameter_list_asm:"<<parameter_list_asm[i].name<<endl;
 
                             temp->insertParameter(parameterName, parameterType);
                         }
@@ -359,9 +359,14 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 // logFile << "parameter_list: " << parameter_list[i].name << " " << parameter_list[i].type << endl;
                                 string parameterName = parameter_list[i].name;
                                 string parameterType = parameter_list[i].type;
-                                parameter_list_asm.push_back(parameter_list[i]);
+                            tempNodeVar.name = parameterName + (symbolTable.getScopeTable())->getShowId();
+                                parameter_list_asm.push_back(tempNodeVar);
                                 cout << "parameter_list_asm:"<<parameter_list_asm[i].name<<endl;
                                 symbolTable.insert(parameterName, parameterType);
+                                 SymbolInfo *symbolInfo = symbolTable.search(parameterName);
+                            string global_name = tempNodeVar.name;
+                            var_list_asm.push_back(tempNodeVar);
+                            symbolInfo->setAsmName(global_name);
                             }
                         }
                         else
@@ -401,15 +406,24 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 errorFile << "error: parameter "<<definedParameterName<<" has wrong type as declared\n";
                             }else{
                              symbolTable.insert(definedParameterName, definedParameterType);
+                             
                             }
+                            SymbolInfo *symbolInfo = symbolTable.search(definedParameterName);
+                            tempNodeVar.name = definedParameterName + (symbolTable.getScopeTable())->getShowId();
+                            string global_name = tempNodeVar.name;
+                            parameter_list_asm.push_back(tempNodeVar);
+                            var_list_asm.push_back(tempNodeVar);
+                            symbolInfo->setAsmName(global_name);
+                            cout << "----------------------------"<<global_name<<endl;
+
                         }}
                     }
                         // symbolTable.printAllScopesInFile(logFile);
                         // logFile<<"enterScope";
                         string parameter_code = "";
-                        for(int i = 0; i < parameter_list.size(); i++)
+                        for(int i = 0; i < parameter_list_asm.size(); i++)
                         {
-                            parameter_code += "\tpop" + parameter_list[i].name ;
+                            parameter_code += "\tpop" + parameter_list_asm[i].name ;
                         }
                         // parameter_list.clear();
                         // logFile << "line number" << lineCount << ": " ;
@@ -449,10 +463,11 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 asmCodes    += functionName+ " PROC "+"\n";
                                 asmCodes += "\tPOP BP\n";
                                 // asmCodes += paramete recieved code
-                                for(int i = parameter_list.size()-1; i >= 0; i--)
+                                for(int i = parameter_list_asm.size()-1; i >= 0; i--)
                                 {
-                                    asmCodes += "\tPOP " + parameter_list[i].name + "\n";
+                                    asmCodes += "\tPOP " + parameter_list_asm[i].name + "\n";
                                 }
+                                parameter_list_asm.clear();
                                 // asmCodes += parameter_code;
                                 asmCodes += "\tPUSH BP\n";
                                 asmCodes += $7->getAsmCodes();
@@ -525,16 +540,17 @@ function_definition : type_specifier ID LPAREN parameter_list RPAREN
                                 asmCodes += "INT 21h\n";
                                 asmCodes += "MAIN ENDP\n";
                                 asmCodes += "END MAIN\n";
+
                             }
                             else{
-                                asmCodes    = functionName+ "PROC "+"\n";
+                                asmCodes    += functionName+ " PROC "+"\n";
                                 asmCodes += "\tPOP BP\n";
                                 // asmCodes += paramete recieved code
                                 asmCodes += "\tPUSH BP\n";
-                                asmCodes = $6->getAsmCodes();
+                                asmCodes += $6->getAsmCodes();
                                 asmCodes += "\tPUSH BP\n";
                                 asmCodes += "\tRET\n";
-                                asmCodes += functionName+ "ENDP\n";
+                                asmCodes += functionName+ " ENDP\n";
                                 
                                 
                             }
@@ -607,6 +623,7 @@ parameter_list : parameter_list COMMA type_specifier ID
 compound_statement : LCURL statement_list RCURL{
     $$ = new SymbolInfo("{\n"+$2->getName()+"\n}", "SYMBOL_COMPOUND_STATEMENT");
     $$->setAsmCodes($2->getAsmCodes());
+    // $$->setAsmName($2->getAsmName());
     logFile << "line number" << lineCount << ": " ;
     logFile << "compound_statement : LCURL statement_list RCURL"<<endl<<endl ;
     logFile<< $$->getName() << endl<<endl;
@@ -638,8 +655,9 @@ variable_declaration : type_specifier declaration_list SEMICOLON
                                 cout << "#####" << endl;
                                 for(int i = 0;i < variable_list.size();i++){
                                     symbolTable.insert(variable_list[i].name, $1->getName());
-                                    var_list_asm.push_back(variable_list[i]);
-                                    string global_name = variable_list[i].name ;
+                                    tempNodeVar.name = variable_list[i].name + (symbolTable.getScopeTable())->getShowId();
+                                    var_list_asm.push_back(tempNodeVar);
+                                    string global_name = var_list_asm[i].name ;
                                     // + (symbolTable.getScopeTable())->getShowId();
                                         SymbolInfo *temp = symbolTable.search(variable_list[i].name);
                                     if(variable_list[i].arraySize > 0){
@@ -982,7 +1000,7 @@ statement : variable_declaration
                }}
             
             string asmCode = "";
-            asmCode += "\tmov ax, " + $3->getName() + "\n";
+            asmCode += "\tmov ax, " + temp->getAsmName() + "\n";
             asmCode += "\tmov print_var , ax\n";
             asmCode += "\tcall println\n";
 
@@ -1255,67 +1273,38 @@ rel_expression : simple_expression
     asmCodes += "\tcmp ax, " + rightAsm + "\n";
 
     string relOperator = $2->getName();
+        // asmCodes += " ;"+$$->getName()+"\n";
     if(relOperator == "=="){
-        asmCodes += "\tje " + return1 + "\n";
-        asmCodes += "\tmov ax, 0\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += return0 + ":\n";
+        asmCodes += "\tje " + return1 + "\n";       
     }
     else if(relOperator == "!="){
         asmCodes += "\tjne " + return1 + "\n";
-        asmCodes += "\tmov ax, 0\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += return0 + ":\n";
+        
     }
    
     else if(relOperator == "<"){
         asmCodes += "\tjl " + return1 + "\n";
-        asmCodes += "\tmov ax, 0\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += return0 + ":\n";
+        
     }
    else if(relOperator == ">"){
         asmCodes += "\tjg " + return1 + "\n";
-        asmCodes += "\tmov ax, 0\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += return0 + ":\n";
+        
     }
     else if(relOperator == "<="){
         asmCodes += "\tjle " + return1 + "\n";
-        asmCodes += "\tmov ax, 0\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
-        asmCodes += "\tmov ax, 1\n";
-        asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += return0 + ":\n";
+       
     }
     else if(relOperator == ">="){
         asmCodes += "\tjge " + return1 + "\n";
-        asmCodes += "\tmov ax, 0\n";
+       
+    }
+     asmCodes += "\tmov ax, 0\n";
         asmCodes += "\tmov " + temp + ", ax\n";
         asmCodes += "\tjmp " + return0 + "\n";
         asmCodes += return1 + ":\n";
         asmCodes += "\tmov ax, 1\n";
         asmCodes += "\tmov " + temp + ", ax\n";
         asmCodes += return0 + ":\n";
-    }
     $$->setAsmCodes(asmCodes);
     $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
@@ -1346,6 +1335,8 @@ simple_expression : term{
      string asmCodes = "";
     
     string lefAsm = $1->getAsmName();
+    cout << "---------------------------------lefAsm " << lefAsm << endl;
+    cout << "---------------------------------rightAsm " << $3->getAsmName() << endl;
     string rightAsm = $3->getAsmName();
     string leftCode = $1->getAsmCodes();
     string rightCode = $3->getAsmCodes();
@@ -1419,7 +1410,7 @@ term : unary_expression {
     
     string asmCodes = "";
     string lefAsm = $1->getAsmName();
-    string rightAsm = $3->getName();
+    string rightAsm = $3->getAsmName();
     string leftCode = $1->getAsmCodes();
     string rightCode = $3->getAsmCodes();
     // string mulOperator = $2->getName();
@@ -1606,7 +1597,7 @@ factor : variable
 
     int asmSize = argument_asm_vector.size();
     for(int i = 0;i < argument_asm_vector.size(); i++){
-        
+        // argument_asm_vector[i] += symbolTable.getScopeTable()->getShowId();
         asmCodes += "\tpush " + argument_asm_vector[i] + "\n";
         // asmCodes += "\tmov [bp-" + to_string(i*2) + "], ax\n";
     }
