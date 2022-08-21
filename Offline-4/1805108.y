@@ -1276,8 +1276,8 @@ rel_expression : simple_expression
     string rightAsm = $3->getAsmName();
     string leftCode = $1->getAsmCodes();
     string rightCode = $3->getAsmCodes();
-    string return0 = newLabel();
-    string return1 = newLabel();
+    string label_0 = newLabel();
+    string label_1 = newLabel();
     asmCodes += leftCode;
     asmCodes += rightCode;
     asmCodes += "\tmov ax, " + lefAsm + "\n";
@@ -1285,36 +1285,36 @@ rel_expression : simple_expression
 
     string relOperator = $2->getName();
     if(relOperator == "=="){
-        asmCodes += "\tje " + return1 + "\n";       
+        asmCodes += "\tje " + label_1 + "\n";       
     }
     else if(relOperator == "!="){
-        asmCodes += "\tjne " + return1 + "\n";
+        asmCodes += "\tjne " + label_1 + "\n";
         
     }
    
     else if(relOperator == "<"){
-        asmCodes += "\tjl " + return1 + "\n";
+        asmCodes += "\tjl " + label_1 + "\n";
         
     }
    else if(relOperator == ">"){
-        asmCodes += "\tjg " + return1 + "\n";
+        asmCodes += "\tjg " + label_1 + "\n";
         
     }
     else if(relOperator == "<="){
-        asmCodes += "\tjle " + return1 + "\n";
+        asmCodes += "\tjle " + label_1 + "\n";
        
     }
     else if(relOperator == ">="){
-        asmCodes += "\tjge " + return1 + "\n";
+        asmCodes += "\tjge " + label_1 + "\n";
        
     }
      asmCodes += "\tmov ax, 0\n";
         asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += "\tjmp " + return0 + "\n";
-        asmCodes += return1 + ":\n";
+        asmCodes += "\tjmp " + label_0 + "\n";
+        asmCodes += label_1 + ":\n";
         asmCodes += "\tmov ax, 1\n";
         asmCodes += "\tmov " + temp + ", ax\n";
-        asmCodes += return0 + ":\n";
+        asmCodes += label_0 + ":\n";
     $$->setAsmCodes(asmCodes);
     $$->setAsmName(temp);
     logFile << "line number" << lineCount << ": " ;
@@ -1496,21 +1496,21 @@ unary_expression: ADDOP unary_expression
     string unaryExpressionAsm = $2->getAsmName();
     string unaryExpressionCode = $2->getAsmCodes();
 
-    string return0 = newLabel();
-    string return1 = newLabel();
+    string label_0 = newLabel();
+    string label_1 = newLabel();
     asmCodes += "; "+ $$->getName() + "\n";
     asmCodes += unaryExpressionCode;
     asmCodes += "\tmov ax, " + unaryExpressionAsm + "\n";
     asmCodes += "\tcmp ax, 0\n";
-    asmCodes += "\tje " + return1 + "\n";
+    asmCodes += "\tje " + label_1 + "\n";
     asmCodes += "\tmov ax, 0\n";
     asmCodes += "\tmov " + temp + ", ax\n";
-    asmCodes += "\tjmp " + return0 + "\n";
+    asmCodes += "\tjmp " + label_0 + "\n";
 
-    asmCodes += return1 + ":\n";
+    asmCodes += label_1 + ":\n";
     asmCodes += "\tmov ax, 1\n";
     asmCodes += "\tmov " + temp + ", ax\n";
-    asmCodes += return0 + ":\n";
+    asmCodes += label_0 + ":\n";
 
     $$->setAsmCodes(asmCodes);
     $$->setAsmName(temp);
@@ -1759,17 +1759,17 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	
-    errorFile.open("1805108_error.txt");
+    errorFile.open("error.txt");
     if(!errorFile){
         return 0;
     }
 
-    logFile.open("1805108_log.txt");
+    logFile.open("log.txt");
     if(!logFile){
         return 0;
     }
 
-    asmFile.open("1805108_asm.asm");
+    asmFile.open("code.asm");
     if(!asmFile){
         return 0;
     }

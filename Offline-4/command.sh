@@ -14,3 +14,5 @@ echo 'Generated the scanner object file'
 g++  y.o l.o -lfl -o 1805108 
 echo 'All ready, running'
 ./1805108 $1
+g++ Optimization.cpp -o Optimization
+./Optimization

@@ -1,0 +1,1492 @@
+line number1: type_specifier : INT
+
+int
+
+line number1: declaration_list: ID 
+
+a
+
+line number1: declaration_list: declaration_list COMMA ID 
+
+a,b
+
+line number1: declaration_list: declaration_list COMMA ID 
+
+a,b,c
+
+line number1: variable_declaration: type_specifier declaration_list SEMICOLON 
+
+int a,b,c;
+
+line number1: unit: variable_declaration 
+
+int a,b,c;
+
+line number1: program:  unit 
+
+int a,b,c;
+
+line number3: type_specifier : VOID
+
+void
+
+line number4: variable : ID
+
+a
+
+line number4: factor : CONST_INT
+
+7
+
+line number4: unary_expression : factor
+
+7
+
+line number4: term : unary_expression
+
+7
+
+line number4: simple_expression : term
+
+7
+
+line number4: expression : simple expression
+
+7
+
+line number4: logic_expression : rel_expression
+
+7
+
+line number4: expression : variable ASSIGNOP logic expression
+
+a=7
+
+line number4: expression_statement : expression SEMICOLON
+
+a=7;
+
+line number4: statement : expression_statement
+
+a=7;
+
+line number4: statement_list : statement
+
+a=7;
+
+line number5: compound_statement : LCURL statement_list RCURL
+
+{
+a=7;
+}
+
+print all scopes
+ ScopeTable: 1_1
+
+ ScopeTable: 1
+
+5--> < func_a ,ID >
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < c ,ID >
+line number5: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+void func_a ( ) {
+a=7;
+}
+
+
+line number5: unit: function_definition 
+
+void func_a ( ) {
+a=7;
+}
+
+
+line number5: program: program unit 
+
+int a,b,c;
+void func_a ( ) {
+a=7;
+}
+
+
+line number7: type_specifier : INT
+
+int
+
+line number7: type_specifier : INT
+
+int
+
+line number7: parameter_list : type_specifier ID
+
+int a
+
+line number8: variable : ID
+
+a
+
+line number8: variable : ID
+
+a
+
+line number8: factor : variable
+
+a
+
+line number8: unary_expression : factor
+
+a
+
+line number8: term : unary_expression
+
+a
+
+line number8: simple_expression : term
+
+a
+
+line number8: factor : CONST_INT
+
+3
+
+line number8: unary_expression : factor
+
+3
+
+line number8: term : unary_expression
+
+3
+
+line number8: simple_expression : simple_expression ADDOP term
+
+a+3
+
+line number8: expression : simple expression
+
+a+3
+
+line number8: logic_expression : rel_expression
+
+a+3
+
+line number8: expression : variable ASSIGNOP logic expression
+
+a=a+3
+
+line number8: expression_statement : expression SEMICOLON
+
+a=a+3;
+
+line number8: statement : expression_statement
+
+a=a+3;
+
+line number8: statement_list : statement
+
+a=a+3;
+
+line number9: variable : ID
+
+a
+
+line number9: factor : variable
+
+a
+
+line number9: unary_expression : factor
+
+a
+
+line number9: term : unary_expression
+
+a
+
+line number9: simple_expression : term
+
+a
+
+line number9: expression : simple expression
+
+a
+
+line number9: logic_expression : rel_expression
+
+a
+
+line number9: expression : logic expression
+
+a
+
+line number9: statement : RETURN expression
+
+return a;
+
+line number9: statement_list : statement_list statement
+
+a=a+3;
+return a;
+
+line number10: compound_statement : LCURL statement_list RCURL
+
+{
+a=a+3;
+return a;
+}
+
+print all scopes
+ ScopeTable: 1_2
+
+7--> < a ,ID >
+ ScopeTable: 1
+
+5--> < func_a ,ID >
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < foo ,ID >< c ,ID >
+line number10: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+
+int foo ( int a ) {
+a=a+3;
+return a;
+}
+
+
+line number10: unit: function_definition 
+
+int foo ( int a ) {
+a=a+3;
+return a;
+}
+
+
+line number10: program: program unit 
+
+int a,b,c;
+void func_a ( ) {
+a=7;
+}
+
+int foo ( int a ) {
+a=a+3;
+return a;
+}
+
+
+line number12: type_specifier : INT
+
+int
+
+line number12: type_specifier : INT
+
+int
+
+line number12: parameter_list : type_specifier ID
+
+int a
+
+line number12: type_specifier : INT
+
+int
+
+line number12: parameter_list : parameter_list COMMA type_specifier ID
+
+int a,int b
+
+line number13: type_specifier : INT
+
+int
+
+line number13: declaration_list: ID 
+
+c
+
+line number13: variable_declaration: type_specifier declaration_list SEMICOLON 
+
+int c;
+
+line number13: statement : variable_declaration
+
+int c;
+
+line number13: statement_list : statement
+
+int c;
+
+line number14: variable : ID
+
+c
+
+line number14: factor : CONST_INT
+
+4
+
+line number14: unary_expression : factor
+
+4
+
+line number14: term : unary_expression
+
+4
+
+line number14: variable : ID
+
+a
+
+line number14: factor : variable
+
+a
+
+line number14: unary_expression : factor
+
+a
+
+line number14: term : term MULOP unary_expression
+
+4*a
+
+line number14: simple_expression : term
+
+4*a
+
+line number14: factor : CONST_INT
+
+2
+
+line number14: unary_expression : factor
+
+2
+
+line number14: term : unary_expression
+
+2
+
+line number14: variable : ID
+
+b
+
+line number14: factor : variable
+
+b
+
+line number14: unary_expression : factor
+
+b
+
+line number14: term : term MULOP unary_expression
+
+2*b
+
+line number14: simple_expression : simple_expression ADDOP term
+
+4*a+2*b
+
+line number14: expression : simple expression
+
+4*a+2*b
+
+line number14: logic_expression : rel_expression
+
+4*a+2*b
+
+line number14: expression : variable ASSIGNOP logic expression
+
+c=4*a+2*b
+
+line number14: expression_statement : expression SEMICOLON
+
+c=4*a+2*b;
+
+line number14: statement : expression_statement
+
+c=4*a+2*b;
+
+line number14: statement_list : statement_list statement
+
+int c;
+c=4*a+2*b;
+
+line number15: variable : ID
+
+c
+
+line number15: factor : variable
+
+c
+
+line number15: unary_expression : factor
+
+c
+
+line number15: term : unary_expression
+
+c
+
+line number15: simple_expression : term
+
+c
+
+line number15: expression : simple expression
+
+c
+
+line number15: logic_expression : rel_expression
+
+c
+
+line number15: expression : logic expression
+
+c
+
+line number15: statement : RETURN expression
+
+return c;
+
+line number15: statement_list : statement_list statement
+
+int c;
+c=4*a+2*b;
+return c;
+
+line number16: compound_statement : LCURL statement_list RCURL
+
+{
+int c;
+c=4*a+2*b;
+return c;
+}
+
+print all scopes
+ ScopeTable: 1_3
+
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < c ,ID >
+ ScopeTable: 1
+
+5--> < func_a ,ID >
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < foo ,ID >< c ,ID >
+24--> < bar ,ID >
+line number16: func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+
+int bar ( int a,int b ) {
+int c;
+c=4*a+2*b;
+return c;
+}
+
+
+line number16: unit: function_definition 
+
+int bar ( int a,int b ) {
+int c;
+c=4*a+2*b;
+return c;
+}
+
+
+line number16: program: program unit 
+
+int a,b,c;
+void func_a ( ) {
+a=7;
+}
+
+int foo ( int a ) {
+a=a+3;
+return a;
+}
+
+int bar ( int a,int b ) {
+int c;
+c=4*a+2*b;
+return c;
+}
+
+
+line number19: type_specifier : INT
+
+int
+
+line number21: type_specifier : INT
+
+int
+
+line number21: declaration_list: ID 
+
+i
+
+line number21: declaration_list: declaration_list COMMA ID 
+
+i,j
+
+line number21: declaration_list: declaration_list COMMA ID 
+
+i,j,k
+
+line number21: declaration_list: declaration_list COMMA ID 
+
+i,j,k,l
+
+line number21: variable_declaration: type_specifier declaration_list SEMICOLON 
+
+int i,j,k,l;
+
+line number21: statement : variable_declaration
+
+int i,j,k,l;
+
+line number21: statement_list : statement
+
+int i,j,k,l;
+
+line number23: variable : ID
+
+i
+
+line number23: factor : CONST_INT
+
+5
+
+line number23: unary_expression : factor
+
+5
+
+line number23: term : unary_expression
+
+5
+
+line number23: simple_expression : term
+
+5
+
+line number23: expression : simple expression
+
+5
+
+line number23: logic_expression : rel_expression
+
+5
+
+line number23: expression : variable ASSIGNOP logic expression
+
+i=5
+
+line number23: expression_statement : expression SEMICOLON
+
+i=5;
+
+line number23: statement : expression_statement
+
+i=5;
+
+line number23: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+
+line number24: variable : ID
+
+j
+
+line number24: factor : CONST_INT
+
+6
+
+line number24: unary_expression : factor
+
+6
+
+line number24: term : unary_expression
+
+6
+
+line number24: simple_expression : term
+
+6
+
+line number24: expression : simple expression
+
+6
+
+line number24: logic_expression : rel_expression
+
+6
+
+line number24: expression : variable ASSIGNOP logic expression
+
+j=6
+
+line number24: expression_statement : expression SEMICOLON
+
+j=6;
+
+line number24: statement : expression_statement
+
+j=6;
+
+line number24: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+
+line number26: argument_list :
+
+
+
+line number26: factor : ID LPAREN argument_list RPAREN
+
+func_a (  )
+
+line number26: unary_expression : factor
+
+func_a (  )
+
+line number26: term : unary_expression
+
+func_a (  )
+
+line number26: simple_expression : term
+
+func_a (  )
+
+line number26: expression : simple expression
+
+func_a (  )
+
+line number26: logic_expression : rel_expression
+
+func_a (  )
+
+line number26: expression : logic expression
+
+func_a (  )
+
+line number26: expression_statement : expression SEMICOLON
+
+func_a (  );
+
+line number26: statement : expression_statement
+
+func_a (  );
+
+line number26: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+
+line number27: statement : PRINTLN LPAREN expression RPAREN SEMICOLON
+
+println(a);
+
+line number27: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+
+line number29: variable : ID
+
+k
+
+line number29: variable : ID
+
+i
+
+line number29: factor : variable
+
+i
+
+line number29: unary_expression : factor
+
+i
+
+line number29: term : unary_expression
+
+i
+
+line number29: simple_expression : term
+
+i
+
+line number29: expression : simple expression
+
+i
+
+line number29: logic_expression : rel_expression
+
+i
+
+line number29: argument_list : logic_expression
+
+i
+
+line number29: argument_list : arguments
+
+i
+
+line number29: factor : ID LPAREN argument_list RPAREN
+
+foo ( i )
+
+line number29: unary_expression : factor
+
+foo ( i )
+
+line number29: term : unary_expression
+
+foo ( i )
+
+line number29: simple_expression : term
+
+foo ( i )
+
+line number29: expression : simple expression
+
+foo ( i )
+
+line number29: logic_expression : rel_expression
+
+foo ( i )
+
+line number29: expression : variable ASSIGNOP logic expression
+
+k=foo ( i )
+
+line number29: expression_statement : expression SEMICOLON
+
+k=foo ( i );
+
+line number29: statement : expression_statement
+
+k=foo ( i );
+
+line number29: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+
+line number30: statement : PRINTLN LPAREN expression RPAREN SEMICOLON
+
+println(k);
+
+line number30: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+
+line number32: variable : ID
+
+l
+
+line number32: variable : ID
+
+i
+
+line number32: factor : variable
+
+i
+
+line number32: unary_expression : factor
+
+i
+
+line number32: term : unary_expression
+
+i
+
+line number32: simple_expression : term
+
+i
+
+line number32: expression : simple expression
+
+i
+
+line number32: logic_expression : rel_expression
+
+i
+
+line number32: argument_list : logic_expression
+
+i
+
+line number32: variable : ID
+
+j
+
+line number32: factor : variable
+
+j
+
+line number32: unary_expression : factor
+
+j
+
+line number32: term : unary_expression
+
+j
+
+line number32: simple_expression : term
+
+j
+
+line number32: expression : simple expression
+
+j
+
+line number32: logic_expression : rel_expression
+
+j
+
+line number32: argument_list : arguments COMMA logic_expression
+
+i,j
+
+line number32: argument_list : arguments
+
+i,j
+
+line number32: factor : ID LPAREN argument_list RPAREN
+
+bar ( i,j )
+
+line number32: unary_expression : factor
+
+bar ( i,j )
+
+line number32: term : unary_expression
+
+bar ( i,j )
+
+line number32: simple_expression : term
+
+bar ( i,j )
+
+line number32: expression : simple expression
+
+bar ( i,j )
+
+line number32: logic_expression : rel_expression
+
+bar ( i,j )
+
+line number32: expression : variable ASSIGNOP logic expression
+
+l=bar ( i,j )
+
+line number32: expression_statement : expression SEMICOLON
+
+l=bar ( i,j );
+
+line number32: statement : expression_statement
+
+l=bar ( i,j );
+
+line number32: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+
+line number33: statement : PRINTLN LPAREN expression RPAREN SEMICOLON
+
+println(l);
+
+line number33: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+
+line number35: variable : ID
+
+j
+
+line number35: factor : CONST_INT
+
+6
+
+line number35: unary_expression : factor
+
+6
+
+line number35: term : unary_expression
+
+6
+
+line number35: variable : ID
+
+i
+
+line number35: factor : variable
+
+i
+
+line number35: unary_expression : factor
+
+i
+
+line number35: term : unary_expression
+
+i
+
+line number35: simple_expression : term
+
+i
+
+line number35: expression : simple expression
+
+i
+
+line number35: logic_expression : rel_expression
+
+i
+
+line number35: argument_list : logic_expression
+
+i
+
+line number35: variable : ID
+
+j
+
+line number35: factor : variable
+
+j
+
+line number35: unary_expression : factor
+
+j
+
+line number35: term : unary_expression
+
+j
+
+line number35: simple_expression : term
+
+j
+
+line number35: expression : simple expression
+
+j
+
+line number35: logic_expression : rel_expression
+
+j
+
+line number35: argument_list : arguments COMMA logic_expression
+
+i,j
+
+line number35: argument_list : arguments
+
+i,j
+
+line number35: factor : ID LPAREN argument_list RPAREN
+
+bar ( i,j )
+
+line number35: unary_expression : factor
+
+bar ( i,j )
+
+line number35: term : term MULOP unary_expression
+
+6*bar ( i,j )
+
+line number35: simple_expression : term
+
+6*bar ( i,j )
+
+line number35: factor : CONST_INT
+
+2
+
+line number35: unary_expression : factor
+
+2
+
+line number35: term : unary_expression
+
+2
+
+line number35: simple_expression : simple_expression ADDOP term
+
+6*bar ( i,j )+2
+
+line number35: factor : CONST_INT
+
+3
+
+line number35: unary_expression : factor
+
+3
+
+line number35: term : unary_expression
+
+3
+
+line number35: variable : ID
+
+i
+
+line number35: factor : variable
+
+i
+
+line number35: unary_expression : factor
+
+i
+
+line number35: term : unary_expression
+
+i
+
+line number35: simple_expression : term
+
+i
+
+line number35: expression : simple expression
+
+i
+
+line number35: logic_expression : rel_expression
+
+i
+
+line number35: argument_list : logic_expression
+
+i
+
+line number35: argument_list : arguments
+
+i
+
+line number35: factor : ID LPAREN argument_list RPAREN
+
+foo ( i )
+
+line number35: unary_expression : factor
+
+foo ( i )
+
+line number35: term : term MULOP unary_expression
+
+3*foo ( i )
+
+line number35: simple_expression : simple_expression ADDOP term
+
+6*bar ( i,j )+2-3*foo ( i )
+
+line number35: expression : simple expression
+
+6*bar ( i,j )+2-3*foo ( i )
+
+line number35: logic_expression : rel_expression
+
+6*bar ( i,j )+2-3*foo ( i )
+
+line number35: expression : variable ASSIGNOP logic expression
+
+j=6*bar ( i,j )+2-3*foo ( i )
+
+line number35: expression_statement : expression SEMICOLON
+
+j=6*bar ( i,j )+2-3*foo ( i );
+
+line number35: statement : expression_statement
+
+j=6*bar ( i,j )+2-3*foo ( i );
+
+line number35: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+
+line number36: statement : PRINTLN LPAREN expression RPAREN SEMICOLON
+
+println(j);
+
+line number36: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+println(j);
+
+line number39: factor : CONST_INT
+
+0
+
+line number39: unary_expression : factor
+
+0
+
+line number39: term : unary_expression
+
+0
+
+line number39: simple_expression : term
+
+0
+
+line number39: expression : simple expression
+
+0
+
+line number39: logic_expression : rel_expression
+
+0
+
+line number39: expression : logic expression
+
+0
+
+line number39: statement : RETURN expression
+
+return 0;
+
+line number39: statement_list : statement_list statement
+
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+println(j);
+return 0;
+
+line number40: compound_statement : LCURL statement_list RCURL
+
+{
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+println(j);
+return 0;
+}
+
+print all scopes
+ ScopeTable: 1_4
+
+15--> < i ,ID >
+16--> < j ,ID >
+17--> < k ,ID >
+18--> < l ,ID >
+ ScopeTable: 1
+
+5--> < func_a ,ID >
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < foo ,ID >< c ,ID >
+16--> < main ,ID >
+24--> < bar ,ID >
+line number40: func_definition : type_specifier ID LPAREN RPAREN compound_statement
+
+int main ( ) {
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+println(j);
+return 0;
+}
+
+
+line number40: unit: function_definition 
+
+int main ( ) {
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+println(j);
+return 0;
+}
+
+
+line number40: program: program unit 
+
+int a,b,c;
+void func_a ( ) {
+a=7;
+}
+
+int foo ( int a ) {
+a=a+3;
+return a;
+}
+
+int bar ( int a,int b ) {
+int c;
+c=4*a+2*b;
+return c;
+}
+
+int main ( ) {
+int i,j,k,l;
+i=5;
+j=6;
+func_a (  );
+println(a);
+k=foo ( i );
+println(k);
+l=bar ( i,j );
+println(l);
+j=6*bar ( i,j )+2-3*foo ( i );
+println(j);
+return 0;
+}
+
+
+line number42: func_a PROC 
+	POP BP
+	PUSH BP
+ ; assignment expression:a=7
+	mov ax,7
+	mov a1, ax
+	PUSH BP
+	RET
+func_a ENDP
+; function definition
+foo PROC 
+	POP BP
+	POP a1_2
+	PUSH BP
+ ; assignment expression:a=a+3
+	mov ax, a1_2
+	add ax, 3
+	mov temp_0, ax
+	mov ax,temp_0
+	mov a1_2, ax
+	pop bp
+	push a1_2
+	PUSH BP
+	RET
+foo ENDP
+; function definition
+bar PROC 
+	POP BP
+	POP b1_3
+	POP a1_3
+	PUSH BP
+ ; assignment expression:c=4*a+2*b
+ ;4
+	mov ax, 4
+	mov bx, a1_3
+	imul bx
+	mov temp_1, ax
+ ;2
+	mov ax, 2
+	mov bx, b1_3
+	imul bx
+	mov temp_2, ax
+	mov ax, temp_1
+	add ax, temp_2
+	mov temp_3, ax
+	mov ax,temp_3
+	mov a1, ax
+	pop bp
+	push a1
+	PUSH BP
+	RET
+bar ENDP
+MAIN PROC
+MOV AX, @DATA
+MOV DS, AX
+ ; assignment expression:i=5
+	mov ax,5
+	mov a1, ax
+ ; assignment expression:j=6
+	mov ax,6
+	mov b1, ax
+; function call: func_a (  )
+	push ax
+	push bx
+	push cx
+	push dx
+	push 
+	call func_a
+	pop temp_4
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+ ; println(a)
+	mov ax, a1
+	mov print_var , ax
+	call println
+ ; assignment expression:k=foo ( i )
+; function call: foo ( i )
+	push ax
+	push bx
+	push cx
+	push dx
+	push a1
+	call foo
+	pop temp_5
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+	mov ax,temp_5
+	mov c1, ax
+ ; println(k)
+	mov ax, c1
+	mov print_var , ax
+	call println
+ ; assignment expression:l=bar ( i,j )
+; function call: bar ( i,j )
+	push ax
+	push bx
+	push cx
+	push dx
+	push a1
+	push b1
+	call bar
+	pop temp_6
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+	mov ax,temp_6
+	mov a1_2, ax
+ ; println(l)
+	mov ax, a1_2
+	mov print_var , ax
+	call println
+ ; assignment expression:j=6*bar ( i,j )+2-3*foo ( i )
+; function call: bar ( i,j )
+	push ax
+	push bx
+	push cx
+	push dx
+	push a1
+	push b1
+	call bar
+	pop temp_7
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+ ;6
+	mov ax, 6
+	mov bx, temp_7
+	imul bx
+	mov temp_8, ax
+	mov ax, temp_8
+	add ax, 2
+	mov temp_9, ax
+; function call: foo ( i )
+	push ax
+	push bx
+	push cx
+	push dx
+	push a1
+	call foo
+	pop temp_10
+	pop dx
+	pop cx
+	pop bx
+	pop ax
+ ;3
+	mov ax, 3
+	mov bx, temp_10
+	imul bx
+	mov temp_11, ax
+	mov ax, temp_9
+	sub ax, temp_11
+	mov temp_12, ax
+	mov ax,temp_12
+	mov b1, ax
+ ; println(j)
+	mov ax, b1
+	mov print_var , ax
+	call println
+	pop bp
+	push 0
+MOV AX, 4C00h
+INT 21h
+MAIN ENDP
+END MAIN
+
+start: program
+print all scopes
+ ScopeTable: 1
+
+5--> < func_a ,ID >
+7--> < a ,ID >
+8--> < b ,ID >
+9--> < foo ,ID >< c ,ID >
+16--> < main ,ID >
+24--> < bar ,ID >
+total no. of errors: 6
+total no. of lines42

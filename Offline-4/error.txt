@@ -1,0 +1,6 @@
+line number13: error: variable c already declared
+line number26: error: function func_a expects 0 arguments
+line number29: error: function foo expects 0 arguments
+line number32: error: function bar expects 0 arguments
+line number35: error: function bar expects 0 arguments
+line number35: error: function foo expects 0 arguments
